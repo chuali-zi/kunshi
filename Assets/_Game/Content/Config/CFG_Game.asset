@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d71b85f9927a6e4e9e4d16740782f79, type: 3}
+  m_Name: CFG_Game
+  m_EditorClassIdentifier: ConGame.Runtime::ConGame.Runtime.Config.GameConfigAsset
+  idleEntrySeconds: 45
+  activeEntrySeconds: 30
+  loudNoiseDelaySeconds: 8
+  warningLeadSeconds: 0.5
+  walkSpeed: 2.8
+  sprintSpeed: 4.5
+  turnSpeedDegrees: 720
+  interactionRadius: 1.2
+  throwSpeed: 8
+  killerCounterplayDelay: 2.5

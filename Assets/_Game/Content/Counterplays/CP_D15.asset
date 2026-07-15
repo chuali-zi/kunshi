@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83ec325bf13b3224ca48aaf99d6a8a9d, type: 3}
+  m_Name: CP_D15
+  m_EditorClassIdentifier: ConGame.Runtime::ConGame.Runtime.Counterplay.CounterplayDefinitionAsset
+  outcomeId: D15
+  sortOrder: 2101
+  triggerMode: 5
+  conditions:
+  - Key: 12
+    Operator: 2
+    Expected: 1
+  contentStatus: 0
+  performance: {fileID: 0}
