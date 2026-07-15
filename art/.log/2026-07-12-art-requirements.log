@@ -1,0 +1,1 @@
+整理 docs 中房间、23 项交互物、22 种死法与结局的美术需求。新建独立 art 工作区、资产台账和最小动画表；按 P0/P1/P2、Blender 批次、破坏状态与 Unity/Blender 职责拆分。动画改为通用动作、Ragdoll、IK、Timeline 复用，仅保留 D08/D11/D21 三组双人演出。

@@ -1,0 +1,24 @@
+{
+  "name": "ConGame.Tests.PlayMode",
+  "rootNamespace": "ConGame.Tests.PlayMode",
+  "references": [
+    "ConGame.Domain",
+    "ConGame.Runtime",
+    "ConGame.Presentation",
+    "ConGame.Bootstrap"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
