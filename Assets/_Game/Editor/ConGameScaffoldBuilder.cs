@@ -17,6 +17,8 @@ using ConGame.Runtime.Loop;
 using ConGame.Runtime.Player;
 using ConGame.Presentation.Camera;
 using ConGame.Presentation.CRT;
+
+using ConGame.Presentation.M1;
 using ConGame.Presentation.Timeline;
 using Unity.AI.Navigation;
 using UnityEditor;
@@ -39,6 +41,10 @@ namespace ConGame.Editor
         private const string ItemRoot = ContentRoot + "/Items";
         private const string CounterplayRoot = ContentRoot + "/Counterplays";
         private const string ConfigRoot = ContentRoot + "/Config";
+
+        private const string PerformanceRoot = ContentRoot + "/Performances";
+        private const string NavigationRoot = ContentRoot + "/Navigation";
+        private const string NavMeshPath = NavigationRoot + "/NavMesh_Room_M1.asset";
         private const string MaterialRoot = ContentRoot + "/Materials";
         private const string PipelinePath = ConfigRoot + "/RP_ConGame.asset";
         private const string RendererPath = ConfigRoot + "/RP_ConGame_Renderer.asset";
@@ -56,7 +62,8 @@ namespace ConGame.Editor
             GameConfigAsset config = EnsureAsset<GameConfigAsset>(ConfigRoot + "/CFG_Game.asset");
             EnsureAsset<DarkAdaptationConfigAsset>(ConfigRoot + "/CFG_DarkAdaptation.asset");
             Dictionary<string, ItemDefinitionAsset> items = BuildItemDefinitions();
-            CounterplayCatalogAsset counterplays = BuildCounterplayDefinitions();
+            Dictionary<string, M1GreyboxPlayableAsset> performances = BuildM1Performances();
+            CounterplayCatalogAsset counterplays = BuildCounterplayDefinitions(performances);
             Dictionary<string, Material> materials = BuildMaterials();
 
             BuildBootstrapScene();
@@ -67,12 +74,9 @@ namespace ConGame.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             ConGameProjectValidator.ValidateProject(true);
-            EditorUtility.DisplayDialog(
-                "ConGame M1",
-                inputBackendChanged
-                    ? "M1 greybox rebuilt and the new Input System backend was enabled. Restart Unity once, then open Assets/_Game/Scenes/Bootstrap.unity."
-                    : "M1 greybox rebuilt. Open Assets/_Game/Scenes/Bootstrap.unity and enter Play Mode.",
-                "OK");
+            Debug.Log(inputBackendChanged ? "[ConGame] M1 greybox rebuilt. Restart Unity once because the new Input " +
+                                                "System backend was enabled."
+                                          : "[ConGame] M1 greybox rebuilt and ready for playtesting.");
         }
 
         [MenuItem("ConGame/Scaffold/Open M1 Room", priority = 2)]
@@ -94,6 +98,9 @@ namespace ConGame.Editor
             EnsureFolder(ItemRoot);
             EnsureFolder(CounterplayRoot);
             EnsureFolder(ConfigRoot);
+
+            EnsureFolder(PerformanceRoot);
+            EnsureFolder(NavigationRoot);
             EnsureFolder(MaterialRoot);
             EnsureFolder(ContentRoot + "/Timelines");
             EnsureFolder(Root + "/Art");
@@ -101,7 +108,8 @@ namespace ConGame.Editor
 
         private static Dictionary<string, ItemDefinitionAsset> BuildItemDefinitions()
         {
-            Dictionary<string, ItemDefinitionAsset> result = new Dictionary<string, ItemDefinitionAsset>(StringComparer.Ordinal);
+            Dictionary<string, ItemDefinitionAsset> result =
+                new Dictionary<string, ItemDefinitionAsset>(StringComparer.Ordinal);
             foreach (ItemSeed seed in ItemSeedLibrary.All)
             {
                 string path = $"{ItemRoot}/ITEM_{Sanitize(seed.Id)}.asset";
@@ -114,28 +122,50 @@ namespace ConGame.Editor
             return result;
         }
 
-        private static CounterplayCatalogAsset BuildCounterplayDefinitions()
+        private static CounterplayCatalogAsset BuildCounterplayDefinitions(
+            IReadOnlyDictionary<string, M1GreyboxPlayableAsset> performances)
         {
             List<CounterplayDefinitionAsset> definitions = new List<CounterplayDefinitionAsset>();
             foreach (CounterplaySeed seed in CounterplaySeedLibrary.All)
             {
                 string path = $"{CounterplayRoot}/CP_{seed.Id}.asset";
                 CounterplayDefinitionAsset asset = EnsureAsset<CounterplayDefinitionAsset>(path);
-                asset.Configure(seed.Id, seed.SortOrder, seed.TriggerMode, seed.Conditions, seed.Status);
+                performances.TryGetValue(seed.Id, out M1GreyboxPlayableAsset performance);
+                asset.Configure(seed.Id, seed.SortOrder, seed.TriggerMode, seed.Conditions, seed.Status, performance);
                 EditorUtility.SetDirty(asset);
                 definitions.Add(asset);
             }
 
-            CounterplayCatalogAsset catalog = EnsureAsset<CounterplayCatalogAsset>(CounterplayRoot + "/CAT_Counterplays.asset");
+            CounterplayCatalogAsset catalog =
+                EnsureAsset<CounterplayCatalogAsset>(CounterplayRoot + "/CAT_Counterplays.asset");
             catalog.Configure(definitions.ToArray());
             EditorUtility.SetDirty(catalog);
             return catalog;
         }
 
+        private static Dictionary<string, M1GreyboxPlayableAsset> BuildM1Performances()
+        {
+            Dictionary<string, M1GreyboxPlayableAsset> result =
+                new Dictionary<string, M1GreyboxPlayableAsset>(StringComparer.Ordinal);
+
+            Add("D01", M1GreyboxDeathStyle.DefaultShot, 1.65f);
+            Add("D03", M1GreyboxDeathStyle.SofaRearShot, 1.3f);
+            Add("D07", M1GreyboxDeathStyle.ArmedStandoff, 1.8f);
+            return result;
+
+            void Add(string id, M1GreyboxDeathStyle style, float duration)
+            {
+                M1GreyboxPlayableAsset asset =
+                    EnsureAsset<M1GreyboxPlayableAsset>($"{PerformanceRoot}/PERF_{id}_Greybox.asset");
+                asset.Configure(style, duration);
+                EditorUtility.SetDirty(asset);
+                result.Add(id, asset);
+            }
+        }
+
         private static Dictionary<string, Material> BuildMaterials()
         {
-            return new Dictionary<string, Material>(StringComparer.Ordinal)
-            {
+            return new Dictionary<string, Material>(StringComparer.Ordinal) {
                 ["wall"] = EnsureMaterial("MAT_Greybox_Wall", new Color(0.55f, 0.49f, 0.39f)),
                 ["floor"] = EnsureMaterial("MAT_Greybox_Floor", new Color(0.10f, 0.20f, 0.14f)),
                 ["wood"] = EnsureMaterial("MAT_Greybox_Wood", new Color(0.25f, 0.12f, 0.06f)),
@@ -149,7 +179,8 @@ namespace ConGame.Editor
 
         private static void EnsureRenderPipeline()
         {
-            UniversalRenderPipelineAsset pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(PipelinePath);
+            UniversalRenderPipelineAsset pipeline =
+                AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(PipelinePath);
             if (pipeline == null)
             {
                 UniversalRendererData renderer = EnsureAsset<UniversalRendererData>(RendererPath);
@@ -171,10 +202,13 @@ namespace ConGame.Editor
 
         private static bool EnsureInputSystemBackend()
         {
-            UnityEngine.Object[] settingsAssets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
+            UnityEngine.Object[] settingsAssets =
+                AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
             if (settingsAssets == null || settingsAssets.Length == 0)
             {
-                Debug.LogWarning("Could not inspect PlayerSettings; set Active Input Handling to Input System Package (New) before playtesting.");
+                Debug.LogWarning(
+                    "Could not inspect PlayerSettings; set Active Input Handling to Input System Package " +
+                    "(New) before playtesting.");
                 return false;
             }
 
@@ -215,11 +249,9 @@ namespace ConGame.Editor
             EditorSceneManager.SaveScene(scene, MenuScenePath);
         }
 
-        private static void BuildRoomScene(
-            GameConfigAsset config,
-            CounterplayCatalogAsset counterplays,
-            IReadOnlyDictionary<string, ItemDefinitionAsset> items,
-            IReadOnlyDictionary<string, Material> materials)
+        private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAsset counterplays,
+                                           IReadOnlyDictionary<string, ItemDefinitionAsset> items,
+                                           IReadOnlyDictionary<string, Material> materials)
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             GameObject roomRoot = new GameObject("Room_M1");
@@ -233,14 +265,12 @@ namespace ConGame.Editor
             LoopDirector loop = systems.AddComponent<LoopDirector>();
             RoomLightCoordinator lightCoordinator = systems.AddComponent<RoomLightCoordinator>();
 
-            BuildRoomShell(roomRoot.transform, materials);
+            BuildRoomShell(roomRoot.transform, materials, out Transform doorHinge);
 
             Transform fixedCameraRig = BuildFixedCamera(roomRoot.transform, out Camera outputCamera);
             BuildPlayer(roomRoot.transform, fixedCameraRig, config, facts, events, items, materials,
-                out PlayerMotor playerMotor,
-                out PlayerInputRouter input,
-                out PlayerInteractor interactor,
-                out GameObject firstPersonRig);
+                        out PlayerMotor playerMotor, out PlayerInputRouter input, out PlayerInteractor interactor,
+                        out GameObject firstPersonRig);
 
             CameraModeController cameraMode = systems.AddComponent<CameraModeController>();
             cameraMode.Configure(fixedCameraRig.gameObject, firstPersonRig);
@@ -251,9 +281,13 @@ namespace ConGame.Editor
             BuildLights(roomRoot.transform, facts, materials, out BreakableLight ceiling, out BreakableLight table);
             lightCoordinator.Configure(ceiling, table, facts);
 
-            KillerDirector killer = BuildKiller(roomRoot.transform, playerMotor.transform, facts, counterplays, config, materials["killer"]);
+            KillerDirector killer = BuildKiller(roomRoot.transform, playerMotor, interactor, facts, counterplays,
+                                                config, materials["killer"]);
+            RoomDoorBreachController breach = systems.AddComponent<RoomDoorBreachController>();
+            breach.Configure(doorHinge, config.BreachDuration, config.BreachOpenAngle);
+
             registry.Configure(roomRoot.transform);
-            loop.Configure(config, flow, registry, facts, events, input, playerMotor, killer);
+            loop.Configure(config, flow, registry, facts, events, input, playerMotor, killer, breach);
             RoomContext context = systems.AddComponent<RoomContext>();
             context.Configure(config, flow, facts, events, registry, loop, input, playerMotor, killer);
 
@@ -265,20 +299,41 @@ namespace ConGame.Editor
             EditorSceneManager.SaveScene(scene, RoomScenePath);
         }
 
-        private static void BuildRoomShell(Transform parent, IReadOnlyDictionary<string, Material> materials)
+        private static void BuildRoomShell(Transform parent, IReadOnlyDictionary<string, Material> materials,
+                                           out Transform doorHinge)
         {
             GameObject shell = new GameObject("Environment");
             shell.transform.SetParent(parent);
 
-            CreateCube("Floor", new Vector3(0f, -0.05f, 0f), new Vector3(6.2f, 0.1f, 5.2f), shell.transform, materials["floor"]);
-            CreateCube("North Wall", new Vector3(0f, 1.4f, 2.65f), new Vector3(6.4f, 2.8f, 0.1f), shell.transform, materials["wall"]);
-            CreateCube("South Wall", new Vector3(0f, 1.4f, -2.65f), new Vector3(6.4f, 2.8f, 0.1f), shell.transform, materials["wall"]);
-            CreateCube("West Wall", new Vector3(-3.15f, 1.4f, 0f), new Vector3(0.1f, 2.8f, 5.2f), shell.transform, materials["wall"]);
-            CreateCube("East Wall", new Vector3(3.15f, 1.4f, 0f), new Vector3(0.1f, 2.8f, 5.2f), shell.transform, materials["wall"]);
-            CreateCube("Ceiling", new Vector3(0f, 2.85f, 0f), new Vector3(6.4f, 0.1f, 5.4f), shell.transform, materials["wall"]);
+            CreateCube("Floor", new Vector3(0f, -0.05f, 0f), new Vector3(6.2f, 0.1f, 5.2f), shell.transform,
+                       materials["floor"]);
+            CreateCube("North Wall", new Vector3(0f, 1.4f, 2.65f), new Vector3(6.4f, 2.8f, 0.1f), shell.transform,
+                       materials["wall"]);
+            CreateCube("South Wall", new Vector3(0f, 1.4f, -2.65f), new Vector3(6.4f, 2.8f, 0.1f), shell.transform,
+                       materials["wall"]);
+            CreateCube("West Wall", new Vector3(-3.15f, 1.4f, 0f), new Vector3(0.1f, 2.8f, 5.2f), shell.transform,
+                       materials["wall"]);
 
-            CreateCube("Door", new Vector3(3.05f, 1.025f, 1.45f), new Vector3(0.12f, 2.05f, 0.9f), shell.transform, materials["wood"]);
-            CreateCube("Black Corridor", new Vector3(3.7f, 1.3f, 1.45f), new Vector3(1.2f, 2.6f, 1.0f), shell.transform, materials["killer"]);
+            CreateCube("East Wall Lower", new Vector3(3.15f, 1.4f, -0.6f), new Vector3(0.1f, 2.8f, 3.2f),
+                       shell.transform, materials["wall"]);
+            CreateCube("East Wall Upper", new Vector3(3.15f, 1.4f, 2.3f), new Vector3(0.1f, 2.8f, 0.7f),
+                       shell.transform, materials["wall"]);
+            CreateCube("Door Lintel", new Vector3(3.15f, 2.48f, 1.45f), new Vector3(0.1f, 0.64f, 1.0f), shell.transform,
+                       materials["wall"]);
+            CreateCube("Ceiling", new Vector3(0f, 2.85f, 0f), new Vector3(6.4f, 0.1f, 5.4f), shell.transform,
+                       materials["wall"]);
+
+            GameObject hinge = new GameObject("DoorHinge");
+            hinge.transform.SetParent(shell.transform);
+            hinge.transform.position = new Vector3(3.05f, 0f, 1f);
+            GameObject door = CreateCube("Door", new Vector3(3.05f, 1.025f, 1.45f), new Vector3(0.12f, 2.05f, 0.9f),
+                                         hinge.transform, materials["wood"]);
+            doorHinge = hinge.transform;
+
+            CreateCube("Corridor Floor", new Vector3(3.7f, -0.05f, 1.45f), new Vector3(1.2f, 0.1f, 1.2f),
+                       shell.transform, materials["floor"]);
+            CreateCube("Black Corridor", new Vector3(4.28f, 1.3f, 1.45f), new Vector3(0.1f, 2.6f, 1.2f),
+                       shell.transform, materials["killer"]);
         }
 
         private static Transform BuildFixedCamera(Transform parent, out Camera outputCamera)
@@ -304,18 +359,12 @@ namespace ConGame.Editor
             return rig.transform;
         }
 
-        private static void BuildPlayer(
-            Transform parent,
-            Transform fixedCamera,
-            GameConfigAsset config,
-            GameplayFactService facts,
-            GameplayEventHub events,
-            IReadOnlyDictionary<string, ItemDefinitionAsset> items,
-            IReadOnlyDictionary<string, Material> materials,
-            out PlayerMotor motor,
-            out PlayerInputRouter input,
-            out PlayerInteractor interactor,
-            out GameObject firstPersonRig)
+        private static void BuildPlayer(Transform parent, Transform fixedCamera, GameConfigAsset config,
+                                        GameplayFactService facts, GameplayEventHub events,
+                                        IReadOnlyDictionary<string, ItemDefinitionAsset> items,
+                                        IReadOnlyDictionary<string, Material> materials, out PlayerMotor motor,
+                                        out PlayerInputRouter input, out PlayerInteractor interactor,
+                                        out GameObject firstPersonRig)
         {
             GameObject player = new GameObject("Player");
             player.transform.SetParent(parent);
@@ -354,16 +403,15 @@ namespace ConGame.Editor
             interactor.Configure(input, scanner, hand.transform, motor, facts, events, config);
         }
 
-        private static void BuildFurnitureAndZones(
-            Transform parent,
-            GameplayFactService facts,
-            IReadOnlyDictionary<string, ItemDefinitionAsset> items,
-            IReadOnlyDictionary<string, Material> materials)
+        private static void BuildFurnitureAndZones(Transform parent, GameplayFactService facts,
+                                                   IReadOnlyDictionary<string, ItemDefinitionAsset> items,
+                                                   IReadOnlyDictionary<string, Material> materials)
         {
             GameObject furniture = new GameObject("Furniture");
             furniture.transform.SetParent(parent);
 
-            GameObject armchair = CreateCube("FUR_Armchair", new Vector3(-0.7f, 0.575f, -0.55f), new Vector3(0.95f, 1.15f, 0.75f), furniture.transform, materials["chair"]);
+            GameObject armchair = CreateCube("FUR_Armchair", new Vector3(-0.7f, 0.575f, -0.55f),
+                                             new Vector3(0.95f, 1.15f, 0.75f), furniture.transform, materials["chair"]);
             InteractableEntity chairEntity = armchair.AddComponent<InteractableEntity>();
             chairEntity.Configure(items["sofa_awaken"]);
             HideCapability hide = armchair.AddComponent<HideCapability>();
@@ -383,10 +431,14 @@ namespace ConGame.Editor
             PlayerZoneTrigger zone = sofaZone.AddComponent<PlayerZoneTrigger>();
             zone.Configure(PlayerZone.SofaRear, facts);
 
-            CreateCube("FUR_Bed", new Vector3(1.7f, 0.3f, 1.85f), new Vector3(2.0f, 0.6f, 1.0f), furniture.transform, materials["wood"]);
-            CreateCube("FUR_Bookcase", new Vector3(-2.65f, 1.05f, 1.65f), new Vector3(0.8f, 2.1f, 0.35f), furniture.transform, materials["wood"]);
-            CreateCube("FUR_Dresser", new Vector3(-1.45f, 0.425f, 2.1f), new Vector3(1.1f, 0.85f, 0.48f), furniture.transform, materials["wood"]);
-            CreateCube("FUR_WoodChair", new Vector3(-0.1f, 0.48f, 1.7f), new Vector3(0.45f, 0.95f, 0.5f), furniture.transform, materials["interactable"]);
+            CreateCube("FUR_Bed", new Vector3(1.7f, 0.3f, 1.85f), new Vector3(2.0f, 0.6f, 1.0f), furniture.transform,
+                       materials["wood"]);
+            CreateCube("FUR_Bookcase", new Vector3(-2.65f, 1.05f, 1.65f), new Vector3(0.8f, 2.1f, 0.35f),
+                       furniture.transform, materials["wood"]);
+            CreateCube("FUR_Dresser", new Vector3(-1.45f, 0.425f, 2.1f), new Vector3(1.1f, 0.85f, 0.48f),
+                       furniture.transform, materials["wood"]);
+            CreateCube("FUR_WoodChair", new Vector3(-0.1f, 0.48f, 1.7f), new Vector3(0.45f, 0.95f, 0.5f),
+                       furniture.transform, materials["interactable"]);
         }
 
         private static void BuildBat(Transform parent, ItemDefinitionAsset definition, Material material)
@@ -406,15 +458,11 @@ namespace ConGame.Editor
             bat.AddComponent<RigidbodyResettable>();
         }
 
-        private static void BuildTelevision(
-            Transform parent,
-            GameplayFactService facts,
-            GameplayEventHub events,
-            GameFlowController flow,
-            ItemDefinitionAsset definition,
-            Material material)
+        private static void BuildTelevision(Transform parent, GameplayFactService facts, GameplayEventHub events,
+                                            GameFlowController flow, ItemDefinitionAsset definition, Material material)
         {
-            GameObject tv = CreateCube("PRP_CRTTV", new Vector3(0f, 0.9f, -2.38f), new Vector3(1.2f, 0.8f, 0.45f), parent, material);
+            GameObject tv = CreateCube("PRP_CRTTV", new Vector3(0f, 0.9f, -2.38f), new Vector3(1.2f, 0.8f, 0.45f),
+                                       parent, material);
             InteractableEntity entity = tv.AddComponent<InteractableEntity>();
             entity.Configure(definition);
             TelevisionController controller = tv.AddComponent<TelevisionController>();
@@ -427,12 +475,9 @@ namespace ConGame.Editor
             screenAnchor.transform.localPosition = new Vector3(0f, 0.31f, 0.51f);
         }
 
-        private static void BuildLights(
-            Transform parent,
-            GameplayFactService facts,
-            IReadOnlyDictionary<string, Material> materials,
-            out BreakableLight ceilingBreakable,
-            out BreakableLight tableBreakable)
+        private static void BuildLights(Transform parent, GameplayFactService facts,
+                                        IReadOnlyDictionary<string, Material> materials,
+                                        out BreakableLight ceilingBreakable, out BreakableLight tableBreakable)
         {
             GameObject ceiling = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             ceiling.name = "PRP_CeilingLamp";
@@ -462,17 +507,13 @@ namespace ConGame.Editor
             tableBreakable.Configure(tableLight);
         }
 
-        private static KillerDirector BuildKiller(
-            Transform parent,
-            Transform player,
-            GameplayFactService facts,
-            CounterplayCatalogAsset counterplays,
-            GameConfigAsset config,
-            Material material)
+        private static KillerDirector BuildKiller(Transform parent, PlayerMotor player, PlayerInteractor interactor,
+                                                  GameplayFactService facts, CounterplayCatalogAsset counterplays,
+                                                  GameConfigAsset config, Material material)
         {
             GameObject killer = new GameObject("Killer");
             killer.transform.SetParent(parent);
-            killer.transform.position = new Vector3(2.45f, 0f, 1.45f);
+            killer.transform.position = new Vector3(3.62f, 0f, 1.45f);
 
             GameObject visual = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             visual.name = "CH_Killer_Greybox";
@@ -489,9 +530,12 @@ namespace ConGame.Editor
 
             PlayableDirector director = killer.AddComponent<PlayableDirector>();
             director.playOnAwake = false;
-            TimelineSequenceRunner sequenceRunner = killer.AddComponent<TimelineSequenceRunner>();
+            killer.AddComponent<TimelineSequenceRunner>();
+
+            M1GreyboxPerformancePlayer performance = killer.AddComponent<M1GreyboxPerformancePlayer>();
+            performance.Configure(killer.transform, player, interactor);
             KillerDirector killerDirector = killer.AddComponent<KillerDirector>();
-            killerDirector.Configure(agent, player, facts, counterplays, config, sequenceRunner);
+            killerDirector.Configure(agent, player.transform, facts, counterplays, config, performance);
             return killerDirector;
         }
 
@@ -502,20 +546,29 @@ namespace ConGame.Editor
             NavMeshSurface surface = navigation.AddComponent<NavMeshSurface>();
             surface.collectObjects = CollectObjects.All;
             surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+
+            if (AssetDatabase.LoadAssetAtPath<NavMeshData>(NavMeshPath) != null)
+            {
+                AssetDatabase.DeleteAsset(NavMeshPath);
+            }
+
             surface.BuildNavMesh();
+            if (surface.navMeshData != null)
+            {
+                AssetDatabase.CreateAsset(surface.navMeshData, NavMeshPath);
+                EditorUtility.SetDirty(surface);
+            }
         }
 
         private static void SetBuildScenes()
         {
-            EditorBuildSettings.scenes = new[]
-            {
-                new EditorBuildSettingsScene(BootstrapScenePath, true),
-                new EditorBuildSettingsScene(MenuScenePath, true),
-                new EditorBuildSettingsScene(RoomScenePath, true)
-            };
+            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(BootstrapScenePath, true),
+                                                 new EditorBuildSettingsScene(MenuScenePath, true),
+                                                 new EditorBuildSettingsScene(RoomScenePath, true) };
         }
 
-        private static GameObject CreateCube(string name, Vector3 position, Vector3 scale, Transform parent, Material material)
+        private static GameObject CreateCube(string name, Vector3 position, Vector3 scale, Transform parent,
+                                             Material material)
         {
             GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             gameObject.name = name;
@@ -542,7 +595,8 @@ namespace ConGame.Editor
             return material;
         }
 
-        private static T EnsureAsset<T>(string path) where T : ScriptableObject
+        private static T EnsureAsset<T>(string path)
+            where T : ScriptableObject
         {
             T asset = AssetDatabase.LoadAssetAtPath<T>(path);
             if (asset != null)
@@ -587,7 +641,8 @@ namespace ConGame.Editor
                 }
             }
 
-            Debug.LogWarning($"Optional component {string.Join(" or ", typeNames)} was not found. The scene remains usable with the physical Camera fallback.");
+            Debug.LogWarning(
+                $"Optional component {string.Join(" or ", typeNames)} was not found. The scene remains usable with the physical Camera fallback.");
             return null;
         }
     }

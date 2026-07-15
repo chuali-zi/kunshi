@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ConGame.Domain.Interaction;
 using ConGame.Domain.Counterplay;
 using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Data;
@@ -12,12 +13,9 @@ namespace ConGame.Editor
 
     public static class ConGameProjectValidator
     {
-        private static readonly string[] ExpectedScenes =
-        {
-            "Assets/_Game/Scenes/Bootstrap.unity",
-            "Assets/_Game/Scenes/MainMenu.unity",
-            "Assets/_Game/Scenes/Room_M1.unity"
-        };
+        private static readonly string[] ExpectedScenes = { "Assets/_Game/Scenes/Bootstrap.unity",
+                                                            "Assets/_Game/Scenes/MainMenu.unity",
+                                                            "Assets/_Game/Scenes/Room_M1.unity" };
 
         [MenuItem("ConGame/Validate Project", priority = 100)]
         public static void ValidateFromMenu()
@@ -25,8 +23,7 @@ namespace ConGame.Editor
             int errors = ValidateProject(true);
             EditorUtility.DisplayDialog(
                 "ConGame Validation",
-                errors == 0 ? "Validation passed." : $"Validation found {errors} error(s). See Console.",
-                "OK");
+                errors == 0 ? "Validation passed." : $"Validation found {errors} error(s). See Console.", "OK");
         }
 
         public static int ValidateProject(bool log)
@@ -53,7 +50,8 @@ namespace ConGame.Editor
 
             for (int i = 0; i < guids.Length; i++)
             {
-                ItemDefinitionAsset item = AssetDatabase.LoadAssetAtPath<ItemDefinitionAsset>(AssetDatabase.GUIDToAssetPath(guids[i]));
+                ItemDefinitionAsset item =
+                    AssetDatabase.LoadAssetAtPath<ItemDefinitionAsset>(AssetDatabase.GUIDToAssetPath(guids[i]));
                 if (item == null || string.IsNullOrWhiteSpace(item.ItemId) || !ids.Add(item.ItemId))
                 {
                     errors++;
@@ -78,7 +76,8 @@ namespace ConGame.Editor
 
         private static int ValidateCounterplays(bool log)
         {
-            string[] guids = AssetDatabase.FindAssets("t:CounterplayDefinitionAsset", new[] { "Assets/_Game/Content/Counterplays" });
+            string[] guids =
+                AssetDatabase.FindAssets("t:CounterplayDefinitionAsset", new[] { "Assets/_Game/Content/Counterplays" });
             HashSet<string> ids = new HashSet<string>(StringComparer.Ordinal);
             HashSet<int> orders = new HashSet<int>();
             bool foundFallback = false;
@@ -86,7 +85,8 @@ namespace ConGame.Editor
 
             for (int i = 0; i < guids.Length; i++)
             {
-                CounterplayDefinitionAsset definition = AssetDatabase.LoadAssetAtPath<CounterplayDefinitionAsset>(AssetDatabase.GUIDToAssetPath(guids[i]));
+                CounterplayDefinitionAsset definition =
+                    AssetDatabase.LoadAssetAtPath<CounterplayDefinitionAsset>(AssetDatabase.GUIDToAssetPath(guids[i]));
                 if (definition == null)
                 {
                     errors++;
@@ -110,9 +110,18 @@ namespace ConGame.Editor
                         Debug.LogError($"Counterplay sort order {definition.SortOrder} is duplicated.", definition);
                     }
                 }
+                if (definition.ContentStatus == ContentStatus.Implemented && definition.Performance == null)
+                {
+                    errors++;
+                    if (log)
+                    {
+                        Debug.LogError(
+                            $"Implemented counterplay {definition.OutcomeId} must reference an M1 performance asset.",
+                            definition);
+                    }
+                }
 
-                if (definition.OutcomeId == "D01" &&
-                    (definition.TriggerMode & CounterplayTriggerMode.Fallback) != 0 &&
+                if (definition.OutcomeId == "D01" && (definition.TriggerMode & CounterplayTriggerMode.Fallback) != 0 &&
                     (definition.Conditions == null || definition.Conditions.Length == 0))
                 {
                     foundFallback = true;
@@ -133,7 +142,8 @@ namespace ConGame.Editor
                 errors++;
                 if (log)
                 {
-                    Debug.LogError($"Expected {CounterplaySeedLibrary.All.Count} counterplay definitions, found {guids.Length}.");
+                    Debug.LogError(
+                        $"Expected {CounterplaySeedLibrary.All.Count} counterplay definitions, found {guids.Length}.");
                 }
             }
 
@@ -181,7 +191,8 @@ namespace ConGame.Editor
                 }
             }
 
-            UnityEngine.Object[] settingsAssets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
+            UnityEngine.Object[] settingsAssets =
+                AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
             if (settingsAssets == null || settingsAssets.Length == 0)
             {
                 return errors;

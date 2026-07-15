@@ -1,12 +1,19 @@
 * text=auto
+.gitattributes text eol=lf
 *.cs text eol=lf
 *.json text eol=lf
 *.asmdef text eol=lf
 *.md text eol=lf
-*.unity merge=unityyamlmerge eol=lf
-*.prefab merge=unityyamlmerge eol=lf
-*.asset merge=unityyamlmerge eol=lf
-*.meta merge=unityyamlmerge eol=lf
+
+# Unity YAML is textual and uses trailing spaces for empty scalar values.
+*.unity text merge=unityyamlmerge eol=lf whitespace=-trailing-space
+*.prefab text merge=unityyamlmerge eol=lf whitespace=-trailing-space
+*.asset text merge=unityyamlmerge eol=lf whitespace=-trailing-space
+*.meta text merge=unityyamlmerge eol=lf whitespace=-trailing-space
+*.mat text eol=lf whitespace=-trailing-space
+*.anim text eol=lf whitespace=-trailing-space
+*.controller text eol=lf whitespace=-trailing-space
+
 *.png binary
 *.jpg binary
 *.jpeg binary

@@ -10,12 +10,18 @@ namespace ConGame.Runtime.Counterplay
     [CreateAssetMenu(menuName = "ConGame/Content/Counterplay Definition", fileName = "CP_New")]
     public sealed class CounterplayDefinitionAsset : ScriptableObject
     {
-        [SerializeField] private string outcomeId;
-        [SerializeField] private int sortOrder;
-        [SerializeField] private CounterplayTriggerMode triggerMode;
-        [SerializeField] private FactCondition[] conditions;
-        [SerializeField] private ContentStatus contentStatus;
-        [SerializeField] private PlayableAsset performance;
+        [SerializeField]
+        private string outcomeId;
+        [SerializeField]
+        private int sortOrder;
+        [SerializeField]
+        private CounterplayTriggerMode triggerMode;
+        [SerializeField]
+        private FactCondition[] conditions;
+        [SerializeField]
+        private ContentStatus contentStatus;
+        [SerializeField]
+        private PlayableAsset performance;
 
         public string OutcomeId => outcomeId;
         public int SortOrder => sortOrder;
@@ -29,18 +35,15 @@ namespace ConGame.Runtime.Counterplay
             return new CounterplayRule(outcomeId, sortOrder, triggerMode, conditions, contentStatus);
         }
 
-        public void Configure(
-            string id,
-            int order,
-            CounterplayTriggerMode mode,
-            FactCondition[] ruleConditions,
-            ContentStatus status)
+        public void Configure(string id, int order, CounterplayTriggerMode mode, FactCondition[] ruleConditions,
+                              ContentStatus status, PlayableAsset performanceAsset = null)
         {
             outcomeId = id;
             sortOrder = order;
             triggerMode = mode;
             conditions = ruleConditions;
             contentStatus = status;
+            performance = performanceAsset;
         }
     }
 }

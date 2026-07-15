@@ -17,4 +17,4 @@ MonoBehaviour:
   triggerMode: 8
   conditions: []
   contentStatus: 2
-  performance: {fileID: 0}
+  performance: {fileID: 11400000, guid: ef4928107ca5d6c49a68a7cdc4074b62, type: 2}

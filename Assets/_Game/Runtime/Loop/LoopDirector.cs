@@ -20,14 +20,25 @@ namespace ConGame.Runtime.Loop
     [DisallowMultipleComponent]
     public sealed class LoopDirector : MonoBehaviour
     {
-        [SerializeField] private GameConfigAsset config;
-        [SerializeField] private GameFlowController flow;
-        [SerializeField] private LoopResetRegistry resetRegistry;
-        [SerializeField] private GameplayFactService facts;
-        [SerializeField] private GameplayEventHub events;
-        [SerializeField] private PlayerInputRouter input;
-        [SerializeField] private PlayerMotor playerMotor;
-        [SerializeField] private KillerDirector killer;
+        [SerializeField]
+        private GameConfigAsset config;
+        [SerializeField]
+        private GameFlowController flow;
+        [SerializeField]
+        private LoopResetRegistry resetRegistry;
+        [SerializeField]
+        private GameplayFactService facts;
+        [SerializeField]
+        private GameplayEventHub events;
+        [SerializeField]
+        private PlayerInputRouter input;
+        [SerializeField]
+        private PlayerMotor playerMotor;
+
+        [SerializeField]
+        private RoomDoorBreachController breach;
+        [SerializeField]
+        private KillerDirector killer;
 
         private EntryClock _entryClock;
         private DarkAdaptationTracker _darkAdaptation;
@@ -46,15 +57,10 @@ namespace ConGame.Runtime.Loop
         public PersistentProgressV1 Progress => _progress;
         public EntryClock EntryClock => _entryClock;
 
-        public void Configure(
-            GameConfigAsset gameConfig,
-            GameFlowController flowController,
-            LoopResetRegistry registry,
-            GameplayFactService factService,
-            GameplayEventHub eventHub,
-            PlayerInputRouter inputRouter,
-            PlayerMotor motor,
-            KillerDirector killerDirector)
+        public void Configure(GameConfigAsset gameConfig, GameFlowController flowController, LoopResetRegistry registry,
+                              GameplayFactService factService, GameplayEventHub eventHub, PlayerInputRouter inputRouter,
+                              PlayerMotor motor, KillerDirector killerDirector,
+                              RoomDoorBreachController breachController = null)
         {
             config = gameConfig;
             flow = flowController;
@@ -64,6 +70,7 @@ namespace ConGame.Runtime.Loop
             input = inputRouter;
             playerMotor = motor;
             killer = killerDirector;
+            breach = breachController;
         }
 
         public void Initialize(JsonSaveStore saveStore = null)
@@ -76,7 +83,8 @@ namespace ConGame.Runtime.Loop
             _saveStore = saveStore ?? new JsonSaveStore();
             _progress = _saveStore.Load();
             _loopEpoch = _progress.loopIndex;
-            _entryClock = new EntryClock(config == null ? EntryClockSettings.Default : config.CreateEntryClockSettings());
+            _entryClock =
+                new EntryClock(config == null ? EntryClockSettings.Default : config.CreateEntryClockSettings());
             _darkAdaptation = new DarkAdaptationTracker(_progress.darkAdaptationXp);
 
             flow.Initialize(GamePhase.Awakening);
@@ -87,7 +95,8 @@ namespace ConGame.Runtime.Loop
             _initialized = true;
 
             ConsumeCrackEchoIfNeeded();
-            flow.Request(GamePhase.FreeRoam, TransitionPriority.Normal, "Awakening is immediately interruptible in M1.");
+            flow.Request(GamePhase.FreeRoam, TransitionPriority.Normal,
+                         "Awakening is immediately interruptible in M1.");
         }
 
         private void OnDestroy()
@@ -139,7 +148,7 @@ namespace ConGame.Runtime.Loop
 
         public void RequestKill(string outcomeId)
         {
-            if (!_initialized || _resetting || flow.CurrentPhase >= GamePhase.EndingE1)
+            if (!_initialized || _resetting || flow.CurrentPhase != GamePhase.Counterplay)
             {
                 return;
             }
@@ -187,8 +196,17 @@ namespace ConGame.Runtime.Loop
         {
             if (current == GamePhase.Breach)
             {
-                killer.BeginEntry(_loopEpoch, RequestKill);
-                flow.Request(GamePhase.Counterplay, TransitionPriority.Normal, "Killer crossed the room threshold.");
+                playerMotor?.SetInputLocked(true);
+                input?.SetGameplayEnabled(false);
+
+                if (breach == null)
+                {
+                    OnBreachCompleted();
+                }
+                else
+                {
+                    breach.Begin(_loopEpoch, OnBreachCompleted);
+                }
             }
             else if (current == GamePhase.KillImpact)
             {
@@ -198,6 +216,17 @@ namespace ConGame.Runtime.Loop
             {
                 ConsumeCrackEchoIfNeeded();
             }
+        }
+
+        private void OnBreachCompleted()
+        {
+            if (!_initialized || _resetting || flow.CurrentPhase != GamePhase.Breach)
+            {
+                return;
+            }
+
+            killer?.BeginEntry(_loopEpoch, RequestKill);
+            flow.Request(GamePhase.Counterplay, TransitionPriority.Normal, "Door breach completed.");
         }
 
         private void PerformReset()

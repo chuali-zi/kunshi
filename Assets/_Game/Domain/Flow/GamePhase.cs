@@ -105,14 +105,11 @@ namespace ConGame.Domain.Flow
                 case GamePhase.Menu:
                     return to == GamePhase.Awakening;
                 case GamePhase.Awakening:
-                    return to == GamePhase.FreeRoam || to == GamePhase.Breach ||
-                           to == GamePhase.KillImpact || to == GamePhase.EndingE1;
+                    return to == GamePhase.FreeRoam || to == GamePhase.Breach || to == GamePhase.EndingE1;
                 case GamePhase.FreeRoam:
-                    return to == GamePhase.Breach || to == GamePhase.KillImpact ||
-                           to == GamePhase.EndingE1;
+                    return to == GamePhase.Breach || to == GamePhase.EndingE1;
                 case GamePhase.Breach:
-                    return to == GamePhase.Counterplay || to == GamePhase.KillImpact ||
-                           to == GamePhase.EndingE1;
+                    return to == GamePhase.Counterplay || to == GamePhase.EndingE1;
                 case GamePhase.Counterplay:
                     return to == GamePhase.KillImpact || to == GamePhase.EndingE1;
                 case GamePhase.KillImpact:

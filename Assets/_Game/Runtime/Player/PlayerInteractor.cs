@@ -14,13 +14,20 @@ namespace ConGame.Runtime.Player
     [DisallowMultipleComponent]
     public sealed class PlayerInteractor : MonoBehaviour, ILoopResettable
     {
-        [SerializeField] private PlayerInputRouter input;
-        [SerializeField] private InteractionScanner scanner;
-        [SerializeField] private Transform handSocket;
-        [SerializeField] private PlayerMotor motor;
-        [SerializeField] private GameplayFactService facts;
-        [SerializeField] private GameplayEventHub events;
-        [SerializeField] private GameConfigAsset config;
+        [SerializeField]
+        private PlayerInputRouter input;
+        [SerializeField]
+        private InteractionScanner scanner;
+        [SerializeField]
+        private Transform handSocket;
+        [SerializeField]
+        private PlayerMotor motor;
+        [SerializeField]
+        private GameplayFactService facts;
+        [SerializeField]
+        private GameplayEventHub events;
+        [SerializeField]
+        private GameConfigAsset config;
 
         private Rigidbody _heldBody;
         private Collider[] _heldColliders;
@@ -29,14 +36,9 @@ namespace ConGame.Runtime.Player
 
         public InteractableEntity HeldEntity { get; private set; }
 
-        public void Configure(
-            PlayerInputRouter inputRouter,
-            InteractionScanner interactionScanner,
-            Transform socket,
-            PlayerMotor playerMotor,
-            GameplayFactService factService,
-            GameplayEventHub eventHub,
-            GameConfigAsset gameConfig)
+        public void Configure(PlayerInputRouter inputRouter, InteractionScanner interactionScanner, Transform socket,
+                              PlayerMotor playerMotor, GameplayFactService factService, GameplayEventHub eventHub,
+                              GameConfigAsset gameConfig)
         {
             input = inputRouter;
             scanner = interactionScanner;
@@ -110,6 +112,11 @@ namespace ConGame.Runtime.Player
             motor?.Teleport(anchor.position, anchor.rotation);
             facts?.SetPlayerZone(zone);
             facts?.SetPlayerPose(PlayerPose.Crouched);
+        }
+
+        public void ForceDropHeld()
+        {
+            DetachHeld(false);
         }
 
         public void CaptureInitialState()
@@ -209,9 +216,8 @@ namespace ConGame.Runtime.Player
             {
                 body.isKinematic = false;
                 body.useGravity = true;
-                body.linearVelocity = applyThrow
-                    ? transform.forward * (config == null ? 8f : config.ThrowSpeed)
-                    : Vector3.zero;
+                body.linearVelocity =
+                    applyThrow ? transform.forward * (config == null ? 8f : config.ThrowSpeed) : Vector3.zero;
                 body.angularVelocity = applyThrow ? Random.onUnitSphere * 3f : Vector3.zero;
             }
 
