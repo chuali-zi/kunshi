@@ -1,7 +1,9 @@
 using System.Collections;
 using ConGame.Bootstrap;
+using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Runtime.AI;
+using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Loop;
 using NUnit.Framework;
@@ -34,11 +36,25 @@ namespace ConGame.Tests.PlayMode
             LoopDirector loop = roomRoot.GetComponentInChildren<LoopDirector>(true);
             RoomDoorBreachController breach = roomRoot.GetComponentInChildren<RoomDoorBreachController>(true);
             KillerDirector killer = roomRoot.GetComponentInChildren<KillerDirector>(true);
+            GameplayFactService facts = roomRoot.GetComponentInChildren<GameplayFactService>(true);
 
             Assert.That(context.enabled, Is.True);
+
+            float awakenWait = 0f;
+            while (flow.CurrentPhase == GamePhase.Awakening && awakenWait < 5.5f)
+            {
+                awakenWait += Time.deltaTime;
+                yield return null;
+            }
+
             Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.FreeRoam));
             Assert.That(loop.EntryClock, Is.Not.Null);
             Assert.That(killer.State, Is.EqualTo(KillerState.Dormant));
+
+            // Leave idle-awakening facts so Entry selects fallback D01 instead of D02.
+            facts.SetMeaningfulInput(true);
+            facts.SetPlayerZone(PlayerZone.Open);
+            facts.SetAtAwakeningPoint(false);
 
             Assert.That(flow.Request(GamePhase.Breach, TransitionPriority.Normal, "M1 integration test"), Is.True);
             Assert.That(flow.CommitPending(), Is.True);

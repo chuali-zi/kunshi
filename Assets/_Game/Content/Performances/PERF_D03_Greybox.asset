@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: PERF_D03_Greybox
   m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.M1.M1GreyboxPlayableAsset
   style: 1
-  sequenceDuration: 1.3
+  sequenceDuration: 1.8
+  outcomeId: D03
+  heldItemPolicy: 0
+  qteWindows: []
+  resultBranches: []

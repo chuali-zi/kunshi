@@ -39,6 +39,8 @@ namespace ConGame.Runtime.Loop
         private RoomDoorBreachController breach;
         [SerializeField]
         private KillerDirector killer;
+        [SerializeField]
+        private DarkAdaptationConfigAsset darkAdaptationConfig;
 
         private EntryClock _entryClock;
         private DarkAdaptationTracker _darkAdaptation;
@@ -46,21 +48,29 @@ namespace ConGame.Runtime.Loop
         private PersistentProgressV1 _progress;
         private bool _initialized;
         private bool _resetting;
-        private int _loopEpoch;
+        
+        private float _awakeningRemaining;
+private int _loopEpoch;
+        private Color _baseAmbient = new Color(0.08f, 0.08f, 0.09f);
 
-        public event Action EntryWarning;
+        
+        public event Action<bool> AwakeningStarted;
+public event Action EntryWarning;
         public event Action TelevisionCrackEchoRequested;
         public event Action<int, string> LoopResetCompleted;
+        public event Action<string> EndingFightCompleted;
 
         public int LoopEpoch => _loopEpoch;
         public string LastOutcomeId { get; private set; }
         public PersistentProgressV1 Progress => _progress;
         public EntryClock EntryClock => _entryClock;
+        public float CurrentAmbientIntensity { get; private set; }
 
         public void Configure(GameConfigAsset gameConfig, GameFlowController flowController, LoopResetRegistry registry,
                               GameplayFactService factService, GameplayEventHub eventHub, PlayerInputRouter inputRouter,
                               PlayerMotor motor, KillerDirector killerDirector,
-                              RoomDoorBreachController breachController = null)
+                              RoomDoorBreachController breachController = null,
+                              DarkAdaptationConfigAsset darkConfig = null)
         {
             config = gameConfig;
             flow = flowController;
@@ -71,6 +81,7 @@ namespace ConGame.Runtime.Loop
             playerMotor = motor;
             killer = killerDirector;
             breach = breachController;
+            darkAdaptationConfig = darkConfig;
         }
 
         public void Initialize(JsonSaveStore saveStore = null)
@@ -86,6 +97,8 @@ namespace ConGame.Runtime.Loop
             _entryClock =
                 new EntryClock(config == null ? EntryClockSettings.Default : config.CreateEntryClockSettings());
             _darkAdaptation = new DarkAdaptationTracker(_progress.darkAdaptationXp);
+            _baseAmbient = RenderSettings.ambientLight;
+            ApplyDarkAdaptationAmbient();
 
             flow.Initialize(GamePhase.Awakening);
             flow.PhaseChanged += OnPhaseChanged;
@@ -93,10 +106,8 @@ namespace ConGame.Runtime.Loop
             events.NoiseEmitted += OnNoiseEmitted;
             events.KillerStimulusEmitted += OnKillerStimulus;
             _initialized = true;
-
             ConsumeCrackEchoIfNeeded();
-            flow.Request(GamePhase.FreeRoam, TransitionPriority.Normal,
-                         "Awakening is immediately interruptible in M1.");
+            BeginAwakening();
         }
 
         private void OnDestroy()
@@ -119,7 +130,18 @@ namespace ConGame.Runtime.Loop
                 return;
             }
 
-            GamePhase phase = flow.CurrentPhase;
+            
+            if (flow.CurrentPhase == GamePhase.Awakening && _awakeningRemaining > 0f)
+            {
+                _awakeningRemaining -= Time.deltaTime;
+                if (_awakeningRemaining <= 0f)
+                {
+                    flow.Request(GamePhase.FreeRoam, TransitionPriority.Normal, "Awakening performance completed.");
+                }
+            }
+
+            
+GamePhase phase = flow.CurrentPhase;
             bool clockActive = phase == GamePhase.Awakening || phase == GamePhase.FreeRoam;
             if (clockActive)
             {
@@ -131,8 +153,41 @@ namespace ConGame.Runtime.Loop
             if (result.ExperienceGained > 0)
             {
                 _progress.darkAdaptationXp = _darkAdaptation.Experience;
-                _saveStore.SaveAtomic(_progress);
+                ApplyDarkAdaptationAmbient();
+                TrySaveProgress();
             }
+            else if (persistentBlack)
+            {
+                ApplyDarkAdaptationAmbient();
+            }
+        }
+
+        public void NotifyEndingFightCompleted(string outcomeId)
+        {
+            EndingFightCompleted?.Invoke(string.IsNullOrWhiteSpace(outcomeId) ? "D01" : outcomeId);
+        }
+
+        public void RequestKill(string outcomeId)
+        {
+            if (!_initialized || _resetting)
+            {
+                return;
+            }
+
+            string resolved = string.IsNullOrWhiteSpace(outcomeId) ? "D01" : outcomeId;
+            if (flow.CurrentPhase == GamePhase.EndingE2)
+            {
+                NotifyEndingFightCompleted(resolved);
+                return;
+            }
+
+            if (flow.CurrentPhase != GamePhase.Counterplay)
+            {
+                return;
+            }
+
+            LastOutcomeId = resolved;
+            flow.Request(GamePhase.KillImpact, TransitionPriority.Death, LastOutcomeId);
         }
 
         public void NotifyMeaningfulAction()
@@ -142,28 +197,46 @@ namespace ConGame.Runtime.Loop
                 return;
             }
 
-            facts.SetMeaningfulInput(true);
-            ProcessEntrySignal(_entryClock.MarkMeaningfulAction());
-        }
-
-        public void RequestKill(string outcomeId)
-        {
-            if (!_initialized || _resetting || flow.CurrentPhase != GamePhase.Counterplay)
+            if (flow.CurrentPhase == GamePhase.Awakening)
             {
-                return;
+                flow.Request(GamePhase.FreeRoam, TransitionPriority.Normal, "Awakening interrupted by player input.");
             }
 
-            LastOutcomeId = string.IsNullOrWhiteSpace(outcomeId) ? "D01" : outcomeId;
-            flow.Request(GamePhase.KillImpact, TransitionPriority.Death, LastOutcomeId);
+            facts.SetMeaningfulInput(true);
+            ProcessEntrySignal(_entryClock.MarkMeaningfulAction());
         }
 
         public void SaveProgress()
         {
             if (_progress != null)
             {
-                _saveStore.SaveAtomic(_progress);
+                TrySaveProgress();
             }
         }
+
+public void MarkEndingCompleted()
+        {
+            if (_progress == null)
+            {
+                return;
+            }
+
+            _progress.endingCompleted = true;
+            TrySaveProgress();
+        }
+
+public void MarkD21Seen()
+        {
+            if (_progress == null || _progress.d21Seen)
+            {
+                return;
+            }
+
+            _progress.d21Seen = true;
+            TrySaveProgress();
+        }
+
+
 
         private void OnNoiseEmitted(NoiseEvent noise)
         {
@@ -205,7 +278,9 @@ namespace ConGame.Runtime.Loop
                 }
                 else
                 {
-                    breach.Begin(_loopEpoch, OnBreachCompleted);
+                    float baseDuration = config == null ? 0.9f : config.BreachDuration;
+                    float extra = facts == null ? 0f : facts.DoorBlockBreachExtraSeconds;
+                    breach.Begin(_loopEpoch, OnBreachCompleted, baseDuration + extra);
                 }
             }
             else if (current == GamePhase.KillImpact)
@@ -215,6 +290,7 @@ namespace ConGame.Runtime.Loop
             else if (current == GamePhase.Awakening)
             {
                 ConsumeCrackEchoIfNeeded();
+                BeginAwakening();
             }
         }
 
@@ -255,11 +331,11 @@ namespace ConGame.Runtime.Loop
             _entryClock.Reset();
             _darkAdaptation.ResetPartial();
             _progress.AdvanceLoop();
-            _saveStore.SaveAtomic(_progress);
+            TrySaveProgress();
 
             flow.Request(GamePhase.Awakening, TransitionPriority.Normal, "Room restored.");
             flow.CommitPending();
-            flow.Request(GamePhase.FreeRoam, TransitionPriority.Normal, "Awakening input available.");
+
 
             input?.SetGameplayEnabled(true);
             playerMotor?.SetInputLocked(false);
@@ -277,7 +353,51 @@ namespace ConGame.Runtime.Loop
             TelevisionCrackEchoRequested?.Invoke();
             Debug.Log("[ConGame] Consumed one-loop television crack echo.");
             _progress.tvCrackEchoPending = false;
-            _saveStore.SaveAtomic(_progress);
+            TrySaveProgress();
         }
-    }
+    
+
+private void BeginAwakening()
+        {
+            int loopIndex = _progress == null ? 1 : Mathf.Max(1, _progress.loopIndex);
+            _awakeningRemaining = Mathf.Clamp(4.2f - (loopIndex - 1) * 0.25f, 2.5f, 4.2f);
+            ApplyDarkAdaptationAmbient();
+            AwakeningStarted?.Invoke(_progress == null || _progress.loopIndex <= 1);
+        }
+
+        private void ApplyDarkAdaptationAmbient()
+        {
+            int xp = _darkAdaptation == null ? 0 : _darkAdaptation.Experience;
+            float intensity = darkAdaptationConfig == null ? 0.002f : darkAdaptationConfig.GetIntensity(xp);
+            CurrentAmbientIntensity = intensity;
+            bool persistentBlack = facts != null &&
+                                   facts.CaptureSnapshot().RoomLight == RoomLightState.PersistentBlack;
+            if (persistentBlack)
+            {
+                RenderSettings.ambientLight = new Color(intensity, intensity, intensity * 1.05f);
+            }
+            else
+            {
+                RenderSettings.ambientLight = Color.Lerp(_baseAmbient, Color.white * 0.2f, intensity * 4f);
+            }
+        }
+
+
+private void TrySaveProgress()
+        {
+            if (_saveStore == null || _progress == null)
+            {
+                return;
+            }
+
+            try
+            {
+                _saveStore.SaveAtomic(_progress);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"[ConGame] Progress save failed without blocking gameplay: {exception.Message}", this);
+            }
+        }
+}
 }

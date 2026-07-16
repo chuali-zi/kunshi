@@ -1,16 +1,19 @@
 using ConGame.Domain.Facts;
 using ConGame.Runtime.Facts;
+using ConGame.Runtime.Loop;
 using UnityEngine;
 
 namespace ConGame.Runtime.Lighting
 {
-
     [DisallowMultipleComponent]
-    public sealed class RoomLightCoordinator : MonoBehaviour
+    public sealed class RoomLightCoordinator : MonoBehaviour, ILoopResettable
     {
         [SerializeField] private BreakableLight ceilingLight;
         [SerializeField] private BreakableLight tableLight;
         [SerializeField] private GameplayFactService facts;
+
+        public int ResetOrder => 59;
+        public RoomLightState CurrentState { get; private set; } = RoomLightState.Lit;
 
         public void Configure(BreakableLight ceiling, BreakableLight table, GameplayFactService factService)
         {
@@ -55,28 +58,50 @@ namespace ConGame.Runtime.Lighting
             Recompute();
         }
 
-        private void Recompute()
+        public RoomLightState Recompute()
         {
-            if (facts == null || ceilingLight == null || tableLight == null)
+            if (ceilingLight == null || tableLight == null)
             {
-                return;
+                return CurrentState;
             }
 
-            RoomLightState state;
-            if (ceilingLight.IsBroken && tableLight.IsBroken)
+            if (!ceilingLight.IsBroken)
             {
-                state = RoomLightState.PersistentBlack;
+                CurrentState = RoomLightState.Lit;
             }
-            else if (ceilingLight.IsBroken || tableLight.IsBroken)
+            else if (tableLight.IsBroken)
             {
-                state = RoomLightState.Dim;
+                CurrentState = RoomLightState.PersistentBlack;
+            }
+            else if (!tableLight.IsPowered)
+            {
+                CurrentState = RoomLightState.RecoverableDark;
             }
             else
             {
-                state = RoomLightState.Lit;
+                CurrentState = RoomLightState.Dim;
             }
 
-            facts.SetRoomLight(state);
+            facts?.SetRoomLight(CurrentState);
+            return CurrentState;
+        }
+
+        public void CaptureInitialState()
+        {
+            Recompute();
+        }
+
+        public void Quiesce(in LoopResetContext context)
+        {
+        }
+
+        public void Restore(in LoopResetContext context)
+        {
+        }
+
+        public void Resume(in LoopResetContext context)
+        {
+            Recompute();
         }
     }
 }

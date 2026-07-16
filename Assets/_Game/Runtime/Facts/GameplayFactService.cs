@@ -39,10 +39,9 @@ namespace ConGame.Runtime.Facts
             _snapshot.PlayerPose = pose;
         }
 
-        public void SetHeldCategories(ItemCategory categories)
+public void SetHeldCategories(ItemCategory categories)
         {
             _snapshot.HeldItemCategories = categories;
-            _snapshot.HasStolenPistol = (categories & ItemCategory.Firearm) != 0;
         }
 
         public void SetMoving(bool value)
@@ -75,10 +74,55 @@ namespace ConGame.Runtime.Facts
             _snapshot.IsAmbushing = value;
         }
 
+        public float DoorBlockBreachExtraSeconds { get; private set; }
+
+        public void SetDoorBlock(DoorBlockState state, float breachExtraSeconds = 0f)
+        {
+            _snapshot.DoorBlock = state;
+            DoorBlockBreachExtraSeconds =
+                state == DoorBlockState.None ? 0f : Mathf.Max(0f, breachExtraSeconds);
+        }
+
+        public void SetTrap(TrapState state)
+        {
+            _snapshot.Trap = state;
+        }
+
+        public void SetTrapPulled(bool value)
+        {
+            _snapshot.TrapPulled = value;
+        }
+
+        public void SetStolenPistol(bool value)
+        {
+            _snapshot.HasStolenPistol = value;
+        }
+
+        public void SetGlareActive(bool value)
+        {
+            _snapshot.IsGlareActive = value;
+        }
+
+        public void SetStrikingWall(bool value)
+        {
+            _snapshot.IsStrikingWall = value;
+        }
+
+        public void SetStrikingWindow(bool value)
+        {
+            _snapshot.IsStrikingWindow = value;
+        }
+
+        public void SetAtAwakeningPoint(bool value)
+        {
+            _snapshot.IsAtAwakeningPoint = value;
+        }
+
         public void CaptureInitialState()
         {
             _snapshot = FactSnapshot.CreateBaseline();
             _initialSnapshot = _snapshot;
+            DoorBlockBreachExtraSeconds = 0f;
         }
 
         public void Quiesce(in LoopResetContext context)
@@ -88,6 +132,7 @@ namespace ConGame.Runtime.Facts
         public void Restore(in LoopResetContext context)
         {
             _snapshot = _initialSnapshot;
+            DoorBlockBreachExtraSeconds = 0f;
         }
 
         public void Resume(in LoopResetContext context)

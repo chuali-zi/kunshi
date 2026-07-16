@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: ConGame.Runtime::ConGame.Runtime.Data.ItemDefinitionAsset
   itemId: mirror
   displayName: "\u955C\u5B50"
-  supportedVerbs: 1
+  supportedVerbs: 5
   categories: 0
-  contentStatus: 0
+  contentStatus: 2

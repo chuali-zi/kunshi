@@ -81,6 +81,16 @@ namespace ConGame.Runtime.Ending
         {
         }
 
+        public void SetEndingDestroyed()
+        {
+            SetDamage(TelevisionDamageState.Destroyed);
+        }
+
+        public void PulseLightImpact()
+        {
+            LightImpactPulse?.Invoke();
+        }
+
         private void SetDamage(TelevisionDamageState state)
         {
             DamageState = state;

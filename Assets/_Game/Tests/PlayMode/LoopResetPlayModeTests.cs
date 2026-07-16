@@ -21,10 +21,12 @@ namespace ConGame.Tests.PlayMode
             item.transform.SetParent(root.transform);
             item.transform.localPosition = new Vector3(1f, 2f, 3f);
             Rigidbody body = item.AddComponent<Rigidbody>();
+            body.isKinematic = true;
             item.AddComponent<RigidbodyResettable>();
 
             yield return null;
             registry.CaptureInitialState();
+            body.isKinematic = false;
             item.transform.SetParent(null);
             item.transform.position = new Vector3(8f, 9f, 10f);
             body.linearVelocity = Vector3.one * 4f;

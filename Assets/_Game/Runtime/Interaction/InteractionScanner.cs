@@ -29,7 +29,7 @@ namespace ConGame.Runtime.Interaction
             Refresh();
         }
 
-        public InteractableEntity Refresh()
+public InteractableEntity Refresh()
         {
             Vector3 center = transform.position + Vector3.up;
             int count = Physics.OverlapSphereNonAlloc(center, radius, _hits, layerMask, QueryTriggerInteraction.Collide);
@@ -50,6 +50,12 @@ namespace ConGame.Runtime.Interaction
                     continue;
                 }
 
+                int capabilityPriority = candidate.GetBestExecutablePriority(player);
+                if (capabilityPriority == int.MinValue)
+                {
+                    continue;
+                }
+
                 Vector3 toTarget = candidate.transform.position - transform.position;
                 float distance = toTarget.magnitude;
                 Vector3 direction = distance <= 0.001f ? transform.forward : toTarget / distance;
@@ -59,7 +65,7 @@ namespace ConGame.Runtime.Interaction
                     continue;
                 }
 
-                float score = facing * 2f - distance;
+                float score = capabilityPriority * 100f + facing * 2f - distance;
                 if (candidate == Current)
                 {
                     score += 0.1f;

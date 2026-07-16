@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.M1.M1GreyboxPlayableAsset
   style: 2
   sequenceDuration: 1.8
+  outcomeId: D07
+  heldItemPolicy: 0
+  qteWindows: []
+  resultBranches: []

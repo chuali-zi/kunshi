@@ -40,6 +40,15 @@ namespace ConGame.Domain.Interaction
         Bullet = 3
     }
 
+    public enum ItemPhysicalState
+    {
+        Placed = 0,
+        Held = 1,
+        Flying = 2,
+        Scripted = 3,
+        Broken = 4
+    }
+
     public enum ContentStatus
     {
         Specified = 0,

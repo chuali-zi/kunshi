@@ -1,6 +1,7 @@
 using System;
 using ConGame.Domain.Counterplay;
 using ConGame.Domain.Facts;
+using ConGame.Domain.Interaction;
 using ConGame.Runtime.Config;
 using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Facts;
@@ -21,6 +22,7 @@ namespace ConGame.Runtime.AI
     public sealed class KillerDirector : MonoBehaviour, ILoopResettable
     {
         private const float ContinuousEvaluationInterval = 0.1f;
+        private const float D03PSearchSeconds = 8f;
 
         [SerializeField]
         private NavMeshAgent agent;
@@ -44,6 +46,8 @@ namespace ConGame.Runtime.AI
         private float _continuousEvaluationRemaining;
         private bool _running;
         private int _loopEpoch;
+        private bool _endingMode;
+        private bool _sprintInterruptUsed;
 
         public event Action<KillerState> StateChanged;
         public event Action<string> CounterplaySelected;
@@ -52,6 +56,7 @@ namespace ConGame.Runtime.AI
 
         public KillerState State { get; private set; } = KillerState.Dormant;
         public string SelectedOutcomeId { get; private set; }
+        public bool EndingMode => _endingMode;
 
         public void Configure(NavMeshAgent navMeshAgent, Transform target, GameplayFactService factService,
                               CounterplayCatalogAsset counterplayCatalog, GameConfigAsset gameConfig,
@@ -66,6 +71,69 @@ namespace ConGame.Runtime.AI
             _performancePlayer = performancePlayerBehaviour as IPerformancePlayer;
         }
 
+        public void SetEndingMode(bool enabled)
+        {
+            _endingMode = enabled;
+        }
+
+        public void ForceImmediateKill(string outcomeId = null)
+        {
+            if (State == KillerState.Dormant)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(outcomeId))
+            {
+                SelectedOutcomeId = outcomeId;
+            }
+
+            _running = false;
+            _performancePlayer?.CancelAllForLoop(_loopEpoch);
+            _killCallback?.Invoke(string.IsNullOrEmpty(SelectedOutcomeId) ? "D01" : SelectedOutcomeId);
+        }
+
+        public bool TryStartOutcome(string outcomeId)
+        {
+            if (catalog == null || string.IsNullOrWhiteSpace(outcomeId) || State == KillerState.Dormant)
+            {
+                return false;
+            }
+
+            CounterplayDefinitionAsset definition = FindDefinition(outcomeId);
+            if (definition == null)
+            {
+                return false;
+            }
+
+            StartCounterplay(definition);
+            return true;
+        }
+
+        public void RequestSprintInterrupt()
+        {
+            if (State == KillerState.Dormant || _sprintInterruptUsed)
+            {
+                return;
+            }
+
+            _sprintInterruptUsed = true;
+            if (agent != null)
+            {
+                agent.enabled = true;
+                agent.speed = Mathf.Max(agent.speed, 5.5f);
+                if (agent.isOnNavMesh && playerTarget != null)
+                {
+                    agent.SetDestination(playerTarget.position);
+                }
+            }
+
+            if (_running)
+            {
+                _remainingDelay = Mathf.Min(_remainingDelay, 0.6f);
+            }
+        }
+
         private void Awake()
         {
             agent ??= GetComponent<NavMeshAgent>();
@@ -74,12 +142,12 @@ namespace ConGame.Runtime.AI
 
         private void Update()
         {
-            if (!_running)
+            if (State == KillerState.Dormant)
             {
                 return;
             }
 
-            if (agent != null && agent.enabled && agent.isOnNavMesh && playerTarget != null)
+            if (_running && agent != null && agent.enabled && agent.isOnNavMesh && playerTarget != null)
             {
                 agent.SetDestination(playerTarget.position);
             }
@@ -122,18 +190,36 @@ namespace ConGame.Runtime.AI
             }
 
             FactSnapshot snapshot = facts == null ? FactSnapshot.CreateBaseline() : facts.CaptureSnapshot();
-            StartCounterplay(catalog == null ? null : catalog.Select(CounterplayTriggerMode.Entry, snapshot));
+            CounterplayDefinitionAsset selected = catalog == null
+                                                     ? null
+                                                     : catalog.Select(CounterplayTriggerMode.Entry, snapshot);
+            if (_endingMode)
+            {
+                selected = FilterEndingDefinition(selected, snapshot);
+            }
+
+            StartCounterplay(selected);
         }
 
         public void HandleStimulus(KillerStimulus stimulus)
         {
-            if (!_running || catalog == null || facts == null)
+            if (State == KillerState.Dormant || catalog == null || facts == null)
             {
                 return;
             }
 
             FactSnapshot snapshot = facts.CaptureSnapshotForStimulus(stimulus);
+            if (stimulus.Type == KillerStimulusType.TelevisionHeavyHit)
+            {
+                RequestSprintInterrupt();
+            }
+
             CounterplayDefinitionAsset selected = catalog.Select(CounterplayTriggerMode.Reactive, snapshot);
+            if (_endingMode)
+            {
+                selected = FilterEndingDefinition(selected, snapshot);
+            }
+
             if (selected != null && selected.SortOrder < GetSelectedOrder())
             {
                 StartCounterplay(selected);
@@ -152,6 +238,7 @@ namespace ConGame.Runtime.AI
         {
             _running = false;
             _continuousEvaluationRemaining = 0f;
+            _sprintInterruptUsed = false;
             _performancePlayer?.CancelAllForLoop(context.PreviousEpoch);
             StopAgentForPerformance();
             SetState(KillerState.Dormant);
@@ -163,6 +250,8 @@ namespace ConGame.Runtime.AI
             SelectedOutcomeId = string.Empty;
             _killCallback = null;
             _loopEpoch = context.NextEpoch;
+            _endingMode = false;
+            _sprintInterruptUsed = false;
             SetState(KillerState.Dormant);
         }
 
@@ -177,8 +266,18 @@ namespace ConGame.Runtime.AI
             CounterplaySelected?.Invoke(SelectedOutcomeId);
             SetState(KillerState.Navigating);
 
+            // Greybox D03P: hold Continuous/Entry match for a search beat before the kill.
+            if (string.Equals(SelectedOutcomeId, "D03P", StringComparison.Ordinal))
+            {
+                _performancePlayer?.CancelAllForLoop(_loopEpoch);
+                _remainingDelay = D03PSearchSeconds;
+                _running = true;
+                return;
+            }
+
             if (definition != null && definition.Performance != null && _performancePlayer != null)
             {
+                _performancePlayer.CancelAllForLoop(_loopEpoch);
                 StopAgentForPerformance();
                 int performanceEpoch = _loopEpoch;
                 bool started = _performancePlayer.Play(definition, () =>
@@ -235,10 +334,64 @@ namespace ConGame.Runtime.AI
 
             FactSnapshot snapshot = facts.CaptureSnapshot();
             CounterplayDefinitionAsset selected = catalog.Select(CounterplayTriggerMode.Continuous, snapshot);
+            if (_endingMode)
+            {
+                selected = FilterEndingDefinition(selected, snapshot);
+            }
+
             if (selected != null && selected.SortOrder < GetSelectedOrder())
             {
                 StartCounterplay(selected);
             }
+        }
+
+        private CounterplayDefinitionAsset FilterEndingDefinition(
+            CounterplayDefinitionAsset selected,
+            in FactSnapshot snapshot)
+        {
+            if (selected != null && IsEndingAllowed(selected.OutcomeId))
+            {
+                return selected;
+            }
+
+            if (snapshot.IncomingProjectile)
+            {
+                return FindDefinition("D10") ?? selected;
+            }
+
+            if ((snapshot.HeldItemCategories & ItemCategory.Weapon) != 0)
+            {
+                return FindDefinition("D07") ?? selected;
+            }
+
+            return FindDefinition("D01") ?? selected;
+        }
+
+        private static bool IsEndingAllowed(string outcomeId)
+        {
+            return string.Equals(outcomeId, "D01", StringComparison.Ordinal) ||
+                   string.Equals(outcomeId, "D07", StringComparison.Ordinal) ||
+                   string.Equals(outcomeId, "D10", StringComparison.Ordinal);
+        }
+
+        private CounterplayDefinitionAsset FindDefinition(string outcomeId)
+        {
+            if (catalog == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < catalog.Definitions.Count; i++)
+            {
+                CounterplayDefinitionAsset definition = catalog.Definitions[i];
+                if (definition != null &&
+                    string.Equals(definition.OutcomeId, outcomeId, StringComparison.Ordinal))
+                {
+                    return definition;
+                }
+            }
+
+            return null;
         }
 
         private int GetSelectedOrder()

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace ConGame.Runtime.Lighting
 {
-
     [DisallowMultipleComponent]
     public sealed class BreakableLight : MonoBehaviour, IHitReceiver, ILoopResettable
     {
@@ -15,18 +14,22 @@ namespace ConGame.Runtime.Lighting
         [SerializeField] private GameObject brokenVisual;
 
         private bool _initialBroken;
+        private bool _initialPowered = true;
 
         public event Action<BreakableLight, bool> BrokenChanged;
 
         public int ResetOrder => 50;
-
         public bool IsBroken { get; private set; }
+        public bool IsPowered { get; private set; } = true;
+        public bool IsEmitting => !IsBroken && IsPowered && targetLight != null && targetLight.enabled;
 
         public void Configure(Light lightComponent, GameObject intact = null, GameObject broken = null)
         {
             targetLight = lightComponent;
             intactVisual = intact;
             brokenVisual = broken;
+            IsPowered = lightComponent == null || lightComponent.enabled;
+            ApplyVisuals();
         }
 
         public HitResult ReceiveHit(in HitInfo hit)
@@ -40,9 +43,17 @@ namespace ConGame.Runtime.Lighting
             return HitResult.Broke;
         }
 
+        public void SetPowered(bool powered)
+        {
+            IsPowered = powered;
+            ApplyVisuals();
+            BrokenChanged?.Invoke(this, IsBroken);
+        }
+
         public void CaptureInitialState()
         {
             _initialBroken = IsBroken;
+            _initialPowered = IsPowered;
             ApplyVisuals();
         }
 
@@ -52,6 +63,7 @@ namespace ConGame.Runtime.Lighting
 
         public void Restore(in LoopResetContext context)
         {
+            IsPowered = _initialPowered;
             SetBroken(_initialBroken);
         }
 
@@ -70,7 +82,7 @@ namespace ConGame.Runtime.Lighting
         {
             if (targetLight != null)
             {
-                targetLight.enabled = !IsBroken;
+                targetLight.enabled = !IsBroken && IsPowered;
             }
 
             if (intactVisual != null)

@@ -21,6 +21,7 @@ namespace ConGame.Runtime.AI
         [SerializeField]
         private float openAngle = DefaultOpenAngle;
 
+        private float _baseDuration = DefaultDuration;
         private Vector3 _initialLocalPosition;
         private Quaternion _initialLocalRotation;
         private Vector3 _initialLocalScale;
@@ -35,19 +36,28 @@ namespace ConGame.Runtime.AI
 
         public float Progress => duration <= 0f ? 1f : Mathf.Clamp01(_elapsed / duration);
 
+        public float CurrentDuration => duration;
+
         public void Configure(Transform doorTransform, float breachDuration, float doorOpenAngle)
         {
             door = doorTransform;
-            duration = Mathf.Max(0.01f, breachDuration);
+            _baseDuration = Mathf.Max(0.01f, breachDuration);
+            duration = _baseDuration;
             openAngle = doorOpenAngle;
             _captured = false;
         }
 
         public void Begin(int loopEpoch, Action completed)
         {
+            Begin(loopEpoch, completed, _baseDuration);
+        }
+
+        public void Begin(int loopEpoch, Action completed, float durationOverride)
+        {
             EnsureInitialStateCaptured();
             Cancel();
 
+            duration = Mathf.Max(0.01f, durationOverride);
             _loopEpoch = loopEpoch;
             _completed = completed;
             _elapsed = 0f;
@@ -107,6 +117,7 @@ namespace ConGame.Runtime.AI
         {
             ApplyInitialPose();
             _elapsed = 0f;
+            duration = _baseDuration;
         }
 
         public void Resume(in LoopResetContext context)

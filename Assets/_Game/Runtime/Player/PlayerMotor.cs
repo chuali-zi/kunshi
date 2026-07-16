@@ -21,11 +21,16 @@ namespace ConGame.Runtime.Player
         private Vector3 _initialPosition;
         private Quaternion _initialRotation;
         private float _verticalVelocity;
-        private bool _inputLocked;
+        
+        private float _movementSpeedMultiplier = 1f;
+private bool _inputLocked;
 
         public int ResetOrder => 300;
 
-        public PlayerInputRouter Input => input;
+        
+
+        public float MovementSpeedMultiplier => _movementSpeedMultiplier;
+public PlayerInputRouter Input => input;
 
         public void Configure(
             CharacterController controller,
@@ -81,7 +86,7 @@ namespace ConGame.Runtime.Player
                     config.TurnSpeedDegrees * Time.deltaTime);
             }
 
-            float speed = input.SprintHeld ? config.SprintSpeed : config.WalkSpeed;
+            float speed = (input.SprintHeld ? config.SprintSpeed : config.WalkSpeed) * _movementSpeedMultiplier;
             if (characterController.isGrounded && _verticalVelocity < 0f)
             {
                 _verticalVelocity = -2f;
@@ -105,6 +110,12 @@ namespace ConGame.Runtime.Player
             }
         }
 
+public void SetMovementSpeedMultiplier(float multiplier)
+        {
+            _movementSpeedMultiplier = Mathf.Clamp(multiplier, 0.1f, 1f);
+        }
+
+
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             bool wasEnabled = characterController != null && characterController.enabled;
@@ -119,9 +130,9 @@ namespace ConGame.Runtime.Player
                 characterController.enabled = wasEnabled;
             }
         }
-
         public void CaptureInitialState()
         {
+            _movementSpeedMultiplier = 1f;
             _initialPosition = transform.position;
             _initialRotation = transform.rotation;
         }
@@ -135,9 +146,9 @@ namespace ConGame.Runtime.Player
                 characterController.enabled = false;
             }
         }
-
         public void Restore(in LoopResetContext context)
         {
+            _movementSpeedMultiplier = 1f;
             transform.SetPositionAndRotation(_initialPosition, _initialRotation);
         }
 

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace ConGame.Runtime.Interaction
 {
-
     [DisallowMultipleComponent]
     public sealed class InteractableEntity : MonoBehaviour
     {
@@ -16,9 +15,7 @@ namespace ConGame.Runtime.Interaction
         private InteractionCapability[] _capabilities;
 
         public string ItemId => definition == null ? fallbackItemId : definition.ItemId;
-
         public ItemCategory Categories => definition == null ? ItemCategory.None : definition.Categories;
-
         public bool IsHeld { get; private set; }
 
         public void Configure(ItemDefinitionAsset itemDefinition, string fallbackId = "")
@@ -30,19 +27,19 @@ namespace ConGame.Runtime.Interaction
 
         public bool TryExecute(PlayerInteractor player, InteractionVerb requestedVerb = InteractionVerb.None)
         {
+            StatefulWorldItem stateful = GetComponent<StatefulWorldItem>();
+            if (stateful != null && !stateful.AllowsOrdinaryInteraction)
+            {
+                return false;
+            }
+
             EnsureCapabilities();
             InteractionContext context = new InteractionContext(player, this);
             InteractionCapability best = null;
-
             for (int i = 0; i < _capabilities.Length; i++)
             {
                 InteractionCapability capability = _capabilities[i];
-                if (capability == null)
-                {
-                    continue;
-                }
-
-                if (requestedVerb != InteractionVerb.None && capability.Verb != requestedVerb)
+                if (capability == null || (requestedVerb != InteractionVerb.None && capability.Verb != requestedVerb))
                 {
                     continue;
                 }
@@ -61,6 +58,35 @@ namespace ConGame.Runtime.Interaction
             }
 
             return best != null && best.Execute(context) == InteractionResult.Accepted;
+        }
+
+        public int GetBestExecutablePriority(PlayerInteractor player)
+        {
+            StatefulWorldItem stateful = GetComponent<StatefulWorldItem>();
+            if (stateful != null && !stateful.AllowsOrdinaryInteraction)
+            {
+                return int.MinValue;
+            }
+
+            EnsureCapabilities();
+            InteractionContext context = new InteractionContext(player, this);
+            int bestPriority = int.MinValue;
+            for (int i = 0; i < _capabilities.Length; i++)
+            {
+                InteractionCapability capability = _capabilities[i];
+                if (capability == null || capability.Verb == InteractionVerb.Hide ||
+                    capability.Verb == InteractionVerb.Swing || capability.Verb == InteractionVerb.Throw)
+                {
+                    continue;
+                }
+
+                if (capability.CanExecute(context))
+                {
+                    bestPriority = Math.Max(bestPriority, capability.Priority);
+                }
+            }
+
+            return bestPriority;
         }
 
         public T GetCapability<T>() where T : InteractionCapability

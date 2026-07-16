@@ -19,5 +19,5 @@ MonoBehaviour:
   - Key: 4
     Operator: 0
     Expected: 1
-  contentStatus: 0
-  performance: {fileID: 0}
+  contentStatus: 2
+  performance: {fileID: 11400000, guid: d7e6b25e8b389454b88482a3b156640c, type: 2}

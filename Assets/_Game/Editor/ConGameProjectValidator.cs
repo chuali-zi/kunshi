@@ -31,8 +31,10 @@ namespace ConGame.Editor
             int errors = 0;
             errors += ValidateItems(log);
             errors += ValidateCounterplays(log);
+            errors += ValidateContentStatusHonesty(log);
             errors += ValidateBuildScenes(log);
             errors += ValidateProjectSettings(log);
+            errors += ValidateRoomAnchors(log);
 
             if (log && errors == 0)
             {
@@ -144,6 +146,63 @@ namespace ConGame.Editor
                 {
                     Debug.LogError(
                         $"Expected {CounterplaySeedLibrary.All.Count} counterplay definitions, found {guids.Length}.");
+                }
+            }
+
+            return errors;
+        }
+
+        private static int ValidateContentStatusHonesty(bool log)
+        {
+            int errors = 0;
+            foreach (ItemSeed seed in ItemSeedLibrary.All)
+            {
+                if (seed.Status == ContentStatus.Stub || seed.Status == ContentStatus.Specified)
+                {
+                    errors++;
+                    if (log)
+                    {
+                        Debug.LogError($"Release catalog rejects non-Implemented item seed '{seed.Id}' ({seed.Status}).");
+                    }
+                }
+            }
+
+            foreach (CounterplaySeed seed in CounterplaySeedLibrary.All)
+            {
+                if (seed.Status == ContentStatus.Stub || seed.Status == ContentStatus.Specified)
+                {
+                    errors++;
+                    if (log)
+                    {
+                        Debug.LogError(
+                            $"Release catalog rejects non-Implemented counterplay seed '{seed.Id}' ({seed.Status}).");
+                    }
+                }
+            }
+
+            return errors;
+        }
+
+        private static int ValidateRoomAnchors(bool log)
+        {
+            string[] guids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets/_Game/Scenes" });
+            int errors = 0;
+            for (int i = 0; i < guids.Length; i++)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+                if (!path.EndsWith("Room_M1.unity", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                // Soft check: CRT shader must exist for greybox presentation.
+                if (Shader.Find("ConGame/CRT/FullscreenOverlay") == null)
+                {
+                    errors++;
+                    if (log)
+                    {
+                        Debug.LogError("CRT fullscreen shader missing (ConGame/CRT/FullscreenOverlay).");
+                    }
                 }
             }
 

@@ -42,14 +42,14 @@ namespace ConGame.Tests.EditMode
         }
 
         [Test]
-        public void SpecifiedD02DoesNotReplaceImplementedFallback()
+        public void ImplementedD02IsSelectedWhenIdleAtAwakening()
         {
             FactSnapshot facts = FactSnapshot.CreateBaseline();
-            AssertSelected(CounterplayTriggerMode.Entry, facts, "D01");
+            AssertSelected(CounterplayTriggerMode.Entry, facts, "D02");
         }
 
         [Test]
-        public void SpecifiedD03PDoesNotReplaceImplementedFallback()
+        public void ImplementedD03PIsSelectedWhenSofaRearCrouched()
         {
             FactSnapshot facts = FactSnapshot.CreateBaseline();
             facts.PlayerZone = PlayerZone.SofaRear;
@@ -57,11 +57,11 @@ namespace ConGame.Tests.EditMode
             facts.HasMeaningfulInput = true;
             facts.IsAtAwakeningPoint = false;
 
-            AssertSelected(CounterplayTriggerMode.Entry, facts, "D01");
+            AssertSelected(CounterplayTriggerMode.Entry, facts, "D03P");
         }
 
         [Test]
-        public void SpecifiedD10DoesNotReplaceImplementedFallback()
+        public void ImplementedD10IsSelectableWhenProjectileIncoming()
         {
             FactSnapshot facts = FactSnapshot.CreateBaseline();
             facts.PlayerZone = PlayerZone.Open;
@@ -69,7 +69,7 @@ namespace ConGame.Tests.EditMode
             facts.IsAtAwakeningPoint = false;
             facts.IncomingProjectile = true;
 
-            AssertSelected(CounterplayTriggerMode.Reactive, facts, "D01");
+            AssertSelected(CounterplayTriggerMode.Reactive, facts, "D10");
         }
 
         [TestCase(PlayerZone.SofaRear, PlayerPose.Standing, ItemCategory.None, "D03")]

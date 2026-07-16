@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: ConGame.Runtime::ConGame.Runtime.Data.ItemDefinitionAsset
   itemId: boarded_window
   displayName: "\u5C01\u6B7B\u7A97\u6237"
-  supportedVerbs: 1
+  supportedVerbs: 5
   categories: 0
-  contentStatus: 0
+  contentStatus: 2
