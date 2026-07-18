@@ -16,19 +16,5 @@ MonoBehaviour:
   sequenceDuration: 12
   outcomeId: D21
   heldItemPolicy: 1
-  qteWindows:
-  - DurationSeconds: 1.5
-    RequiredPresses: 5
-  - DurationSeconds: 1.3
-    RequiredPresses: 6
-  - DurationSeconds: 1.2
-    RequiredPresses: 7
-  resultBranches:
-  - BranchId: flashlight_victory
-    RequiresAllQteWindows: 1
-    NextOutcomeId: D21
-    MarksD21Seen: 1
-  - BranchId: backup_pistol
-    RequiresAllQteWindows: 0
-    NextOutcomeId: D21
-    MarksD21Seen: 0
+  qteWindows: []
+  resultBranches: []

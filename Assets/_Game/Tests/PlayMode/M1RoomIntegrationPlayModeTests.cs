@@ -3,9 +3,11 @@ using ConGame.Bootstrap;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Runtime.AI;
+using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Loop;
+using ConGame.Runtime.Interaction;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,8 +39,13 @@ namespace ConGame.Tests.PlayMode
             RoomDoorBreachController breach = roomRoot.GetComponentInChildren<RoomDoorBreachController>(true);
             KillerDirector killer = roomRoot.GetComponentInChildren<KillerDirector>(true);
             GameplayFactService facts = roomRoot.GetComponentInChildren<GameplayFactService>(true);
+            StolenLootDropController loot = roomRoot.GetComponentInChildren<StolenLootDropController>(true);
 
             Assert.That(context.enabled, Is.True);
+            Assert.That(loot, Is.Not.Null);
+            Assert.That(loot.MainFirearm, Is.Not.Null);
+            Assert.That(killer.GetComponent<CounterplayFlashlightTarget>(), Is.Not.Null,
+                "Inactive Killer must still receive the D21 flashlight target at scene startup.");
 
             float awakenWait = 0f;
             while (flow.CurrentPhase == GamePhase.Awakening && awakenWait < 5.5f)
@@ -60,7 +67,7 @@ namespace ConGame.Tests.PlayMode
             Assert.That(flow.CommitPending(), Is.True);
             Assert.That(breach.IsRunning, Is.True);
 
-            yield return new WaitForSeconds(1.05f);
+            yield return new WaitForSeconds(3.2f);
 
             Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Counterplay));
             Assert.That(breach.IsRunning, Is.False);

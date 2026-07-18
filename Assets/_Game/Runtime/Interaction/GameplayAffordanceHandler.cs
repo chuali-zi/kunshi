@@ -1,5 +1,6 @@
 using ConGame.Domain.Facts;
 using ConGame.Domain.Interaction;
+using ConGame.Runtime.Events;
 using ConGame.Runtime.Facts;
 using UnityEngine;
 
@@ -24,13 +25,21 @@ namespace ConGame.Runtime.Interaction
     {
         [SerializeField] private GameplayAffordanceKind kind;
         [SerializeField] private GameplayFactService facts;
+        [SerializeField, Min(0.05f)] private float glareDuration = 0.75f;
+        [SerializeField] private GameplayEventHub events;
 
         public GameplayAffordanceKind Kind => kind;
 
-        public void Configure(GameplayAffordanceKind affordanceKind, GameplayFactService factService)
+        public void Configure(
+            GameplayAffordanceKind affordanceKind,
+            GameplayFactService factService,
+            float activeGlareDuration = 0.75f,
+            GameplayEventHub eventHub = null)
         {
             kind = affordanceKind;
             facts = factService;
+            glareDuration = Mathf.Max(0.05f, activeGlareDuration);
+            events = eventHub;
         }
 
         public bool CanUse(in InteractionContext context)
@@ -54,6 +63,7 @@ namespace ConGame.Runtime.Interaction
                 case GameplayAffordanceKind.PullRugTrap:
                     facts.SetTrap(TrapState.RugArmed);
                     facts.SetTrapPulled(true);
+                    ResolveEvents()?.EmitStimulus(KillerStimulusType.TrapPull, "rug");
                     break;
                 case GameplayAffordanceKind.BlockDoorWithFurniture:
                     facts.SetDoorBlock(DoorBlockState.Furniture);
@@ -71,14 +81,19 @@ namespace ConGame.Runtime.Interaction
                     facts.SetAmbushing(true);
                     break;
                 case GameplayAffordanceKind.ActivateGlare:
-                    facts.SetGlareActive(true);
-                    break;
+                    return InteractionResult.Rejected;
                 case GameplayAffordanceKind.StealPistol:
                     facts.SetStolenPistol(true);
                     break;
             }
 
             return InteractionResult.Accepted;
+        }
+
+        private GameplayEventHub ResolveEvents()
+        {
+            events ??= UnityEngine.Object.FindAnyObjectByType<GameplayEventHub>();
+            return events;
         }
     }
 }

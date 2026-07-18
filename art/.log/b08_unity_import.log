@@ -1,0 +1,904 @@
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.4/staging' branch; Version is '6000.4.6f1 (0b051c2e5d54) revision 722204'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Channel LicenseClient-chual doesn't exist
+OS: 'Windows 11  (10.0.26200) CoreCountrySpecific' Language: 'zh' Physical Memory: 32278 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-07-18T04:16:09Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 7612)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+D:\game\con_game
+-executeMethod
+ConGame.Editor.ArtAcceptance.Run
+-logFile
+D:\game\con_game\art\.log\b08_unity_import.log
+Successfully changed project path to: D:\game\con_game
+D:/game/con_game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [39068]  Target information:
+
+Player connection [39068]  * "[IP] 192.168.132.1 [Port] 55504 [Flags] 2 [Guid] 3672884049 [EditorId] 3672884049 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [39068]  * "[IP] 192.168.47.1 [Port] 55504 [Flags] 2 [Guid] 3672884049 [EditorId] 3672884049 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [39068]  * "[IP] 100.123.192.77 [Port] 55504 [Flags] 2 [Guid] 3672884049 [EditorId] 3672884049 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [39068]  * "[IP] 198.18.0.1 [Port] 55504 [Flags] 2 [Guid] 3672884049 [EditorId] 3672884049 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [39068]  * "[IP] 192.168.1.230 [Port] 55504 [Flags] 2 [Guid] 3672884049 [EditorId] 3672884049 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [39068] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [39068] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual" at "2026-07-18T04:16:10.4951928Z"
+[Package Manager] Connected to IPC stream "Upm-11924" after 0.5 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 7612, path: "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              7ddd37ac7ebc4be0aa28ee4623c0c474
+  Correlation Id:          68274c34844c79750c59b423a833cc9f
+  External correlation Id: 3558693352908895072
+  Machine Id:              fwc+ZXC8gUl3/PnhHFwDpEWQZa8=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-chual" (connect: 0.85s, validation: 0.30s, handshake: 0.08s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual-notifications" at "2026-07-18T04:16:10.8740934Z"
+[Licensing::Module] Connected to LicensingClient (PId: 7612, launch time: 0.01, total connection time: 1.23s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 15669700394519-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.02
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 1.32s
+[Licensing::Module] Licensing is initialized (took 0.39s).
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.4.6f1 (0b051c2e5d54)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/game/con_game/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) Arc(TM) Graphics (ID=0x7d55)
+    Vendor:   Intel
+    VRAM:     18398 MB
+    Driver:   32.0.101.8724
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56924
+CodeReloadManager initialized
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003348 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.799 seconds
+Domain Reload Profiling: 1624ms
+	BeginReloadAssembly (234ms)
+	RebuildCommonClasses (68ms)
+	RebuildNativeTypeToScriptingClass (21ms)
+	initialDomainReloadingComplete (119ms)
+	LoadAllAssembliesAndSetupDomain (379ms)
+		LoadAssemblies (228ms)
+		AnalyzeDomain (362ms)
+			TypeCache.Refresh (359ms)
+				TypeCache.ScanAssembly (335ms)
+	FinalizeReload (803ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (93ms)
+			BeforeProcessingInitializeOnLoad (168ms)
+			ProcessInitializeOnLoadAttributes (215ms)
+			ProcessInitializeOnLoadMethodAttributes (204ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 36 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ai.navigation@2.0.12 (location: D:\game\con_game\Library\PackageCache\com.unity.ai.navigation@734c2c4c5591)
+    com.unity.animation.rigging@1.4.1 (location: D:\game\con_game\Library\PackageCache\com.unity.animation.rigging@ae5f251e1ed4)
+    com.unity.cinemachine@2.10.7 (location: D:\game\con_game\Library\PackageCache\com.unity.cinemachine@631385387c5a)
+    com.unity.inputsystem@1.19.0 (location: D:\game\con_game\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.timeline@1.8.12 (location: D:\game\con_game\Library\PackageCache\com.unity.timeline@8cd8509afae5)
+    com.unity.burst@1.8.29 (location: D:\game\con_game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.searcher@4.9.4 (location: D:\game\con_game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.mathematics@1.3.3 (location: D:\game\con_game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.nuget.mono-cecil@1.11.6 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework.performance@aa81a99c4a75)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal@0d0659f1368d)
+    com.unity.test-framework@1.6.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework@76560ee600cb)
+    com.unity.modules.audio@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.director@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.animation@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.ext.nunit@2.0.5 (location: D:\game\con_game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.core@630143bbfe2b)
+    com.unity.shadergraph@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.shadergraph@04a6ef07359e)
+    com.unity.render-pipelines.universal-config@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal-config@0db4263b9e6b)
+    com.unity.modules.uielements@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.ai@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.physics@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.ugui@2.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.ugui@473409526770)
+    com.unity.collections@6.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.collections@65f499a3cc26)
+    com.unity.modules.terrain@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.hierarchycore)
+  Git packages:
+    com.coplaydev.unity-mcp@https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main (location: D:\game\con_game\Library\PackageCache\com.coplaydev.unity-mcp@a4c2d0a84573)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/game/con_game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s278ms
+[655/842    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.24 seconds), 1 items updated, 842 evaluated
+AssetDatabase: script compilation time: 0.754358s
+Begin MonoManager ReloadAssembly
+Total cache size 111687032
+Total cache size after purge 111687032, took 00:00:00.0721972
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Editor.Tests.dll at Library/ScriptAssemblies/Cinemachine.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Runtime.Tests.dll at Library/ScriptAssemblies/Cinemachine.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly DocCodeExamples.dll at Library/ScriptAssemblies/DocCodeExamples.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.BurstCompatibilityGen.dll at Library/ScriptAssemblies/Unity.Collections.BurstCompatibilityGen.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Collections.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.PerformanceTests.dll at Library/ScriptAssemblies/Unity.Collections.PerformanceTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.dll at Library/ScriptAssemblies/Unity.Collections.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.Playmode.dll at Library/ScriptAssemblies/Unity.Collections.Tests.Playmode.dll not valid. Loading of assembly skipped.
+Assembly Unity.InputSystem.IntegrationTests.dll at Library/ScriptAssemblies/Unity.InputSystem.IntegrationTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Nuget.Mono-Cecil.dll at Library/ScriptAssemblies/Unity.Nuget.Mono-Cecil.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Config.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Config.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Searcher.EditorTests.dll at Library/ScriptAssemblies/Unity.Searcher.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ShaderGraph.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ShaderGraph.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.UnifiedRayTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.UnifiedRayTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-con_game
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.332 seconds
+Domain Reload Profiling: 5007ms
+	BeginReloadAssembly (210ms)
+		DisableScriptedObjects (24ms)
+		CreateAndSetChildDomain (44ms)
+	RebuildCommonClasses (32ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (56ms)
+	LoadAllAssembliesAndSetupDomain (364ms)
+		LoadAssemblies (298ms)
+		AnalyzeDomain (159ms)
+			TypeCache.Refresh (111ms)
+				TypeCache.ScanAssembly (100ms)
+			BuildScriptInfoCaches (36ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (4332ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (24ms)
+			BeforeProcessingInitializeOnLoad (146ms)
+			ProcessInitializeOnLoadAttributes (3657ms)
+			ProcessInitializeOnLoadMethodAttributes (271ms)
+			AfterProcessingInitializeOnLoad (5ms)
+		AwakeInstancesAfterBackupRestoration (25ms)
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=00ce0865a76afe848a13fd79cfcbeb4f): Total: 6.681 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=5161 ms
+		Asset DB Callback time: managed=27 ms, native=24 ms
+		Scripting: domain reloads=1, domain reload time=676 ms, compile time=756 ms, other=34 ms
+		Project Asset Count: scripts=1061, non-scripts=2117
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 26.192ms
+	ApplyChangesToAssetFolders: 0.510ms
+	Scan: 587.595ms
+	CategorizeScriptCompilationAssets: 18.560ms
+	ProcessAssetsWithTransientArtifactChanges: 66.205ms
+	CategorizeAssets: 40.480ms
+	CompileScripts: 755.712ms
+	ImportOutOfDateAssets: 4340.252ms (4336.960ms without children)
+		ReloadNativeAssets: 0.132ms
+		UnloadImportedAssets: 1.968ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.548ms
+		OnDemandSchedulerStart: 0.640ms
+	PostProcessAllAssets: 27.280ms
+		MonoPostProcessAllAssets: 27.217ms
+			UniversalRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 10.709ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 2.197ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 1.856ms
+			SyncVS.PostprocessSyncProject 1.102ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.812ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.325ms
+			CinemachineSettings.OnPostprocessAllAssets 0.315ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.281ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.206ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.198ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.187ms
+	UnloadStreamsBegin: 1.995ms
+	PersistCurrentRevisions: 0.107ms
+	GenerateScriptTypeHashes: 2.683ms
+	GenerateScriptTypeSerializationHashes: 4.833ms
+	Untracked: 810.969ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Scanning for USB devices : 1.469ms
+Initializing Unity extensions:
+Unloading 74 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4803 unused Assets / (12.4 MB). Loaded Objects now: 5570.
+Memory consumption went from 183.8 MB to 171.4 MB.
+Total: 16.123900 ms (FindLiveObjects: 0.635600 ms CreateObjectMapping: 0.333500 ms MarkObjects: 8.359800 ms  DeleteObjects: 6.791300 ms)
+
+Asset Pipeline Refresh (id=25ea9ab4981605f4594dfbbd3d0e7bb1): Total: 0.040 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+ACCEPT textures configured
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:ConfigureTextureImporters () (at Assets/_Game/Editor/ArtAcceptance.cs:123)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:103)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 123)
+
+Start importing Assets/_Game/Art/Materials/MAT_Metal_Dark.mat using Guid(10b75f805e1ac5c45a42b2d6ef0c1258) (NativeFormatImporter) -> (Import Result ID: '72d991556f73fa467f1173bc59ded4d5') in 0.0074859 seconds [static dependencies only]. Details - ImportResultOutputID=36369ff99994b78e1c9a4dc04bf543cf DependenciesID=a4edb9f29fc0e9f9f68bd7244271e45b StaticDependenciesID=6d95050bd6cb5dc9192ace933513d22c 
+Start importing Assets/_Game/Art/Materials/MAT_Wood_Walnut.mat using Guid(a01115a154addad4bb74d0fe676a8885) (NativeFormatImporter) -> (Import Result ID: 'ba03dc76f7c980a525bcc9ca4bb208b7') in 0.0024236 seconds [static dependencies only]. Details - ImportResultOutputID=1668e190f9449bfbd505779c0babfa76 DependenciesID=deaf58300ea8a48ed3d131467dbf28aa StaticDependenciesID=724eaf998bb19df485b0289635f66cf0 
+Start importing Assets/_Game/Art/Materials/MAT_Floor_DarkGreen.mat using Guid(512496321bf9e574ca15934f6a58dcd7) (NativeFormatImporter) -> (Import Result ID: 'b25d0d0ba8b09bde8a5f49aee645a394') in 0.0012427 seconds [static dependencies only]. Details - ImportResultOutputID=63bf5c0ddd27a35c1f3890b924e5b6ad DependenciesID=b15073f679cd00c284cd5b5972d19a42 StaticDependenciesID=fa4b065df95b72779f3c911cf8266942 
+Start importing Assets/_Game/Art/Materials/MAT_Flashlight_Emissive.mat using Guid(b1974358f8fdc204aad4ce20cd1d7041) (NativeFormatImporter) -> (Import Result ID: 'a3f226dbd3b59c319ae872aadcfbc418') in 0.0015067 seconds [static dependencies only]. Details - ImportResultOutputID=31b9dbd42d36e9625330896b03386517 DependenciesID=d1c58a3da917f401cd449bc5ec6b61ab StaticDependenciesID=62a778cdd793b1fd665a7f5aff39d591 
+Start importing Assets/_Game/Art/Materials/MAT_Glass_Set.mat using Guid(1272f4dd802e8464aa819ac570530a6b) (NativeFormatImporter) -> (Import Result ID: '0231615ce0c22266d745057f5776525b') in 0.0018928 seconds [static dependencies only]. Details - ImportResultOutputID=cfc1e3cfa06b37895a40e5ac1c336df7 DependenciesID=9afa9f440ed218fc6f17152e36b741cf StaticDependenciesID=0b5b128b1f78c7a7c02a0d031288c913 
+Start importing Assets/_Game/Art/Materials/MAT_Glass_Set_Porcelain.mat using Guid(c22c877d39abd234497ca81ff406a2db) (NativeFormatImporter) -> (Import Result ID: '183da92eff17a3bbdba25509b0aaf77a') in 0.0022208 seconds [static dependencies only]. Details - ImportResultOutputID=8d0c8e2d6ea1d9a340e45df41f21d26e DependenciesID=6a981e9150071ba13ce24ee4be35828d StaticDependenciesID=db468b1a0900054af29c558612cd7978 
+Start importing Assets/_Game/Art/Materials/MAT_LampShade_Inner.mat using Guid(2541741e39df03042aded3c1dc5969a9) (NativeFormatImporter) -> (Import Result ID: 'dbe57e538479128fc3d66cc10e26bede') in 0.0013598 seconds [static dependencies only]. Details - ImportResultOutputID=4e5e12f33c55813cade04647893ffbe2 DependenciesID=ac257803ec8d879591096d736391a716 StaticDependenciesID=bd345887dd4f80ac71685a990ca209cc 
+Start importing Assets/_Game/Art/Materials/MAT_Props_Small_Atlas_Rose.mat using Guid(258e03c892dff954ba0569d85edd081d) (NativeFormatImporter) -> (Import Result ID: '3f9c4d63556e5c7efa6411de61992d11') in 0.0017728 seconds [static dependencies only]. Details - ImportResultOutputID=8bbfdbc10103210a8d2d2c58cc38bb71 DependenciesID=72b97e42b6e0c8012480a2d13da3058e StaticDependenciesID=90db84428172d570911108d623d48895 
+Start importing Assets/_Game/Art/Materials/MAT_Metal_Dark_Backup.mat using Guid(5581818551f746b45809be41fd47d0e3) (NativeFormatImporter) -> (Import Result ID: '4873f12a1cae00deff756a481b545302') in 0.0012603 seconds [static dependencies only]. Details - ImportResultOutputID=5f4b4924285be1d309371552d385bec1 DependenciesID=7980d641fd3df79195130cb2383ac8a3 StaticDependenciesID=a43d1cd876766b0f3abeaf44455dec71 
+Start importing Assets/_Game/Art/Materials/MAT_Props_Small_Atlas.mat using Guid(472d9e902c4e0924f8b498ab77c27c6e) (NativeFormatImporter) -> (Import Result ID: '172cdfde87be8c4b8728ac8ad29fb38d') in 0.0014693 seconds [static dependencies only]. Details - ImportResultOutputID=91c72917bd2250ad3425138586f10087 DependenciesID=a1b0b3c47bd502f948aee2c17e01afcb StaticDependenciesID=498ef24c8a6ef0a21904342d86b40de3 
+Start importing Assets/_Game/Art/Materials/MAT_Mirror_Surface.mat using Guid(d84aa07c5c5059a41bd391f80a71d90e) (NativeFormatImporter) -> (Import Result ID: 'bb9bb68fd367e90c47cbd88df25b9b95') in 0.0034728 seconds [static dependencies only]. Details - ImportResultOutputID=42fde139fb29a52b101e40d900fe8d95 DependenciesID=0f96a18cae2ce02c06ddc6a994224231 StaticDependenciesID=d31eba3164a0e46265bba7ee24c993a5 
+Start importing Assets/_Game/Art/Materials/MAT_Wallpaper_Damage.mat using Guid(79f46a54802d72f4a86a6ed99bcb1122) (NativeFormatImporter) -> (Import Result ID: '5b1967a2f8a5313ded09127c52a8a2da') in 0.0012969 seconds [static dependencies only]. Details - ImportResultOutputID=2d4bea272036c4a79be98f0dcd88ef2b DependenciesID=f40ae0f5e1f8e6e6ff791b345bfa9a8d StaticDependenciesID=ae8df51d26dcc102afe2c5a2b93f0c73 
+Start importing Assets/_Game/Art/Materials/MAT_Leather_Burgundy.mat using Guid(e98a0d8f5d7b20b41bc6d2e964d1adaf) (NativeFormatImporter) -> (Import Result ID: '4d7770f9d87ce2bee72245eaaa8a7432') in 0.0018553 seconds [static dependencies only]. Details - ImportResultOutputID=c48283cfe8e7a8d6126713787dff1480 DependenciesID=53f30b21f9095cce555ad5b399cb1e14 StaticDependenciesID=6b1eef1e407a6d3742f271b12d3c32d3 
+Start importing Assets/_Game/Art/Materials/MAT_Floor_DarkGreen_Rug.mat using Guid(5a567d8d54203a4499a76f2a57b35674) (NativeFormatImporter) -> (Import Result ID: 'ee2faed2b633fc6a8daa275ddd39c794') in 0.0014056 seconds [static dependencies only]. Details - ImportResultOutputID=627fe273f61ccb00460aaf91450daad3 DependenciesID=e4afda0084b8d2e8a56d3b74baf7a31e StaticDependenciesID=8808248c59c8da3d347d373c2b30f1be 
+Start importing Assets/_Game/Art/Materials/MAT_Ceiling_White.mat using Guid(1d457a5a7dc37c6438837f0f20817950) (NativeFormatImporter) -> (Import Result ID: '99a866590ba13f662308eb97f988ee18') in 0.0012429 seconds [static dependencies only]. Details - ImportResultOutputID=103995de309e68671288d0a432145652 DependenciesID=f91bedce3c644be2d43cb387e399fc13 StaticDependenciesID=75ce4c8f49382f61c862bb6756b32ac4 
+Start importing Assets/_Game/Art/Materials/MAT_Fabric_Bedding.mat using Guid(2da3b7cdd48684147aa8e2f6ecb8b5a8) (NativeFormatImporter) -> (Import Result ID: 'e0a415aaa59d87ddba5a697bc89b92f5') in 0.0011831 seconds [static dependencies only]. Details - ImportResultOutputID=df35bb858a1ae73f908a8418463de7e5 DependenciesID=0178950c40f53c8a8e719ab1c2e2a45c StaticDependenciesID=6378e1de53a80da78b6c7756d78701bc 
+Start importing Assets/_Game/Art/Materials/MAT_Wallpaper_FloralAged.mat using Guid(3d6dc872a81444544b9f77f11ccefbcc) (NativeFormatImporter) -> (Import Result ID: '3c712e31d9385844328e93f719b608fc') in 0.0010443 seconds [static dependencies only]. Details - ImportResultOutputID=16981acef4fc7cb15437ee2a94a66de6 DependenciesID=2d2bca9aac32ae4429f495ab90f13c14 StaticDependenciesID=fb2fe833771af29b5cbe61ef48351a12 
+Start importing Assets/_Game/Art/Materials/MAT_Brick_Aged.mat using Guid(cda1283de34d56248bf3c2e84e673e0f) (NativeFormatImporter) -> (Import Result ID: 'a448b98a776ac86771399e5352495b4f') in 0.0011162 seconds [static dependencies only]. Details - ImportResultOutputID=8e5cc71ce77b75e7c2bdac8dbfd3d5c7 DependenciesID=e650de3e2084ca3606b3a754643167a2 StaticDependenciesID=bbbe1c8fda265413baff202ce1095d08 
+Start importing Assets/_Game/Art/Materials/MAT_Lamp_Emissive.mat using Guid(cdcabaf62ab5a074a8fc826e9b617a40) (NativeFormatImporter) -> (Import Result ID: '1ea27d35766e10b43902ebe220f278a6') in 0.0016432 seconds [static dependencies only]. Details - ImportResultOutputID=16a5a3d1a2a479f01ae0a5a198d6fe3e DependenciesID=6b3fa05e222d0fbfb7e730fe170b368b StaticDependenciesID=7f8ea14f0ee5b393905a0ed0c54200c6 
+Start importing Assets/_Game/Art/Materials/MAT_Wood_Worn.mat using Guid(7e88eaad8c677b44ea42f44420f8f5bd) (NativeFormatImporter) -> (Import Result ID: '4158aecc8f245ebfdd4a3228f520f598') in 0.0015324 seconds [static dependencies only]. Details - ImportResultOutputID=d631e072a7f227ab96e9cedf85ed3be3 DependenciesID=b1ee41d043ac198ee98a7f23476c2f78 StaticDependenciesID=7c24f86434b0b5900b121c110c1801f8 
+Start importing Assets/_Game/Art/Materials/MAT_Corridor_Black.mat using Guid(fe1e8f4a8401dc34cb9f0c5dd381531e) (NativeFormatImporter) -> (Import Result ID: '234066cb9814e4283336ea990e7e4f1e') in 0.0012605 seconds [static dependencies only]. Details - ImportResultOutputID=142e490127951e3f88184f388c608ebb DependenciesID=7952eeab11337ca36d7e714e23872da5 StaticDependenciesID=ee63777f59cfea422bb193b29870becb 
+Start importing Assets/_Game/Art/Materials/MAT_CRT_Inner.mat using Guid(1f61a5b2fc25694469ea682f459cc093) (NativeFormatImporter) -> (Import Result ID: '908f5eb28304a7c3f8f733656f1c4d09') in 0.0012156 seconds [static dependencies only]. Details - ImportResultOutputID=6d068795e5e6d14d657937025eaa4383 DependenciesID=91d8168df09f77db8f9e7d043c9ab8d0 StaticDependenciesID=8fbd47993e83a8e8a1f4d0c91cb36884 
+Asset Pipeline Refresh (id=db511d618ccc44444b8dbc9acc1b3b61): Total: 0.164 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+ACCEPT materials created: 22
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:CreateMaterials () (at Assets/_Game/Editor/ArtAcceptance.cs:161)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:104)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 161)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BlackCorridor.fbx)
+Start importing Assets/_Game/Art/Environment/ENV_BlackCorridor.fbx using Guid(bc4f7625771e51c439278732f2dea1d8) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BlackCorridor.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BlackCorridor.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BlackCorridor.fbx)
+ -> (Import Result ID: 'da383543660f22aa2662605dfac023e0') in 0.0260961 seconds [static dependencies only]. Details - ImportResultOutputID=da060bfdb7cb00e25885d9115ab17e2b DependenciesID=981079133be42cbb2d4c35cb0edd39c1 StaticDependenciesID=b38f457873699fa3953e9df2ff411087 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BlackCorridor.fbx)
+Asset Pipeline Refresh (id=9f6ab6c670fa1ab4cab08ec1d5d5290d): Total: 0.040 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+Start importing Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx using Guid(277e9419465989a41abf3916f34c6e91) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+ -> (Import Result ID: '8545f19da5f8780935a7a9f584fe578c') in 0.0216716 seconds [static dependencies only]. Details - ImportResultOutputID=4563b49f7aacd05753610443fbc987e7 DependenciesID=7e54c1f851d32178564dc361f7ac2f11 StaticDependenciesID=35caa3fcafff3ae68af539d5b7004745 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_BoardedWindow.fbx)
+Asset Pipeline Refresh (id=3195e19ab18800a42b2d9964907b885f): Total: 0.035 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+Start importing Assets/_Game/Art/Environment/ENV_DoorSet.fbx using Guid(722de73174c4c744f8085565cc409573) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+ -> (Import Result ID: 'a6d90d147cd19fad195ff3a1bcd0a186') in 0.0186311 seconds [static dependencies only]. Details - ImportResultOutputID=eca9dae388afaaee42cccb931ac1ea0f DependenciesID=b1465babcded8a32f99ca549cbf768a4 StaticDependenciesID=c43d819c45f06ccdb8881b8683205dec 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_DoorSet.fbx)
+Asset Pipeline Refresh (id=1f7dd3e7d71c3644690c1eb0b1eb0fa2): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+Start importing Assets/_Game/Art/Environment/ENV_RoomShell.fbx using Guid(e840f53016648e3499c8e04edaf7e68d) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+ -> (Import Result ID: 'ccc6b4c1ff6ed6db9d5171cc10a642b8') in 0.016104 seconds [static dependencies only]. Details - ImportResultOutputID=8ce836f35b57b2f04285db91bd89a9e8 DependenciesID=e85ad4a63e431e463a007baeef8ac858 StaticDependenciesID=ed28b0a542a1fe1ed200fa86aeec7b17 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_RoomShell.fbx)
+Asset Pipeline Refresh (id=f1aaee80ca4a5eb4abd8113dd1ec5e39): Total: 0.029 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+Start importing Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx using Guid(22fb825ea7730b349b4cc3a7a97a94de) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+ -> (Import Result ID: '17f1c4a5a54ec08e586007e63ad644c7') in 0.0169753 seconds [static dependencies only]. Details - ImportResultOutputID=d7496eb831212514a931bf49b25e7cd8 DependenciesID=f7b049e0c54523806e9127ab85aa8fd4 StaticDependenciesID=74165254b6cd38b86996f13a55e65d23 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/ENV_WallDamageKit.fbx)
+Asset Pipeline Refresh (id=435bf31c988d75b479acb305be7e302b): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Armchair.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_Armchair.fbx using Guid(ad7979bc743e1284492ddf4e252afd42) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Armchair.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Armchair.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Armchair.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Armchair.fbx)
+ -> (Import Result ID: 'b42579ac22c7ce0c1280cb2cd1f6bdfc') in 0.0188297 seconds [static dependencies only]. Details - ImportResultOutputID=5151c25e0df06942196d6e8a0d123308 DependenciesID=78520db97a34b1cac4fda1320e8d868d StaticDependenciesID=40b8c26b28f543618db5a21102200c8f 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Armchair.fbx)
+Asset Pipeline Refresh (id=ae39c6f4d38861a40a05e0650c414418): Total: 0.032 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_Bed.fbx using Guid(dd0111fbfed66f947a751390c528c058) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+ -> (Import Result ID: '9a7c3f1a982f02a193d544b7713c485c') in 0.0193736 seconds [static dependencies only]. Details - ImportResultOutputID=df9c0c7a156ae386e3e5d18966912b81 DependenciesID=94cfef4cdf3061dbbb10a2f1d61406f1 StaticDependenciesID=d8dabbbbd5a1d175a69ec15df59b0b66 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bed.fbx)
+Asset Pipeline Refresh (id=b91360db2b2ac3d438fc988d61f598d2): Total: 0.032 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bookcase.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_Bookcase.fbx using Guid(d760d126b1bf4d749a45c3023ed66144) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bookcase.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bookcase.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bookcase.fbx)
+ -> (Import Result ID: '015e8c7ea61b58e0888e963c55fbf89f') in 0.0176097 seconds [static dependencies only]. Details - ImportResultOutputID=33815374d1d785890e44914b7dcd5e63 DependenciesID=3543eb8c1e8a90a1de78921a5350a2d5 StaticDependenciesID=272a78369e949f6508afed32057de702 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Bookcase.fbx)
+Asset Pipeline Refresh (id=bf519217119ac31448e350dac2bfa829): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_Dresser.fbx using Guid(f58f7c62cdb5d944695909e38dbd131f) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+ -> (Import Result ID: '3e8f4d97215010d0ac3cec03de2e1153') in 0.021506 seconds [static dependencies only]. Details - ImportResultOutputID=14de679fe24674de85f45ff8b3f09228 DependenciesID=90458c250b22020b77a5f3e66d94366a StaticDependenciesID=0734fb3699911ca19a1972596d039a06 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_Dresser.fbx)
+Asset Pipeline Refresh (id=4169a095d2f6da3448f3526b9ad24054): Total: 0.033 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_SideTable.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_SideTable.fbx using Guid(611aa5a23136bb645b303d4024744a3e) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_SideTable.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_SideTable.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_SideTable.fbx)
+ -> (Import Result ID: '84d6d2b0dc8bb56014244659d132e8ea') in 0.0180892 seconds [static dependencies only]. Details - ImportResultOutputID=203e9c432913db2879a4395b72f8f5dc DependenciesID=7b59520f82a801c4f046199b3b979be5 StaticDependenciesID=f391b33dfb1f97cf877bd99c061ae8e8 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_SideTable.fbx)
+Asset Pipeline Refresh (id=a9221bcb575b94943a58d2228a35c695): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_TVCabinet.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_TVCabinet.fbx using Guid(e2776944c1a3e8b4aabd62014e39c90c) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_TVCabinet.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_TVCabinet.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_TVCabinet.fbx)
+ -> (Import Result ID: '55f4035e4fad6d9176708deb07c73628') in 0.0160553 seconds [static dependencies only]. Details - ImportResultOutputID=09d468942dd4cc94378dc46c9448b48b DependenciesID=60b27505ad6deede29322cb66d4b9be8 StaticDependenciesID=f9c1340e91756b9f4266e6f3b9498a2e 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_TVCabinet.fbx)
+Asset Pipeline Refresh (id=90873de9e6698a74eae3182905f51153): Total: 0.028 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_WoodChair.fbx using Guid(fdd076e4f665da94e8bbe14755c1a077) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair.fbx)
+ -> (Import Result ID: '19402cd99f8a1a7c932343faf5ff8ed0') in 0.016653 seconds [static dependencies only]. Details - ImportResultOutputID=4a4fc86cdfc2a27833230968614504ce DependenciesID=e0ff1e6cde7343bc3e687b60ed7d6260 StaticDependenciesID=8e4121ec4908da8a08f42d91a12a95b6 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair.fbx)
+Asset Pipeline Refresh (id=d796c03a9c65ad94a90d28043492b193): Total: 0.028 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+Start importing Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx using Guid(cb24267143c32ac4eaf38502aaf81abe) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+ -> (Import Result ID: 'f1da565072c77f86b07c0b8072ed19f0') in 0.0161769 seconds [static dependencies only]. Details - ImportResultOutputID=5cef5280ce39479c168ffa6527e88f06 DependenciesID=6f1fafe63340653f382e371ce7b04e0b StaticDependenciesID=57d21fdcbf7d4a690e1d95db997d343b 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Environment/FUR_WoodChair_Broken.fbx)
+Asset Pipeline Refresh (id=f49c404c4a2d2ea4ea96fd7f37c48c13): Total: 0.028 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_BaseballBat.fbx)
+Start importing Assets/_Game/Art/Props/PRP_BaseballBat.fbx using Guid(0b821fc06a2aec94da9e97c3fdb46d48) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_BaseballBat.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_BaseballBat.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_BaseballBat.fbx)
+ -> (Import Result ID: '824d855711880e4840d1d82db8f22fb9') in 0.0142849 seconds [static dependencies only]. Details - ImportResultOutputID=5b70a91ed60663600e48b08e7ab3d3d7 DependenciesID=75e09a75e4316dc5790c9f3830e618d1 StaticDependenciesID=1f2f587c4fca896a7a3d23ab6fb88e2a 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_BaseballBat.fbx)
+Asset Pipeline Refresh (id=87a12ecad09d7f4429126e86c8f60233): Total: 0.026 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Covered.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Blanket_Covered.fbx using Guid(f1fc0609d28b9774885c329fa0adb014) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Covered.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Covered.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Covered.fbx)
+ -> (Import Result ID: '6a7425e2ac2ffaf0b0e415e921d54e4d') in 0.018122 seconds [static dependencies only]. Details - ImportResultOutputID=7392f64c24edb45d22e4d8a476a324ab DependenciesID=884bd9c03df3d4b21145630060a7ff07 StaticDependenciesID=2aaa5bc94bbdb67ac3b29caffbe639d2 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Covered.fbx)
+Asset Pipeline Refresh (id=a7045958b5b0bfc4791a4ac324ad701e): Total: 0.035 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Crumpled.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Blanket_Crumpled.fbx using Guid(a08a74a6e6d8b4a48ba316cb3502ed3f) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Crumpled.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Crumpled.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Crumpled.fbx)
+ -> (Import Result ID: '60fec89d48641f2159957414d68cd4cd') in 0.0186247 seconds [static dependencies only]. Details - ImportResultOutputID=14d446cde7673adeb4eba2ef7f29e64a DependenciesID=8b85c233860907f870355e10685ec96a StaticDependenciesID=b2c6a4e93df8b6a485b04e817d022ba4 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Crumpled.fbx)
+Asset Pipeline Refresh (id=0df7d936d0f980946a17f81b4f9a659e): Total: 0.031 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Draped.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Blanket_Draped.fbx using Guid(95daa3939b774934fb0ce3dc3bdc1637) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Draped.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Draped.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Draped.fbx)
+ -> (Import Result ID: '285cce9885d2045544957fd7b2ca7cb1') in 0.016163 seconds [static dependencies only]. Details - ImportResultOutputID=da4ea9cd6f6ea1917c56bcacd12fa4c9 DependenciesID=65c89b4fc46b6e6c9633074a516afe9f StaticDependenciesID=6fe39ab455ebc8f37422990d9d1db293 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_Draped.fbx)
+Asset Pipeline Refresh (id=b13b21d35fea5394a93ec85f1a453731): Total: 0.028 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_FlatTrap.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Blanket_FlatTrap.fbx using Guid(5465e72f4c1c2da45a85ca1a1b3a6600) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_FlatTrap.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_FlatTrap.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_FlatTrap.fbx)
+ -> (Import Result ID: '4089182e078f609d9fc61e4288c817f4') in 0.0194576 seconds [static dependencies only]. Details - ImportResultOutputID=936e61b0ec667e447c4d79d76ec27f73 DependenciesID=274f3bd9d1df8687034e0b5cb2506be7 StaticDependenciesID=1ec56818287fe83052e5758a1d66d285 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Blanket_FlatTrap.fbx)
+Asset Pipeline Refresh (id=29f1601edd6b8674894edc22468f25e9): Total: 0.032 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Books_Set.fbx using Guid(23b8384c40db9d843bc12c83cc6e0b46) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+ -> (Import Result ID: '11302c95309db1f24312e484beb152c1') in 0.0184755 seconds [static dependencies only]. Details - ImportResultOutputID=50a2ebcf90a472261286db8008f76f61 DependenciesID=f1a448a2de8ab412cd0d13ef950721ea StaticDependenciesID=99bf9caa86aa235f0e2670a942d05a02 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Books_Set.fbx)
+Asset Pipeline Refresh (id=c97ab1df1c6828448a47cec3362ce8b1): Total: 0.031 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+Start importing Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx using Guid(252975cc84f75fa45a0db738dda20794) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+ -> (Import Result ID: 'eabbda792508b3e4ecbed6df2e6d62ef') in 0.0202129 seconds [static dependencies only]. Details - ImportResultOutputID=6819feefb2c036284cef2c9e7f929194 DependenciesID=dc4ac72c8f849e874a1efd89ee546b52 StaticDependenciesID=53b8d4f04ecb05517f5166e7cba85c6a 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Broken.fbx)
+Asset Pipeline Refresh (id=e0a7baf921020c8438c2d58648e91773): Total: 0.034 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+Start importing Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx using Guid(accd097130856914eadde08161bc17e0) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+ -> (Import Result ID: 'b931d7a093cc25dfd909af54a6cb4085') in 0.0173094 seconds [static dependencies only]. Details - ImportResultOutputID=5bcbbd61ff717bde61bfa56ec2c39aa4 DependenciesID=edbc63591ddf50815e2ac1f1b83b2897 StaticDependenciesID=3f5a2f6bd05f58fcde90169717fa4240 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CeilingLamp_Intact.fbx)
+Asset Pipeline Refresh (id=d05ccc1a677f67548ad305860fa929a9): Total: 0.029 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx)
+Start importing Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx using Guid(f7682656489dfb74ab845c5672cef23f) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx)
+ -> (Import Result ID: '2a0b540c2ea0a9969eb65e63549d3bf4') in 0.0206017 seconds [static dependencies only]. Details - ImportResultOutputID=656bd9dbaf981a712b7ce2ec6c207d96 DependenciesID=df62a9fb4152ce50fc722c7bbb6dbe14 StaticDependenciesID=722a54ef91a22f95517ea1d62fe56749 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Cracked.fbx)
+Asset Pipeline Refresh (id=c0258f20c27c9c54d914f422efcc71a7): Total: 0.033 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+Start importing Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx using Guid(d3c5a659eb697534785694e09134714f) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+ -> (Import Result ID: 'd90789e322a19c3f3b9bb0ccc735aa61') in 0.0266015 seconds [static dependencies only]. Details - ImportResultOutputID=4795212f5ed2b4a3201cf0323508dbc5 DependenciesID=76037af9b164b5f1b067edcd6ecd4eea StaticDependenciesID=de212ccb5b49722a4d6ca024f9f40f0d 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Destroyed.fbx)
+Asset Pipeline Refresh (id=32359d1af15d830449e9676278cef461): Total: 0.040 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx)
+Start importing Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx using Guid(afaa4628c08a09f4aba34fc157a765eb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx)
+ -> (Import Result ID: '226800daa0cb6d643286bad4cad1f1b6') in 0.0214678 seconds [static dependencies only]. Details - ImportResultOutputID=b3618142f489b37117c5c7f3c0a088bb DependenciesID=1895b84f85bc87ba08629c167be5f994 StaticDependenciesID=03367e259ec729118c349e4406dc5320 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_CRTTV_Intact.fbx)
+Asset Pipeline Refresh (id=8c21c9fed8db1ae47b96a9cea16731b9): Total: 0.033 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+Start importing Assets/_Game/Art/Props/PRP_DrawerClutter.fbx using Guid(168c3bcd1056b5a4fa83c59ff8d248df) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+ -> (Import Result ID: 'd780c675e8813977c2014faca0a75977') in 0.0157141 seconds [static dependencies only]. Details - ImportResultOutputID=358c17aec411d88e4411f207b8dd046d DependenciesID=fa75db71cbec77ce1e5ae5af063b2836 StaticDependenciesID=957715eb1af74e64021640c40b7adac7 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_DrawerClutter.fbx)
+Asset Pipeline Refresh (id=e60f4e50acfc13c48b86019e8ff0fa55): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Flashlight.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Flashlight.fbx using Guid(b8befa4594e513548b748988b721a56a) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Flashlight.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Flashlight.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Flashlight.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Flashlight.fbx)
+ -> (Import Result ID: '4c0fa05fda26f3e05fb0e27b9f04c984') in 0.0149172 seconds [static dependencies only]. Details - ImportResultOutputID=cb1a4a73c7d0c6126d876add3a082b27 DependenciesID=0f2ae8d122bd48b9e45b86b93e41493b StaticDependenciesID=a2a75219d33bbba0b00b5b188703cffa 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Flashlight.fbx)
+Asset Pipeline Refresh (id=2d9bc41cd8f8ebe448145b9c3d95086f): Total: 0.026 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Mirror.fbx using Guid(8a01daa368abb9148bf05b47f967c294) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror.fbx)
+ -> (Import Result ID: 'f79a833bc29d023a4a05c6be1f4876a4') in 0.016189 seconds [static dependencies only]. Details - ImportResultOutputID=4a54fca68f59b4768939904264106196 DependenciesID=89f8fb56e13dad3076ed4270a348e72e StaticDependenciesID=7ae3ece7849c94337860d3d99344a58d 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror.fbx)
+Asset Pipeline Refresh (id=4c621f32169772747b901df069a37ffb): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx using Guid(bce1e3494d8a971478b076d5dda05a81) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+ -> (Import Result ID: 'b240e5c097a266faf145a29d1f00791e') in 0.018438 seconds [static dependencies only]. Details - ImportResultOutputID=12337c37a13afa323293f43bbea6f367 DependenciesID=d6454766a0705bde7541686a365b0f62 StaticDependenciesID=7a306097b2995b433d53c320342d4026 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Mirror_Broken.fbx)
+Asset Pipeline Refresh (id=a635589fb7b8c7141988f1acdd345e30): Total: 0.031 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx using Guid(a575b4b36ef1eb54980f8d5fe5e4d271) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx)
+ -> (Import Result ID: '98202e1cae05257ed6cd76646e5c02e7') in 0.015451 seconds [static dependencies only]. Details - ImportResultOutputID=94525cb8eca65dd265f85809e35c8067 DependenciesID=c16e1897899d8a2873a201fce56851c5 StaticDependenciesID=1b5614a382e4e063ea69c34b040661be 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx)
+Asset Pipeline Refresh (id=7914b726e5dc7c947ac9c52eeb10812d): Total: 0.028 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Main.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Pistol_Main.fbx using Guid(36e3d71b7bb6626438d87cea82e8ef98) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Main.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Main.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Main.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Main.fbx)
+ -> (Import Result ID: 'ba583decb5a3d3ef5771f347bf77455d') in 0.0165655 seconds [static dependencies only]. Details - ImportResultOutputID=2cc7bff8d2c7188b4aafd81b5064cb5d DependenciesID=843ee9908ace2a46073f48b392b873d4 StaticDependenciesID=dbeed5e58bf05454a794eb1190b0261c 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Pistol_Main.fbx)
+Asset Pipeline Refresh (id=978bcba39ef98ef4496186531000e74e): Total: 0.027 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Remote.fbx using Guid(bb27d7ee593469b45afeaeec32adc2ce) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+ -> (Import Result ID: '8c9c784692ab33152d61f9cbe624cf01') in 0.0166704 seconds [static dependencies only]. Details - ImportResultOutputID=f0ecde5c90d649c6d62249876042891e DependenciesID=f923386b815af2baa0329ceb648901e8 StaticDependenciesID=2eec018706369dcb4d5baf097bee5cde 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Remote.fbx)
+Asset Pipeline Refresh (id=3503a769047aeaa458acd8bb1eeedb13): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Rug.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Rug.fbx using Guid(9a7a8164c0aebc04cb695a10dda073bb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Rug.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Rug.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Rug.fbx)
+ -> (Import Result ID: '9eb6045d704c3a09eff6e005dcd08656') in 0.0184894 seconds [static dependencies only]. Details - ImportResultOutputID=b3ce8652065d6f834a9ed1664aec9869 DependenciesID=2729e222d85274d2916db6a61bfb4cda StaticDependenciesID=3126183d586b766abd4d80409f84325b 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Rug.fbx)
+Asset Pipeline Refresh (id=91784eeb984076c4c8c07a04e18ea009): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+Start importing Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx using Guid(55ebd24fbe1cccd44841c8ca0a799ea7) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+ -> (Import Result ID: '2e32817df999792ad065beca147c7690') in 0.0194474 seconds [static dependencies only]. Details - ImportResultOutputID=d2e1809b907e3a0b283670100fc8be4b DependenciesID=845445d508b8c06bc4c98065aecd32e4 StaticDependenciesID=67ed250e142f1bf40f0c5eedc1a249b9 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Broken.fbx)
+Asset Pipeline Refresh (id=4d55dd0419f049147ae94e7c049f501f): Total: 0.032 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+Start importing Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx using Guid(0c8f44375c3b060498da5f1c3c61a349) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+ -> (Import Result ID: 'f466fffb4551e946c54d8f1027a7d434') in 0.0176328 seconds [static dependencies only]. Details - ImportResultOutputID=c58d26526b6ee6305b7d594b3a2e7e77 DependenciesID=33868030e4ef7fee6b7861b4ff08ab90 StaticDependenciesID=1e44e3bba080a802e6f4bc79bcfdf9b1 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_TableLamp_Intact.fbx)
+Asset Pipeline Refresh (id=99aac291a45031743b887f00ffdd7b18): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Vase.fbx using Guid(3e5842a65e152a14f9b76eef49448518) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase.fbx)
+ -> (Import Result ID: 'a87abaed6db605dff8d0fa85a9c9f1eb') in 0.0188624 seconds [static dependencies only]. Details - ImportResultOutputID=d6a075cd2305f491158d0a44afdd82d1 DependenciesID=f8b899e85b7bd654e0d1501469680dfe StaticDependenciesID=05cc7e2e0ba45b6b9deb67d388d49f3e 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase.fbx)
+Asset Pipeline Refresh (id=74b642f5d01a1944a8242457c51760e8): Total: 0.031 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+Start importing Assets/_Game/Art/Props/PRP_Vase_Broken.fbx using Guid(e24052ac2693bd94a91b02da4c1d063b) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+ -> (Import Result ID: '8608e39beef67c3710b9196187796573') in 0.017751 seconds [static dependencies only]. Details - ImportResultOutputID=d2b7507e90a30640e519bc2a67b623a1 DependenciesID=fb0ee9754a24e06bf6cfbf3b6beca6b7 StaticDependenciesID=bc5ac33ad62430db629844b002393378 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_Vase_Broken.fbx)
+Asset Pipeline Refresh (id=f50baf0946b549e41b672af46c8b318e): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+Start importing Assets/_Game/Art/Props/PRP_WallClock.fbx using Guid(43593dcf1da52154a990be46a722afb4) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+ -> (Import Result ID: '29b4c6d9f186d8dae63439c72f84d1ae') in 0.0246911 seconds [static dependencies only]. Details - ImportResultOutputID=e43edba751d8b4faaa4769e59ef6d0a1 DependenciesID=837f91ce57ed558a3d5ff0110d623335 StaticDependenciesID=855a5e73134a90be1f63118d8be06688 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock.fbx)
+Asset Pipeline Refresh (id=4d414f3df127d844cb92c5ebc1480794): Total: 0.036 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+Start importing Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx using Guid(19d6f7c09c5d92840a292a98d032a763) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+ -> (Import Result ID: 'eb09394b659c7a6be5a04eaa69e1a9c4') in 0.0195014 seconds [static dependencies only]. Details - ImportResultOutputID=4446bf778c6186a7ecfcc3eb97ef4556 DependenciesID=223767c444935873f996066a1251890e StaticDependenciesID=f5e089287633eb5f3ed71c362d804798 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Props/PRP_WallClock_Broken.fbx)
+Asset Pipeline Refresh (id=f31855dc9048e464796d9bab39aecb27): Total: 0.032 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+ACCEPT fbx remapped slots: 836
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:RemapAllFbx () (at Assets/_Game/Editor/ArtAcceptance.cs:189)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:105)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 189)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 1061 unused Assets / (25.6 MB). Loaded Objects now: 5572.
+Memory consumption went from 218.9 MB to 193.3 MB.
+Total: 10.168000 ms (FindLiveObjects: 0.369400 ms CreateObjectMapping: 0.166500 ms MarkObjects: 6.969100 ms  DeleteObjects: 2.662000 ms)
+
+ACCEPT placed: 22
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:260)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 260)
+
+ACCEPT shot B08U_fixed_camera.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single,bool,single) (at Assets/_Game/Editor/ArtAcceptance.cs:301)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:264)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 301)
+
+ACCEPT shot B08U_topdown.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single,bool,single) (at Assets/_Game/Editor/ArtAcceptance.cs:301)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:269)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 301)
+
+ACCEPT shot B08U_mirror.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single,bool,single) (at Assets/_Game/Editor/ArtAcceptance.cs:301)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:271)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 301)
+
+ACCEPT shot B08U_vase_dresser.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single,bool,single) (at Assets/_Game/Editor/ArtAcceptance.cs:301)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:272)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 301)
+
+ACCEPT shot B08U_clock.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single,bool,single) (at Assets/_Game/Editor/ArtAcceptance.cs:301)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:273)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 301)
+
+Start importing Assets/_Game/Scenes/ArtAcceptance.unity using Guid(97d48d0229e79ac48b79050cee73716f) (DefaultImporter) -> (Import Result ID: 'f7afb0f236b9bd24c09dba5a0fbe9ade') in 0.0027425 seconds [static dependencies only]. Details - ImportResultOutputID=0de5b29e9cec37c04e0d3517e1a76876 DependenciesID=eed673c76fd0ed84ad6a89217429b2a2 StaticDependenciesID=4bd8dc1aaf6a1ac8fa60349a43adacc2 
+Asset Pipeline Refresh (id=0f74cf35bc6df614ca09b4100327e08e): Total: 0.047 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+ACCEPT scene saved Assets/_Game/Scenes/ArtAcceptance.unity
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:BuildSceneAndShoot () (at Assets/_Game/Editor/ArtAcceptance.cs:276)
+ConGame.Editor.ArtAcceptance:RunInner () (at Assets/_Game/Editor/ArtAcceptance.cs:106)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:89)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 276)
+
+ART_ACCEPTANCE_DONE
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ArtAcceptance:Run () (at Assets/_Game/Editor/ArtAcceptance.cs:90)
+
+(Filename: Assets/_Game/Editor/ArtAcceptance.cs Line: 90)
+
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-chual-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-chual channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1784348184132,"processId":11924,"allocatedMemory":16026501,"memoryLabels":[{"Default":211309},{"Permanent":15276},{"NewDelete":65811},{"Thread":4230344},{"Manager":822957},{"VertexData":344},{"Geometry":816},{"Texture":24},{"Shader":840042},{"Material":24},{"GfxDevice":55537},{"Animation":392},{"Audio":3008},{"FreeType":8},{"FontEngine":736},{"Physics":2090},{"Physics2D":16},{"Serialization":952},{"Input":9880},{"JobScheduler":33024},{"TextLib":216},{"Mono":32},{"MonoCode":64},{"ScriptingNativeRuntime":155052},{"BaseObject":1620368},{"Resource":1184},{"Renderer":3008},{"Transform":4685},{"File":9851},{"WebCam":616},{"Culling":32},{"Terrain":11394},{"Wind":24},{"STL":40},{"String":63751},{"StaticString":6718},{"Utility":2674134},{"Curl":2675},{"PoolAlloc":2264},{"AI":80},{"TypeTree":13637},{"ScriptManager":448},{"RuntimeInitializeOnLoadManager":64},{"SpriteAtlas":120},{"GI":7792},{"Director":8320},{"CloudService":24224},{"WebRequest":808},{"VR":48050},{"SceneManager":504},{"Video":64},{"LazyScriptCache":32},{"Camera":17},{"Secure":2113},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":464},{"Hierarchy":608},{"CoreStats":13032},{"Identifiers":12960},{"Gui":128},{"EditorUtility":110914},{"VersionControl":4},{"Undo":931},{"AssetDatabase":4529233},{"EditorGi":328},{"UnityConnect":37753},{"Upm":1912},{"UpmDiagnostics":8},{"AssetCompliance":64},{"DrivenProperties":72},{"LocalIPC":211},{"ProfilerEditor":9746},{"CoreBusinessMetrics":2866},{"Windowing":456},{"Licensing":1232},{"AssetReference":32},{"IPCStream":32}]}
+~StackAllocator(ALLOC_TEMP_MAIN) m_LastAlloc not NULL. Did you forget to call FreeAllStackAllocations()? To get more information, run app with -diag-temp-memory-leak-validation cmd line argument

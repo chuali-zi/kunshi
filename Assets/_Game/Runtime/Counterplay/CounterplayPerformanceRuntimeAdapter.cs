@@ -2,6 +2,7 @@ using System;
 using ConGame.Domain.Counterplay;
 using ConGame.Runtime.Input;
 using ConGame.Runtime.Loop;
+using ConGame.Runtime.Player;
 using ConGame.Runtime.Settings;
 using UnityEngine;
 
@@ -21,10 +22,12 @@ namespace ConGame.Runtime.Counterplay
         private GameSettingsV1 _settings;
         private bool _interactPulse;
         private bool _subscribed;
+        private int _lootWindowControllerCount;
 
         public event Action<string, int, QteSequenceSnapshot> QteProgressed;
         public event Action<string, int, PerformanceBranchDefinition, CounterplayNarrativeOutcome> BranchResolved;
         public event Action<string, int, string> NextOutcomeRequested;
+        public event Action<string, int> OutcomeCompletionRequested;
         public event Action<string, int> PerformanceCancelled;
         public event Action<string, int, PerformanceHeldItemPolicy> PerformanceStarted;
 
@@ -89,6 +92,7 @@ namespace ConGame.Runtime.Counterplay
             PerformanceHeldItemPolicy heldItemPolicy)
         {
             _interactPulse = false;
+            loop?.SetCounterplayInputWindows(ResolvePerformanceWindows(outcomeId));
             PerformanceStarted?.Invoke(outcomeId, loopEpoch, heldItemPolicy);
         }
 
@@ -97,23 +101,70 @@ namespace ConGame.Runtime.Counterplay
             QteProgressed?.Invoke(outcomeId, loopEpoch, snapshot);
         }
 
-        public void OnBranchResolved(
+        public bool OnBranchResolved(
             string outcomeId,
             int loopEpoch,
             in PerformanceBranchDefinition branch,
             CounterplayNarrativeOutcome narrativeOutcome)
         {
             if (string.Equals(outcomeId, "D21", StringComparison.Ordinal) &&
-                branch.RequiresAllQteWindows)
+                branch.MarksD21Seen)
             {
                 loop?.MarkD21Seen();
             }
 
             BranchResolved?.Invoke(outcomeId, loopEpoch, branch, narrativeOutcome);
-            if (!string.IsNullOrWhiteSpace(branch.NextOutcomeId))
+            if (!string.IsNullOrWhiteSpace(branch.NextOutcomeId) &&
+                !string.Equals(outcomeId, branch.NextOutcomeId, StringComparison.Ordinal))
             {
                 NextOutcomeRequested?.Invoke(outcomeId, loopEpoch, branch.NextOutcomeId);
             }
+
+            return _lootWindowControllerCount > 0 &&
+                   string.Equals(outcomeId, "D08", StringComparison.Ordinal) &&
+                   branch.RequiresAllQteWindows &&
+                   string.Equals(branch.BranchId, "disarm_window", StringComparison.Ordinal);
+        }
+
+        public void RegisterLootWindowController()
+        {
+            _lootWindowControllerCount++;
+        }
+
+        public void UnregisterLootWindowController()
+        {
+            _lootWindowControllerCount = Math.Max(0, _lootWindowControllerCount - 1);
+        }
+
+        public void RequestNextOutcome(string outcomeId, int loopEpoch, string nextOutcomeId)
+        {
+            if (string.IsNullOrWhiteSpace(nextOutcomeId) ||
+                string.Equals(outcomeId, nextOutcomeId, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            NextOutcomeRequested?.Invoke(outcomeId, loopEpoch, nextOutcomeId);
+        }
+
+        public void RequestOutcomeCompletion(string outcomeId, int loopEpoch, bool markD21Seen = false)
+        {
+            if (string.IsNullOrWhiteSpace(outcomeId))
+            {
+                return;
+            }
+
+            if (markD21Seen && string.Equals(outcomeId, "D21", StringComparison.Ordinal))
+            {
+                loop?.MarkD21Seen();
+            }
+
+            OutcomeCompletionRequested?.Invoke(outcomeId, loopEpoch);
+        }
+
+        public void SetCounterplayInputWindows(CounterplayInputWindow windows)
+        {
+            loop?.SetCounterplayInputWindows(windows);
         }
 
         public void OnPerformanceCancelled(string outcomeId, int loopEpoch)
@@ -183,6 +234,26 @@ namespace ConGame.Runtime.Counterplay
             }
 
             _subscribed = false;
+        }
+
+        private static CounterplayInputWindow ResolvePerformanceWindows(string outcomeId)
+        {
+            if (string.Equals(outcomeId, "D08", StringComparison.Ordinal))
+            {
+                return CounterplayInputWindow.Qte;
+            }
+
+            if (string.Equals(outcomeId, "D21", StringComparison.Ordinal))
+            {
+                return CounterplayInputWindow.Grab;
+            }
+
+            if (string.Equals(outcomeId, "D22", StringComparison.Ordinal))
+            {
+                return CounterplayInputWindow.Use;
+            }
+
+            return CounterplayInputWindow.None;
         }
     }
 }

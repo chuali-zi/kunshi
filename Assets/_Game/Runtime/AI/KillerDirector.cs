@@ -22,8 +22,7 @@ namespace ConGame.Runtime.AI
     public sealed class KillerDirector : MonoBehaviour, ILoopResettable
     {
         private const float ContinuousEvaluationInterval = 0.1f;
-        private const float D03PSearchSeconds = 8f;
-
+        private const float EntryReactionWindowSeconds = 2f;
         [SerializeField]
         private NavMeshAgent agent;
         [SerializeField]
@@ -48,6 +47,9 @@ namespace ConGame.Runtime.AI
         private int _loopEpoch;
         private bool _endingMode;
         private bool _sprintInterruptUsed;
+        private int _performanceGeneration;
+        private bool _entrySelectionPending;
+        private float _entryReactionRemaining;
 
         public event Action<KillerState> StateChanged;
         public event Action<string> CounterplaySelected;
@@ -88,9 +90,44 @@ namespace ConGame.Runtime.AI
                 SelectedOutcomeId = outcomeId;
             }
 
+            CompleteCurrentOutcome(SelectedOutcomeId);
+        }
+
+        public bool CompleteCurrentOutcome(string expectedOutcomeId = null)
+        {
+            if (State == KillerState.Dormant ||
+                (!string.IsNullOrWhiteSpace(expectedOutcomeId) &&
+                 !string.Equals(expectedOutcomeId, SelectedOutcomeId, StringComparison.Ordinal)))
+            {
+                return false;
+            }
+
+            int generation = ++_performanceGeneration;
             _running = false;
+            _entrySelectionPending = false;
+            string completedOutcomeId = string.IsNullOrEmpty(SelectedOutcomeId) ? "D01" : SelectedOutcomeId;
+            Action<string> callback = _killCallback;
             _performancePlayer?.CancelAllForLoop(_loopEpoch);
-            _killCallback?.Invoke(string.IsNullOrEmpty(SelectedOutcomeId) ? "D01" : SelectedOutcomeId);
+            if (generation != _performanceGeneration)
+            {
+                return false;
+            }
+
+            _killCallback = null;
+            callback?.Invoke(completedOutcomeId);
+            return true;
+        }
+
+        public void SuspendPerformanceForInteractiveWindow()
+        {
+            if (State != KillerState.PerformanceLocked)
+            {
+                return;
+            }
+
+            _performanceGeneration++;
+            _performancePlayer?.CancelAllForLoop(_loopEpoch);
+            _running = false;
         }
 
         public bool TryStartOutcome(string outcomeId)
@@ -118,6 +155,25 @@ namespace ConGame.Runtime.AI
             }
 
             _sprintInterruptUsed = true;
+            if (State == KillerState.PerformanceLocked)
+            {
+                int generation = ++_performanceGeneration;
+                _performancePlayer?.CancelAllForLoop(_loopEpoch);
+                if (generation != _performanceGeneration)
+                {
+                    return;
+                }
+
+                SetState(KillerState.Navigating);
+                if (generation != _performanceGeneration)
+                {
+                    return;
+                }
+
+                _remainingDelay = 0.6f;
+                _running = true;
+            }
+
             if (agent != null)
             {
                 agent.enabled = true;
@@ -128,7 +184,7 @@ namespace ConGame.Runtime.AI
                 }
             }
 
-            if (_running)
+            if (_running && State != KillerState.PerformanceLocked)
             {
                 _remainingDelay = Mathf.Min(_remainingDelay, 0.6f);
             }
@@ -144,6 +200,18 @@ namespace ConGame.Runtime.AI
         {
             if (State == KillerState.Dormant)
             {
+                return;
+            }
+
+            if (_entrySelectionPending)
+            {
+                _entryReactionRemaining -= Time.deltaTime;
+                if (_entryReactionRemaining <= 0f)
+                {
+                    _entrySelectionPending = false;
+                    StartCounterplay(SelectInitialCounterplay());
+                }
+
                 return;
             }
 
@@ -167,8 +235,7 @@ namespace ConGame.Runtime.AI
             _remainingDelay -= Time.deltaTime;
             if (_remainingDelay <= 0f)
             {
-                _running = false;
-                _killCallback?.Invoke(string.IsNullOrEmpty(SelectedOutcomeId) ? "D01" : SelectedOutcomeId);
+                CompleteCurrentOutcome(SelectedOutcomeId);
             }
         }
 
@@ -189,16 +256,8 @@ namespace ConGame.Runtime.AI
                 }
             }
 
-            FactSnapshot snapshot = facts == null ? FactSnapshot.CreateBaseline() : facts.CaptureSnapshot();
-            CounterplayDefinitionAsset selected = catalog == null
-                                                     ? null
-                                                     : catalog.Select(CounterplayTriggerMode.Entry, snapshot);
-            if (_endingMode)
-            {
-                selected = FilterEndingDefinition(selected, snapshot);
-            }
-
-            StartCounterplay(selected);
+            _entrySelectionPending = true;
+            _entryReactionRemaining = EntryReactionWindowSeconds;
         }
 
         public void HandleStimulus(KillerStimulus stimulus)
@@ -208,19 +267,28 @@ namespace ConGame.Runtime.AI
                 return;
             }
 
-            FactSnapshot snapshot = facts.CaptureSnapshotForStimulus(stimulus);
             if (stimulus.Type == KillerStimulusType.TelevisionHeavyHit)
             {
                 RequestSprintInterrupt();
+                if (State == KillerState.PerformanceLocked || _running)
+                {
+                    return;
+                }
             }
 
+            if (State == KillerState.PerformanceLocked)
+            {
+                return;
+            }
+
+            FactSnapshot snapshot = facts.CaptureSnapshotForStimulus(stimulus);
             CounterplayDefinitionAsset selected = catalog.Select(CounterplayTriggerMode.Reactive, snapshot);
             if (_endingMode)
             {
                 selected = FilterEndingDefinition(selected, snapshot);
             }
 
-            if (selected != null && selected.SortOrder < GetSelectedOrder())
+            if (selected != null && (_entrySelectionPending || selected.SortOrder < GetSelectedOrder()))
             {
                 StartCounterplay(selected);
             }
@@ -237,6 +305,8 @@ namespace ConGame.Runtime.AI
         public void Quiesce(in LoopResetContext context)
         {
             _running = false;
+            _entrySelectionPending = false;
+            _performanceGeneration++;
             _continuousEvaluationRemaining = 0f;
             _sprintInterruptUsed = false;
             _performancePlayer?.CancelAllForLoop(context.PreviousEpoch);
@@ -250,6 +320,7 @@ namespace ConGame.Runtime.AI
             SelectedOutcomeId = string.Empty;
             _killCallback = null;
             _loopEpoch = context.NextEpoch;
+            _entrySelectionPending = false;
             _endingMode = false;
             _sprintInterruptUsed = false;
             SetState(KillerState.Dormant);
@@ -262,35 +333,60 @@ namespace ConGame.Runtime.AI
 
         private void StartCounterplay(CounterplayDefinitionAsset definition)
         {
+            _entrySelectionPending = false;
+            int generation = ++_performanceGeneration;
             SelectedOutcomeId = definition == null ? "D01" : definition.OutcomeId;
+            string outcomeId = SelectedOutcomeId;
             CounterplaySelected?.Invoke(SelectedOutcomeId);
-            SetState(KillerState.Navigating);
-
-            // Greybox D03P: hold Continuous/Entry match for a search beat before the kill.
-            if (string.Equals(SelectedOutcomeId, "D03P", StringComparison.Ordinal))
+            if (generation != _performanceGeneration)
             {
-                _performancePlayer?.CancelAllForLoop(_loopEpoch);
-                _remainingDelay = D03PSearchSeconds;
-                _running = true;
+                return;
+            }
+
+            SetState(KillerState.Navigating);
+            if (generation != _performanceGeneration)
+            {
                 return;
             }
 
             if (definition != null && definition.Performance != null && _performancePlayer != null)
             {
                 _performancePlayer.CancelAllForLoop(_loopEpoch);
+                if (generation != _performanceGeneration)
+                {
+                    return;
+                }
+
                 StopAgentForPerformance();
                 int performanceEpoch = _loopEpoch;
+                SetState(KillerState.PerformanceLocked);
+                if (generation != _performanceGeneration)
+                {
+                    return;
+                }
+
                 bool started = _performancePlayer.Play(definition, () =>
                                                                    {
-                                                                       if (_loopEpoch == performanceEpoch)
+                                                                       if (_loopEpoch == performanceEpoch &&
+                                                                           generation == _performanceGeneration)
                                                                        {
-                                                                           _killCallback?.Invoke(SelectedOutcomeId);
+                                                                           CompleteCurrentOutcome(outcomeId);
                                                                        }
                                                                    });
+                if (generation != _performanceGeneration)
+                {
+                    return;
+                }
+
                 if (started)
                 {
-                    SetState(KillerState.PerformanceLocked);
                     _running = false;
+                    return;
+                }
+
+                SetState(KillerState.Navigating);
+                if (generation != _performanceGeneration)
+                {
                     return;
                 }
             }
@@ -327,7 +423,7 @@ namespace ConGame.Runtime.AI
 
         private void EvaluateContinuousCounterplay()
         {
-            if (catalog == null || facts == null)
+            if (State == KillerState.PerformanceLocked || _entrySelectionPending || catalog == null || facts == null)
             {
                 return;
             }
@@ -343,6 +439,25 @@ namespace ConGame.Runtime.AI
             {
                 StartCounterplay(selected);
             }
+        }
+
+        private CounterplayDefinitionAsset SelectInitialCounterplay()
+        {
+            FactSnapshot snapshot = facts == null ? FactSnapshot.CreateBaseline() : facts.CaptureSnapshot();
+            if (catalog == null)
+            {
+                return null;
+            }
+
+            CounterplayDefinitionAsset entry = catalog.Select(CounterplayTriggerMode.Entry, snapshot);
+            CounterplayDefinitionAsset continuous = catalog.Select(CounterplayTriggerMode.Continuous, snapshot);
+            CounterplayDefinitionAsset selected = entry;
+            if (continuous != null && (selected == null || continuous.SortOrder < selected.SortOrder))
+            {
+                selected = continuous;
+            }
+
+            return _endingMode ? FilterEndingDefinition(selected, snapshot) : selected;
         }
 
         private CounterplayDefinitionAsset FilterEndingDefinition(

@@ -23,7 +23,10 @@ namespace ConGame.Runtime.Player
         private float _verticalVelocity;
         
         private float _movementSpeedMultiplier = 1f;
-private bool _inputLocked;
+        private bool _inputLocked;
+        private Transform _initialMovementCamera;
+        private bool _useMovementReferenceForAim;
+        private bool _initialUseMovementReferenceForAim;
 
         public int ResetOrder => 300;
 
@@ -31,6 +34,9 @@ private bool _inputLocked;
 
         public float MovementSpeedMultiplier => _movementSpeedMultiplier;
 public PlayerInputRouter Input => input;
+        public Vector3 AimForward => _useMovementReferenceForAim && movementCamera != null
+            ? movementCamera.forward
+            : transform.forward;
 
         public void Configure(
             CharacterController controller,
@@ -110,6 +116,12 @@ public PlayerInputRouter Input => input;
             }
         }
 
+        public void SetMovementReference(Transform reference, bool useForAim = false)
+        {
+            movementCamera = reference;
+            _useMovementReferenceForAim = useForAim;
+        }
+
 public void SetMovementSpeedMultiplier(float multiplier)
         {
             _movementSpeedMultiplier = Mathf.Clamp(multiplier, 0.1f, 1f);
@@ -118,6 +130,7 @@ public void SetMovementSpeedMultiplier(float multiplier)
 
         public void Teleport(Vector3 position, Quaternion rotation)
         {
+            PlayerZoneTrigger.ClearOccupancy(facts);
             bool wasEnabled = characterController != null && characterController.enabled;
             if (characterController != null)
             {
@@ -133,6 +146,8 @@ public void SetMovementSpeedMultiplier(float multiplier)
         public void CaptureInitialState()
         {
             _movementSpeedMultiplier = 1f;
+            _initialMovementCamera = movementCamera;
+            _initialUseMovementReferenceForAim = _useMovementReferenceForAim;
             _initialPosition = transform.position;
             _initialRotation = transform.rotation;
         }
@@ -141,6 +156,7 @@ public void SetMovementSpeedMultiplier(float multiplier)
         {
             _inputLocked = true;
             _verticalVelocity = 0f;
+            PlayerZoneTrigger.ClearOccupancy(facts);
             if (characterController != null)
             {
                 characterController.enabled = false;
@@ -149,6 +165,8 @@ public void SetMovementSpeedMultiplier(float multiplier)
         public void Restore(in LoopResetContext context)
         {
             _movementSpeedMultiplier = 1f;
+            movementCamera = _initialMovementCamera;
+            _useMovementReferenceForAim = _initialUseMovementReferenceForAim;
             transform.SetPositionAndRotation(_initialPosition, _initialRotation);
         }
 

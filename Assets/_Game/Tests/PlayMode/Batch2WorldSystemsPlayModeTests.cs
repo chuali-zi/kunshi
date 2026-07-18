@@ -79,7 +79,7 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator ThrowableThrowEmitsIncomingProjectileStimulus()
+        public IEnumerator ThrowableThrowDoesNotEmitProjectileStimulusBeforeCollision()
         {
             GameObject factsObject = new GameObject("facts");
             GameObject eventsObject = new GameObject("events");
@@ -112,8 +112,7 @@ namespace ConGame.Tests.PlayMode
                 Assert.That(interactor.TryHold(entity, body), Is.True);
                 interactor.ThrowHeld();
                 Assert.That(interactor.HeldEntity, Is.Null);
-                Assert.That(stimulus.HasValue, Is.True);
-                Assert.That(stimulus.Value.Type, Is.EqualTo(KillerStimulusType.IncomingProjectile));
+                Assert.That(stimulus.HasValue, Is.False);
                 Assert.That(stateful.CurrentState, Is.EqualTo(ItemPhysicalState.Flying));
                 yield return null;
             }

@@ -64,7 +64,13 @@ namespace ConGame.Presentation.M1
                 return false;
             }
 
+            int expectedCancelGeneration = _generation + 1;
             CancelActive(true);
+            if (_generation != expectedCancelGeneration || IsPlaying)
+            {
+                return true;
+            }
+
             _generation++;
             int generation = _generation;
             ActiveStyle = performance.Style;
@@ -86,9 +92,18 @@ namespace ConGame.Presentation.M1
             if (itemPolicy == PerformanceHeldItemPolicy.DropAtStart)
             {
                 playerInteractor?.ForceDropHeld();
+                if (generation != _generation)
+                {
+                    return true;
+                }
             }
 
             _progress?.OnPerformanceStarted(_activeOutcomeId, _loopEpoch, itemPolicy);
+            if (generation != _generation)
+            {
+                return true;
+            }
+
             _routine = StartCoroutine(RunPerformance(performance, generation));
             return true;
         }
@@ -100,7 +115,7 @@ namespace ConGame.Presentation.M1
                 CancelActive(true);
             }
 
-            _loopEpoch = Math.Max(_loopEpoch, loopEpoch + 1);
+            _loopEpoch = Math.Max(_loopEpoch, loopEpoch);
         }
 
         public void CaptureInitialState()
@@ -131,8 +146,11 @@ namespace ConGame.Presentation.M1
             Quaternion killerStartRotation = killer.rotation;
             Quaternion playerStartRotation = player.rotation;
             float duration = Mathf.Max(performance.SequenceDuration, performance.TotalQteDuration);
-            float approachDuration = duration * 0.62f;
-            Vector3 target = GetKillerTarget(_activeOutcomeId, performance.Style, player);
+            OutcomeBeatProfile profile = GetOutcomeProfile(_activeOutcomeId);
+            float approachDuration = duration * profile.ApproachFraction;
+            float holdDuration = duration * profile.HoldFraction;
+            Vector3 target = player.position + player.right * profile.LateralOffset +
+                             player.forward * profile.ForwardOffset;
             float elapsed = 0f;
 
             while (elapsed < approachDuration && generation == _generation)
@@ -140,6 +158,11 @@ namespace ConGame.Presentation.M1
                 float delta = Time.deltaTime;
                 elapsed += delta;
                 PublishQteProgress(delta);
+                if (generation != _generation)
+                {
+                    yield break;
+                }
+
                 float progress = approachDuration <= 0f ? 1f : Mathf.Clamp01(elapsed / approachDuration);
                 float eased = Mathf.SmoothStep(0f, 1f, progress);
                 killer.position = Vector3.Lerp(killerStart, target, eased);
@@ -160,14 +183,35 @@ namespace ConGame.Presentation.M1
                 yield break;
             }
 
-            Quaternion impactRotation = playerStartRotation * GetImpactRotation(_activeOutcomeId, performance.Style);
-            float impactDuration = Mathf.Max(0.15f, duration - approachDuration);
+            elapsed = 0f;
+            while (elapsed < holdDuration && generation == _generation)
+            {
+                float delta = Time.deltaTime;
+                elapsed += delta;
+                PublishQteProgress(delta);
+                if (generation != _generation)
+                {
+                    yield break;
+                }
+
+                float pulse = Mathf.Sin(elapsed * profile.HoldPulseSpeed) * profile.HoldPulseDistance;
+                killer.position = target + killer.right * pulse;
+                yield return null;
+            }
+
+            Quaternion impactRotation = playerStartRotation * Quaternion.Euler(profile.ImpactEuler);
+            float impactDuration = Mathf.Max(0.15f, duration - approachDuration - holdDuration);
             elapsed = 0f;
             while (elapsed < impactDuration && generation == _generation)
             {
                 float delta = Time.deltaTime;
                 elapsed += delta;
                 PublishQteProgress(delta);
+                if (generation != _generation)
+                {
+                    yield break;
+                }
+
                 float progress = Mathf.Clamp01(elapsed / impactDuration);
                 player.rotation =
                     Quaternion.Slerp(playerStartRotation, impactRotation, Mathf.SmoothStep(0f, 1f, progress));
@@ -180,8 +224,18 @@ namespace ConGame.Presentation.M1
             }
 
             player.rotation = impactRotation;
-            ResolveBranch(performance);
+            bool completionDeferred = ResolveBranch(performance);
+            if (generation != _generation)
+            {
+                yield break;
+            }
+
             _routine = null;
+            if (completionDeferred)
+            {
+                yield break;
+            }
+
             IsPlaying = false;
             Action callback = _completed;
             _completed = null;
@@ -200,78 +254,86 @@ namespace ConGame.Presentation.M1
             _progress?.OnQteProgress(_activeOutcomeId, _loopEpoch, snapshot);
         }
 
-        private void ResolveBranch(M1GreyboxPlayableAsset performance)
+        private bool ResolveBranch(M1GreyboxPlayableAsset performance)
         {
             if (performance == null || _qteCounter == null)
             {
-                return;
+                return false;
             }
 
             bool mechanicalSuccess = _qteCounter.AllWindowsSucceeded;
             if (performance.TryResolveBranch(mechanicalSuccess, out PerformanceBranchDefinition branch))
             {
-                _progress?.OnBranchResolved(
+                return _progress != null && _progress.OnBranchResolved(
                     _activeOutcomeId,
                     _loopEpoch,
                     branch,
                     CounterplayNarrativeOutcome.ScriptedFailure);
             }
+
+            return false;
         }
 
-        private static Vector3 GetKillerTarget(
-            string outcomeId,
-            M1GreyboxDeathStyle style,
-            Transform player)
+        private static OutcomeBeatProfile GetOutcomeProfile(string outcomeId)
         {
-            switch (style)
+            switch (outcomeId)
             {
-                case M1GreyboxDeathStyle.SofaRearShot:
-                    return player.position + player.right * 0.8f + player.forward * 0.45f;
-                case M1GreyboxDeathStyle.ArmedStandoff:
-                    return player.position + player.forward * 2.15f;
-                default:
-                    int ordinal = GetOutcomeOrdinal(outcomeId);
-                    float angle = ((ordinal % 7) - 3) * 11f;
-                    float distance = 1.05f + (ordinal % 4) * 0.22f;
-                    Vector3 offset = Quaternion.Euler(0f, angle, 0f) * player.forward * distance;
-                    return player.position + offset;
-            }
-        }
-
-        private static Quaternion GetImpactRotation(string outcomeId, M1GreyboxDeathStyle style)
-        {
-            switch (style)
-            {
-                case M1GreyboxDeathStyle.SofaRearShot:
-                    return Quaternion.Euler(78f, 0f, 18f);
-                case M1GreyboxDeathStyle.ArmedStandoff:
-                    return Quaternion.Euler(0f, 0f, -82f);
-                default:
-                    int ordinal = GetOutcomeOrdinal(outcomeId);
-                    float pitch = ordinal % 3 == 0 ? 72f : 0f;
-                    float roll = ordinal % 2 == 0 ? -76f : 76f;
-                    return Quaternion.Euler(pitch, 0f, roll);
+                case "D01": return new OutcomeBeatProfile(-0.10f, 1.05f, 0.46f, 0.08f, 58f, -4f, -74f, 6f, 0.018f);
+                case "D02": return new OutcomeBeatProfile(0.38f, 1.18f, 0.52f, 0.06f, 12f, 18f, 78f, 7f, 0.025f);
+                case "D03": return new OutcomeBeatProfile(0.82f, 0.48f, 0.42f, 0.18f, 78f, -12f, 22f, 4f, 0.012f);
+                case "D03P": return new OutcomeBeatProfile(-0.76f, 0.62f, 0.68f, 0.20f, 84f, 16f, -18f, 2f, 0.035f);
+                case "D04": return new OutcomeBeatProfile(-0.55f, 1.32f, 0.55f, 0.07f, 0f, -22f, -82f, 8f, 0.020f);
+                case "D05": return new OutcomeBeatProfile(0.18f, 0.88f, 0.38f, 0.15f, 66f, 8f, 64f, 5f, 0.030f);
+                case "D06": return new OutcomeBeatProfile(0f, 1.52f, 0.64f, 0.12f, 88f, 0f, -8f, 3f, 0.014f);
+                case "D07": return new OutcomeBeatProfile(-0.34f, 2.05f, 0.35f, 0.22f, 4f, 10f, -86f, 9f, 0.022f);
+                case "D08": return new OutcomeBeatProfile(0.22f, 1.72f, 0.40f, 0.16f, 0f, -14f, 82f, 10f, 0.028f);
+                case "D09": return new OutcomeBeatProfile(0.62f, 1.06f, 0.58f, 0.05f, 74f, 24f, 36f, 6f, 0.016f);
+                case "D10": return new OutcomeBeatProfile(-0.92f, 1.42f, 0.44f, 0.11f, 52f, -28f, -58f, 11f, 0.034f);
+                case "D11": return new OutcomeBeatProfile(0.46f, 0.72f, 0.49f, 0.14f, 82f, 6f, 12f, 4f, 0.021f);
+                case "D12": return new OutcomeBeatProfile(-0.24f, 1.24f, 0.61f, 0.04f, 18f, 32f, -80f, 12f, 0.019f);
+                case "D13": return new OutcomeBeatProfile(0.70f, 1.58f, 0.36f, 0.19f, 62f, -18f, 48f, 5f, 0.032f);
+                case "D14": return new OutcomeBeatProfile(-0.66f, 0.96f, 0.57f, 0.09f, 86f, 14f, -30f, 8f, 0.024f);
+                case "D15": return new OutcomeBeatProfile(0.12f, 1.38f, 0.47f, 0.13f, 34f, -34f, 72f, 7f, 0.027f);
+                case "D16": return new OutcomeBeatProfile(0.96f, 1.84f, 0.53f, 0.10f, 6f, 38f, 84f, 9f, 0.015f);
+                case "D17": return new OutcomeBeatProfile(-1.02f, 1.12f, 0.41f, 0.17f, 70f, -6f, -44f, 13f, 0.038f);
+                case "D18": return new OutcomeBeatProfile(0.30f, 0.82f, 0.63f, 0.03f, 80f, 26f, 28f, 6f, 0.011f);
+                case "D19": return new OutcomeBeatProfile(-0.44f, 1.66f, 0.34f, 0.24f, 24f, -40f, -68f, 4f, 0.029f);
+                case "D20": return new OutcomeBeatProfile(0.56f, 1.28f, 0.59f, 0.08f, 64f, 12f, 56f, 10f, 0.023f);
+                case "D21": return new OutcomeBeatProfile(-0.18f, 2.18f, 0.28f, 0.30f, 8f, -8f, -88f, 3f, 0.040f);
+                case "D22": return new OutcomeBeatProfile(0.26f, 2.32f, 0.24f, 0.34f, 2f, 20f, 86f, 14f, 0.045f);
+                default: return new OutcomeBeatProfile(0f, 1.1f, 0.55f, 0.08f, 70f, 0f, 70f, 6f, 0.02f);
             }
         }
 
-        private static int GetOutcomeOrdinal(string outcomeId)
+        private readonly struct OutcomeBeatProfile
         {
-            if (string.IsNullOrEmpty(outcomeId))
+            public OutcomeBeatProfile(
+                float lateralOffset,
+                float forwardOffset,
+                float approachFraction,
+                float holdFraction,
+                float impactPitch,
+                float impactYaw,
+                float impactRoll,
+                float holdPulseSpeed,
+                float holdPulseDistance)
             {
-                return 1;
+                LateralOffset = lateralOffset;
+                ForwardOffset = forwardOffset;
+                ApproachFraction = approachFraction;
+                HoldFraction = holdFraction;
+                ImpactEuler = new Vector3(impactPitch, impactYaw, impactRoll);
+                HoldPulseSpeed = holdPulseSpeed;
+                HoldPulseDistance = holdPulseDistance;
             }
 
-            int value = 0;
-            for (int i = 0; i < outcomeId.Length; i++)
-            {
-                char character = outcomeId[i];
-                if (character >= '0' && character <= '9')
-                {
-                    value = value * 10 + character - '0';
-                }
-            }
-
-            return Math.Max(1, value);
+            public float LateralOffset { get; }
+            public float ForwardOffset { get; }
+            public float ApproachFraction { get; }
+            public float HoldFraction { get; }
+            public Vector3 ImpactEuler { get; }
+            public float HoldPulseSpeed { get; }
+            public float HoldPulseDistance { get; }
         }
 
         private void CancelActive(bool notifyProgress = false)

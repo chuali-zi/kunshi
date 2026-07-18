@@ -20,7 +20,15 @@ namespace ConGame.Runtime.Interaction
 
         public bool CanUse(in InteractionContext context)
         {
-            return facts != null;
+            if (facts == null)
+            {
+                return false;
+            }
+
+            FactSnapshot snapshot = facts.CaptureSnapshot();
+            StatefulWorldItem item = GetComponent<StatefulWorldItem>();
+            return item != null && item.CurrentSocket != null &&
+                   snapshot.Trap == TrapState.BlanketArmed && !snapshot.TrapPulled;
         }
 
         public InteractionResult Use(in InteractionContext context)
@@ -31,13 +39,6 @@ namespace ConGame.Runtime.Interaction
             }
 
             FactSnapshot snapshot = facts.CaptureSnapshot();
-            if (snapshot.Trap != TrapState.BlanketArmed)
-            {
-                facts.SetTrap(TrapState.BlanketArmed);
-                facts.SetTrapPulled(false);
-                return InteractionResult.Accepted;
-            }
-
             facts.SetTrapPulled(true);
             events?.EmitStimulus(KillerStimulusType.TrapPull, "blanket");
             return InteractionResult.Accepted;

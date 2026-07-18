@@ -13,12 +13,8 @@ MonoBehaviour:
   m_Name: PERF_D22_Greybox
   m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.M1.M1GreyboxPlayableAsset
   style: 2
-  sequenceDuration: 1.8
+  sequenceDuration: 12
   outcomeId: D22
   heldItemPolicy: 2
   qteWindows: []
-  resultBranches:
-  - BranchId: single_round_dodged
-    RequiresAllQteWindows: 1
-    NextOutcomeId: D22
-    MarksD21Seen: 0
+  resultBranches: []

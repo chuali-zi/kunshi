@@ -28,7 +28,7 @@ namespace ConGame.Runtime.Counterplay
     {
         void OnPerformanceStarted(string outcomeId, int loopEpoch, PerformanceHeldItemPolicy heldItemPolicy);
         void OnQteProgress(string outcomeId, int loopEpoch, in QteSequenceSnapshot snapshot);
-        void OnBranchResolved(
+        bool OnBranchResolved(
             string outcomeId,
             int loopEpoch,
             in PerformanceBranchDefinition branch,

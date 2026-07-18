@@ -26,9 +26,9 @@ MonoBehaviour:
   resultBranches:
   - BranchId: disarm_window
     RequiresAllQteWindows: 1
-    NextOutcomeId: D22
+    NextOutcomeId: 
     MarksD21Seen: 0
   - BranchId: close_shot
     RequiresAllQteWindows: 0
-    NextOutcomeId: D08
+    NextOutcomeId: 
     MarksD21Seen: 0

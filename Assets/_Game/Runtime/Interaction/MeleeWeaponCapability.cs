@@ -1,4 +1,5 @@
 using System.Collections;
+using ConGame.Domain.Facts;
 using ConGame.Domain.Interaction;
 using ConGame.Runtime.Events;
 using ConGame.Runtime.Facts;
@@ -36,9 +37,11 @@ namespace ConGame.Runtime.Interaction
         private IEnumerator SwingWindow(PlayerInteractor player, GameplayFactService facts, GameplayEventHub events)
         {
             facts?.SetSwinging(true);
+            events?.EmitStimulus(KillerStimulusType.PlayerExposed, name);
             yield return new WaitForSeconds(0.12f);
 
-            Vector3 origin = player.transform.position + Vector3.up + player.transform.forward * 0.8f;
+            Vector3 aimForward = player.AimForward;
+            Vector3 origin = player.transform.position + Vector3.up + aimForward * 0.8f;
             int count = Physics.OverlapSphereNonAlloc(origin, reach, _hits, ~0, QueryTriggerInteraction.Collide);
             for (int i = 0; i < count; i++)
             {
@@ -54,7 +57,7 @@ namespace ConGame.Runtime.Interaction
                     if (behaviours[j] is IHitReceiver receiver)
                     {
                         Vector3 point = hit.ClosestPoint(origin);
-                        receiver.ReceiveHit(new HitInfo(impactKind, name, point, player.transform.forward, force));
+                        receiver.ReceiveHit(new HitInfo(impactKind, name, point, aimForward, force));
                         events?.EmitNoise(NoiseLevel.Loud, point, name);
                         i = count;
                         break;

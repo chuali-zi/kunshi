@@ -31,8 +31,11 @@ namespace ConGame.Runtime.Interaction
         public override bool CanExecute(in InteractionContext context)
         {
             StatefulWorldItem stateful = GetComponent<StatefulWorldItem>();
+            UseCapability use = GetComponent<UseCapability>();
             return context.Player != null && context.Player.HeldEntity == null && _entity != null &&
-                   stateful != null && stateful.AllowsOrdinaryInteraction;
+                   stateful != null && stateful.AllowsOrdinaryInteraction &&
+                   (stateful.CurrentSocket == null || use == null ||
+                    !use.CanExecute(new InteractionContext(context.Player, _entity)));
         }
 
         public override InteractionResult Execute(in InteractionContext context)

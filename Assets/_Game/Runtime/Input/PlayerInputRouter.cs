@@ -5,6 +5,13 @@ using UnityEngine.InputSystem;
 
 namespace ConGame.Runtime.Input
 {
+    public enum GameplayInputMode
+    {
+        Disabled = 0,
+        Full = 1,
+        LookOnly = 2
+    }
+
     [DisallowMultipleComponent]
     public sealed class PlayerInputRouter : MonoBehaviour
     {
@@ -22,6 +29,7 @@ namespace ConGame.Runtime.Input
         private InputAction _submit;
         private InputAction _cancel;
         private GameSettingsV1 _settings = new GameSettingsV1();
+        private GameplayInputMode _inputMode = GameplayInputMode.Full;
 
         public event Action MeaningfulAction;
         public event Action InteractPressed;
@@ -38,6 +46,7 @@ namespace ConGame.Runtime.Input
         public bool SprintHeld => _sprint != null && _sprint.IsPressed();
         public bool GameplayEnabled => _gameplay != null && _gameplay.enabled;
         public bool SystemInputEnabled => _system != null && _system.enabled;
+        public GameplayInputMode InputMode => _inputMode;
 
         private void Awake()
         {
@@ -46,7 +55,7 @@ namespace ConGame.Runtime.Input
 
         private void OnEnable()
         {
-            _gameplay?.Enable();
+            ApplyInputMode();
             _system?.Enable();
         }
 
@@ -75,14 +84,19 @@ namespace ConGame.Runtime.Input
                 BuildActions();
             }
 
-            if (enabled)
+            _inputMode = enabled ? GameplayInputMode.Full : GameplayInputMode.Disabled;
+            ApplyInputMode();
+        }
+
+        public void SetLookOnlyEnabled(bool enabled)
+        {
+            if (_gameplay == null)
             {
-                _gameplay.Enable();
+                BuildActions();
             }
-            else
-            {
-                _gameplay.Disable();
-            }
+
+            _inputMode = enabled ? GameplayInputMode.LookOnly : GameplayInputMode.Disabled;
+            ApplyInputMode();
         }
 
         private void BuildActions()
@@ -174,6 +188,41 @@ namespace ConGame.Runtime.Input
             action.AddBinding(keyboardPath);
             action.AddBinding(gamepadPath);
             return action;
+        }
+
+        private void ApplyInputMode()
+        {
+            if (_gameplay == null)
+            {
+                return;
+            }
+
+            if (_inputMode == GameplayInputMode.Disabled)
+            {
+                _gameplay.Disable();
+                return;
+            }
+
+            _gameplay.Enable();
+            if (_inputMode == GameplayInputMode.Full)
+            {
+                _move.Enable();
+                _look.Enable();
+                _sprint.Enable();
+                _interact.Enable();
+                _attack.Enable();
+                _throw.Enable();
+                _stance.Enable();
+                return;
+            }
+
+            _move.Disable();
+            _sprint.Disable();
+            _interact.Disable();
+            _attack.Disable();
+            _throw.Disable();
+            _stance.Disable();
+            _look.Enable();
         }
     }
 }

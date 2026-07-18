@@ -58,8 +58,11 @@ namespace ConGame.Runtime.Loop
             transform.localScale = _localScale;
             _body.position = transform.position;
             _body.rotation = transform.rotation;
-            _body.linearVelocity = Vector3.zero;
-            _body.angularVelocity = Vector3.zero;
+            if (!_body.isKinematic)
+            {
+                _body.linearVelocity = Vector3.zero;
+                _body.angularVelocity = Vector3.zero;
+            }
             _body.useGravity = _useGravity;
         }
 

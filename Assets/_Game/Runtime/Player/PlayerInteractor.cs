@@ -1,3 +1,4 @@
+using System;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Interaction;
 using ConGame.Runtime.Config;
@@ -10,6 +11,26 @@ using UnityEngine;
 
 namespace ConGame.Runtime.Player
 {
+    public enum PlayerControlMode
+    {
+        Free = 0,
+        BreachBlocked = 1,
+        Counterplay = 2,
+        Blocked = 3
+    }
+
+    [Flags]
+    public enum CounterplayInputWindow
+    {
+        None = 0,
+        Qte = 1 << 0,
+        Grab = 1 << 1,
+        Attack = 1 << 2,
+        Throw = 1 << 3,
+        Use = 1 << 4,
+        All = Qte | Grab | Attack | Throw | Use
+    }
+
     [DisallowMultipleComponent]
     public sealed class PlayerInteractor : MonoBehaviour, ILoopResettable
     {
@@ -30,11 +51,19 @@ namespace ConGame.Runtime.Player
         private bool _hasHideReturnPose;
         private Vector3 _hideReturnPosition;
         private Quaternion _hideReturnRotation;
+        private PlayerZone _hideReturnZone = PlayerZone.Open;
+        private PlayerControlMode _controlMode;
+        private CounterplayInputWindow _counterplayWindows = CounterplayInputWindow.All;
+        private const float CounterplayAimSensitivity = 0.12f;
 
         public int ResetOrder => 80;
         public InteractableEntity HeldEntity { get; private set; }
         public float HeldMovementMultiplier => _heldMovementMultiplier;
         public bool IsHiding => _isHiding;
+        public PlayerControlMode ControlMode => _controlMode;
+        public CounterplayInputWindow CounterplayWindows => _counterplayWindows;
+        public bool IsMovementLocked => _isHiding || _controlMode != PlayerControlMode.Free;
+        public Vector3 AimForward => motor == null ? transform.forward : motor.AimForward;
 
         public void Configure(PlayerInputRouter inputRouter, InteractionScanner interactionScanner, Transform socket,
                               PlayerMotor playerMotor, GameplayFactService factService, GameplayEventHub eventHub,
@@ -88,6 +117,23 @@ namespace ConGame.Runtime.Player
                 return;
             }
 
+            if (_controlMode == PlayerControlMode.Counterplay)
+            {
+                if (HeldEntity != null && HeldEntity.ItemId == "flashlight" &&
+                    (_counterplayWindows & CounterplayInputWindow.Use) != 0)
+                {
+                    float yaw = input.Look.x * CounterplayAimSensitivity;
+                    transform.Rotate(0f, yaw, 0f, Space.World);
+                }
+
+                return;
+            }
+
+            if (_controlMode != PlayerControlMode.Free)
+            {
+                return;
+            }
+
             if (input.Move.sqrMagnitude <= 0.01f)
             {
                 return;
@@ -133,11 +179,13 @@ namespace ConGame.Runtime.Player
             {
                 _hideReturnPosition = transform.position;
                 _hideReturnRotation = transform.rotation;
+                _hideReturnZone = facts == null ? PlayerZone.Open : facts.CaptureSnapshot().PlayerZone;
                 _hasHideReturnPose = true;
             }
 
             motor?.Teleport(anchor.position, anchor.rotation);
             _isHiding = true;
+            ApplyMovementLock();
             facts?.SetPlayerZone(zone);
             facts?.SetPlayerPose(PlayerPose.Hidden);
         }
@@ -156,13 +204,22 @@ namespace ConGame.Runtime.Player
 
             _isHiding = false;
             _hasHideReturnPose = false;
-            facts?.SetPlayerZone(PlayerZone.Open);
+            ApplyMovementLock();
+            facts?.SetPlayerZone(_hideReturnZone);
             facts?.SetPlayerPose(PlayerPose.Standing);
         }
 
         public void SetPose(PlayerPose pose)
         {
+            if (_isHiding && pose != PlayerPose.Hidden)
+            {
+                _isHiding = false;
+                _hasHideReturnPose = false;
+                facts?.SetPlayerZone(_hideReturnZone);
+            }
+
             _isHiding = pose == PlayerPose.Hidden;
+            ApplyMovementLock();
             facts?.SetPlayerPose(pose);
         }
 
@@ -178,20 +235,82 @@ namespace ConGame.Runtime.Player
 
         public void ThrowHeld()
         {
-            if (HeldEntity == null)
+            if (HeldEntity == null || !AllowsCounterplayWindow(CounterplayInputWindow.Throw))
             {
                 return;
             }
 
-            string sourceId = HeldEntity.ItemId;
             DetachHeld(true);
-            events?.EmitStimulus(KillerStimulusType.IncomingProjectile, sourceId);
+        }
+
+        public void SetControlMode(
+            PlayerControlMode mode,
+            CounterplayInputWindow counterplayWindows = CounterplayInputWindow.All)
+        {
+            _controlMode = mode;
+            _counterplayWindows = mode == PlayerControlMode.Counterplay
+                                      ? counterplayWindows
+                                      : CounterplayInputWindow.None;
+            ApplyMovementLock();
+        }
+
+        public void SetCounterplayWindows(CounterplayInputWindow windows)
+        {
+            _counterplayWindows = windows;
+        }
+
+        public bool TryInteract()
+        {
+            if (_controlMode == PlayerControlMode.BreachBlocked || _controlMode == PlayerControlMode.Blocked)
+            {
+                return false;
+            }
+
+            if (HeldEntity != null && AllowsCounterplayWindow(CounterplayInputWindow.Use) &&
+                HeldEntity.TryExecute(this, InteractionVerb.Use))
+            {
+                return true;
+            }
+
+            InteractableEntity target = scanner == null ? null : scanner.Refresh();
+            if (_controlMode == PlayerControlMode.Counterplay)
+            {
+                if (target == null)
+                {
+                    return false;
+                }
+
+                if ((_counterplayWindows & CounterplayInputWindow.Grab) != 0 &&
+                    (target.TryExecute(this, InteractionVerb.PickUp) ||
+                     target.TryExecute(this, InteractionVerb.Carry)))
+                {
+                    return true;
+                }
+
+                return (_counterplayWindows & CounterplayInputWindow.Use) != 0 &&
+                       target.TryExecute(this, InteractionVerb.Use);
+            }
+
+            if (target != null)
+            {
+                return target.TryExecute(this);
+            }
+
+            if (HeldEntity != null || _isHiding || facts == null)
+            {
+                return false;
+            }
+
+            // Empty-handed interact with no target = surrender pose (D06).
+            SetPose(PlayerPose.Kneeling);
+            return true;
         }
 
         public void CaptureInitialState()
         {
             _isHiding = false;
             _hasHideReturnPose = false;
+            _hideReturnZone = PlayerZone.Open;
             _heldMovementMultiplier = 1f;
         }
 
@@ -200,6 +319,7 @@ namespace ConGame.Runtime.Player
             DetachHeld(false);
             _isHiding = false;
             _hasHideReturnPose = false;
+            ApplyMovementLock();
         }
 
         public void Restore(in LoopResetContext context)
@@ -211,7 +331,11 @@ namespace ConGame.Runtime.Player
             _heldMovementMultiplier = 1f;
             _isHiding = false;
             _hasHideReturnPose = false;
+            _hideReturnZone = PlayerZone.Open;
+            _controlMode = PlayerControlMode.Free;
+            _counterplayWindows = CounterplayInputWindow.None;
             motor?.SetMovementSpeedMultiplier(1f);
+            ApplyMovementLock();
             facts?.SetHeldCategories(ItemCategory.None);
         }
 
@@ -248,8 +372,11 @@ namespace ConGame.Runtime.Player
                     }
                 }
 
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                if (!body.isKinematic)
+                {
+                    body.linearVelocity = Vector3.zero;
+                    body.angularVelocity = Vector3.zero;
+                }
                 body.isKinematic = true;
                 body.useGravity = false;
                 entity.transform.SetParent(handSocket, false);
@@ -276,25 +403,12 @@ namespace ConGame.Runtime.Player
 
         private void OnInteract()
         {
-            InteractableEntity target = scanner == null ? null : scanner.Refresh();
-            if (target != null)
-            {
-                target.TryExecute(this);
-                return;
-            }
-
-            if (HeldEntity != null || _isHiding || facts == null)
-            {
-                return;
-            }
-
-            // Empty-handed interact with no target = surrender pose (D06).
-            SetPose(PlayerPose.Kneeling);
+            TryInteract();
         }
 
         private void OnAttack()
         {
-            if (HeldEntity == null)
+            if (HeldEntity == null || !AllowsCounterplayWindow(CounterplayInputWindow.Attack))
             {
                 return;
             }
@@ -310,6 +424,11 @@ namespace ConGame.Runtime.Player
 
         private void OnStance()
         {
+            if (_controlMode != PlayerControlMode.Free)
+            {
+                return;
+            }
+
             if (_isHiding)
             {
                 ExitHide();
@@ -356,12 +475,13 @@ namespace ConGame.Runtime.Player
             InteractableEntity entity = HeldEntity;
             Rigidbody body = _heldBody;
             StatefulWorldItem stateful = _heldStateful;
-            Vector3 velocity = applyThrow ? transform.forward * (config == null ? 8f : config.ThrowSpeed) : Vector3.zero;
-            Vector3 angularVelocity = applyThrow ? Random.onUnitSphere * 3f : Vector3.zero;
+            Vector3 aimForward = motor == null ? transform.forward : motor.AimForward;
+            Vector3 velocity = applyThrow ? aimForward * (config == null ? 8f : config.ThrowSpeed) : Vector3.zero;
+            Vector3 angularVelocity = applyThrow ? UnityEngine.Random.onUnitSphere * 3f : Vector3.zero;
 
             if (stateful != null)
             {
-                stateful.Release(velocity, angularVelocity);
+                stateful.Release(velocity, angularVelocity, applyThrow ? events : null);
             }
             else
             {
@@ -404,6 +524,21 @@ namespace ConGame.Runtime.Player
             {
                 facts.SetPlayerPose(PlayerPose.Standing);
             }
+        }
+
+        private bool AllowsCounterplayWindow(CounterplayInputWindow window)
+        {
+            if (_controlMode == PlayerControlMode.Free)
+            {
+                return true;
+            }
+
+            return _controlMode == PlayerControlMode.Counterplay && (_counterplayWindows & window) != 0;
+        }
+
+        private void ApplyMovementLock()
+        {
+            motor?.SetInputLocked(IsMovementLocked);
         }
     }
 }

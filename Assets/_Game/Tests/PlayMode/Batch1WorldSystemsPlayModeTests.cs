@@ -156,6 +156,7 @@ namespace ConGame.Tests.PlayMode
             GameObject factsObject = new GameObject("facts");
             GameObject rug = new GameObject("rug");
             GameObject blanket = new GameObject("blanket");
+            GameObject blanketSocketObject = new GameObject("blanket-socket");
             try
             {
                 GameplayFactService facts = factsObject.AddComponent<GameplayFactService>();
@@ -169,7 +170,15 @@ namespace ConGame.Tests.PlayMode
 
                 BlanketTrapUseHandler blanketTrap = blanket.AddComponent<BlanketTrapUseHandler>();
                 blanketTrap.Configure(facts);
-                Assert.That(blanketTrap.Use(default), Is.EqualTo(InteractionResult.Accepted));
+                Rigidbody blanketBody = blanket.AddComponent<Rigidbody>();
+                InteractableEntity blanketEntity = blanket.AddComponent<InteractableEntity>();
+                blanketEntity.Configure(null, "blanket");
+                StatefulWorldItem blanketState = blanket.AddComponent<StatefulWorldItem>();
+                blanketState.Configure(blanketBody);
+                PlacementSocket blanketSocket = blanketSocketObject.AddComponent<PlacementSocket>();
+                blanketSocket.Configure("blanket", ItemCategory.None, null, facts,
+                    DoorBlockState.None, TrapState.BlanketArmed);
+                Assert.That(blanketSocket.TryPlace(blanketEntity, blanketState), Is.True);
                 Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.BlanketArmed));
                 Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
                 Assert.That(blanketTrap.Use(default), Is.EqualTo(InteractionResult.Accepted));
@@ -181,6 +190,7 @@ namespace ConGame.Tests.PlayMode
                 Object.Destroy(factsObject);
                 Object.Destroy(rug);
                 Object.Destroy(blanket);
+                Object.Destroy(blanketSocketObject);
             }
         }
 

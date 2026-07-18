@@ -34,6 +34,8 @@ namespace ConGame.Runtime.Loop
         private PlayerInputRouter input;
         [SerializeField]
         private PlayerMotor playerMotor;
+        [SerializeField]
+        private PlayerInteractor playerInteractor;
 
         [SerializeField]
         private RoomDoorBreachController breach;
@@ -66,6 +68,14 @@ public event Action EntryWarning;
         public EntryClock EntryClock => _entryClock;
         public float CurrentAmbientIntensity { get; private set; }
 
+        public void SetCounterplayInputWindows(CounterplayInputWindow windows)
+        {
+            if (flow != null && flow.CurrentPhase == GamePhase.Counterplay)
+            {
+                SetPlayerControl(PlayerControlMode.Counterplay, windows);
+            }
+        }
+
         public void Configure(GameConfigAsset gameConfig, GameFlowController flowController, LoopResetRegistry registry,
                               GameplayFactService factService, GameplayEventHub eventHub, PlayerInputRouter inputRouter,
                               PlayerMotor motor, KillerDirector killerDirector,
@@ -79,6 +89,7 @@ public event Action EntryWarning;
             events = eventHub;
             input = inputRouter;
             playerMotor = motor;
+            playerInteractor ??= playerMotor == null ? null : playerMotor.GetComponent<PlayerInteractor>();
             killer = killerDirector;
             breach = breachController;
             darkAdaptationConfig = darkConfig;
@@ -92,6 +103,7 @@ public event Action EntryWarning;
             }
 
             _saveStore = saveStore ?? new JsonSaveStore();
+            playerInteractor ??= playerMotor == null ? null : playerMotor.GetComponent<PlayerInteractor>();
             _progress = _saveStore.Load();
             _loopEpoch = _progress.loopIndex;
             _entryClock =
@@ -269,7 +281,7 @@ public void MarkD21Seen()
         {
             if (current == GamePhase.Breach)
             {
-                playerMotor?.SetInputLocked(true);
+                SetPlayerControl(PlayerControlMode.BreachBlocked);
                 input?.SetGameplayEnabled(false);
 
                 if (breach == null)
@@ -283,14 +295,30 @@ public void MarkD21Seen()
                     breach.Begin(_loopEpoch, OnBreachCompleted, baseDuration + extra);
                 }
             }
+            else if (current == GamePhase.Counterplay)
+            {
+                // Counterplay keeps the action map alive for QTE/grab/attack/throw/use,
+                // while the motor remains locked for the authored performance.
+                input?.SetGameplayEnabled(true);
+                SetPlayerControl(PlayerControlMode.Counterplay, CounterplayInputWindow.All);
+            }
             else if (current == GamePhase.KillImpact)
             {
+                input?.SetGameplayEnabled(false);
+                SetPlayerControl(PlayerControlMode.Blocked);
                 PerformReset();
             }
             else if (current == GamePhase.Awakening)
             {
+                input?.SetGameplayEnabled(true);
+                SetPlayerControl(PlayerControlMode.Free);
                 ConsumeCrackEchoIfNeeded();
                 BeginAwakening();
+            }
+            else if (current == GamePhase.FreeRoam)
+            {
+                input?.SetGameplayEnabled(true);
+                SetPlayerControl(PlayerControlMode.Free);
             }
         }
 
@@ -338,7 +366,7 @@ public void MarkD21Seen()
 
 
             input?.SetGameplayEnabled(true);
-            playerMotor?.SetInputLocked(false);
+            SetPlayerControl(PlayerControlMode.Free);
             _resetting = false;
             LoopResetCompleted?.Invoke(_progress.loopIndex, LastOutcomeId);
         }
@@ -397,6 +425,21 @@ private void TrySaveProgress()
             catch (Exception exception)
             {
                 Debug.LogError($"[ConGame] Progress save failed without blocking gameplay: {exception.Message}", this);
+            }
+        }
+
+        private void SetPlayerControl(
+            PlayerControlMode mode,
+            CounterplayInputWindow windows = CounterplayInputWindow.None)
+        {
+            playerInteractor ??= playerMotor == null ? null : playerMotor.GetComponent<PlayerInteractor>();
+            if (playerInteractor != null)
+            {
+                playerInteractor.SetControlMode(mode, windows);
+            }
+            else
+            {
+                playerMotor?.SetInputLocked(mode != PlayerControlMode.Free);
             }
         }
 }

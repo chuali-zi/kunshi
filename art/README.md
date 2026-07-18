@@ -4,7 +4,8 @@
 
 ## 当前文件
 
-- [requirements/asset_manifest.md](requirements/asset_manifest.md)：模型、材质、破坏状态和制作批次。
+- [requirements/asset_manifest.md](requirements/asset_manifest.md)：模型、材质、破坏状态和制作批次（台账与进度）。
+- [requirements/asset_spec_3d.md](requirements/asset_spec_3d.md)：逐件 3D 资产制作规格（AI 辅助 DCC 执行用，含全局硬规范、规格卡、itemId 对照与灰盒差异表）。
 - [requirements/animation_manifest.md](requirements/animation_manifest.md)：压缩后的最小动画集合，以及 22 种死法如何复用它们。
 
 ## 推荐目录
@@ -20,9 +21,10 @@ art/
 │  └─ props/
 ├─ source/                   # DCC 源文件，不直接被 Unity 引用
 │  └─ blender/
+│     ├─ _shared/            # headless 构建共享库 (ak.py)
 │     ├─ environment/
 │     ├─ characters/
-│     └─ props/
+│     └─ props/              # .blend 源 + build_*.py 参数化建模脚本
 ├─ exports/                  # 从 Blender 导出的 FBX/GLB 与贴图
 │  ├─ environment/
 │  ├─ characters/
@@ -65,6 +67,7 @@ Assets/_Game/Art/
 
 - 单位：1 Blender Unit = 1 米；所有模型应用 Scale，导出前缩放为 `(1, 1, 1)`。
 - Blender 中 Z 轴向上，物体正面朝 `-Y`；FBX 导出使用 `Forward -Z / Up Y`。
+- **轴向实证（axisprobe，2026-07-16）**：按上述参数导出后 `Blender(x,y,z) → Unity(-x,z,-y)`，即 Unity 东(+X)=Blender -X、北(+Z)=Blender -Y；含绝对房间位置的资产按此建模，合成摆位用 `Blender=(-Unity_x, -Unity_z, Unity_y)`。
 - 静态物体原点放在落地点中心；门、抽屉、钟针等原点放在真实转轴；手持物原点放在握持点。
 - 可交互、可破坏、可掉落部分必须是独立对象，不能只在同一网格上做外观切分。
 - 角色统一 Humanoid 骨架；玩家和神秘人共用骨骼命名与人体比例，便于动画复用。

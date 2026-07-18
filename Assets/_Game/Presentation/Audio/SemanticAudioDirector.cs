@@ -158,7 +158,10 @@ namespace ConGame.Presentation.Audio
                 }
             }
 
-            clip ??= GetFallback(cue);
+            if (clip == null || clip.samples <= 0)
+            {
+                clip = GetFallback(cue);
+            }
             if (clip != null)
             {
                 _source.PlayOneShot(clip, volume);

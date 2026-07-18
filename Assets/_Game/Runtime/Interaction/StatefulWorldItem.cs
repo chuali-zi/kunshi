@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ConGame.Domain.Interaction;
+using ConGame.Domain.Facts;
+using ConGame.Runtime.AI;
+using ConGame.Runtime.Events;
 using ConGame.Runtime.Loop;
 using UnityEngine;
 
@@ -12,6 +15,7 @@ namespace ConGame.Runtime.Interaction
     {
         [SerializeField] private Rigidbody body;
         [SerializeField] private ItemPhysicalState initialState = ItemPhysicalState.Placed;
+        [SerializeField] private ImpactKind flyingImpactKind = ImpactKind.Projectile;
 
         private readonly List<CollisionPair> _ignoredPlayerCollisions = new List<CollisionPair>();
         private Transform _initialParent;
@@ -21,10 +25,15 @@ namespace ConGame.Runtime.Interaction
         private bool _initialActive;
         private bool _initialIsKinematic;
         private bool _initialUseGravity;
+        private CollisionDetectionMode _initialCollisionDetectionMode;
         private Collider[] _colliders;
         private bool[] _initialColliderEnabled;
         private Coroutine _collisionRestoreRoutine;
         private bool _captured;
+        private PlacementSocket _initialSocket;
+        private GameplayEventHub _throwEvents;
+        private Vector3 _flightDirection;
+        private bool _flightImpactConsumed;
 
         public event Action<ItemPhysicalState> StateChanged;
 
@@ -32,11 +41,16 @@ namespace ConGame.Runtime.Interaction
         public ItemPhysicalState CurrentState { get; private set; } = ItemPhysicalState.Placed;
         public Rigidbody Body => body;
         public bool AllowsOrdinaryInteraction => CurrentState != ItemPhysicalState.Scripted;
+        public PlacementSocket CurrentSocket { get; private set; }
 
-        public void Configure(Rigidbody targetBody, ItemPhysicalState state = ItemPhysicalState.Placed)
+        public void Configure(
+            Rigidbody targetBody,
+            ItemPhysicalState state = ItemPhysicalState.Placed,
+            ImpactKind impactKind = ImpactKind.Projectile)
         {
             body = targetBody;
             initialState = state;
+            flyingImpactKind = impactKind;
             CurrentState = state;
             _captured = false;
         }
@@ -57,12 +71,12 @@ namespace ConGame.Runtime.Interaction
             EnsureCaptured();
             CancelCollisionRestore();
             RestoreIgnoredPlayerCollisions();
+            ReleaseCurrentSocket();
             IgnorePlayerCollisions(playerColliders);
 
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopBodyMotion();
                 body.isKinematic = true;
                 body.useGravity = false;
             }
@@ -74,22 +88,30 @@ namespace ConGame.Runtime.Interaction
             return true;
         }
 
-        public void Release(Vector3 velocity, Vector3 angularVelocity)
+        public void Release(
+            Vector3 velocity,
+            Vector3 angularVelocity,
+            GameplayEventHub throwEvents = null)
         {
             if (CurrentState != ItemPhysicalState.Held && CurrentState != ItemPhysicalState.Scripted)
             {
                 return;
             }
 
+            ReleaseCurrentSocket();
             transform.SetParent(null, true);
             if (body != null)
             {
                 body.isKinematic = false;
                 body.useGravity = true;
+                body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 body.linearVelocity = velocity;
                 body.angularVelocity = angularVelocity;
             }
 
+            _throwEvents = throwEvents;
+            _flightDirection = velocity.sqrMagnitude > 0.001f ? velocity.normalized : transform.forward;
+            _flightImpactConsumed = false;
             SetState(ItemPhysicalState.Flying);
             if (isActiveAndEnabled)
             {
@@ -110,18 +132,24 @@ namespace ConGame.Runtime.Interaction
 
             CancelCollisionRestore();
             RestoreIgnoredPlayerCollisions();
+            if (CurrentSocket != null && CurrentSocket != socket)
+            {
+                ReleaseCurrentSocket();
+            }
+
             Transform anchor = socket.Anchor;
             transform.SetParent(anchor, false);
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopBodyMotion();
                 body.isKinematic = true;
                 body.useGravity = false;
             }
 
+            CurrentSocket = socket;
+            ClearFlightContext();
             SetState(ItemPhysicalState.Placed);
             return true;
         }
@@ -130,10 +158,10 @@ namespace ConGame.Runtime.Interaction
         {
             CancelCollisionRestore();
             RestoreIgnoredPlayerCollisions();
+            ReleaseCurrentSocket();
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopBodyMotion();
                 body.isKinematic = true;
             }
 
@@ -144,6 +172,8 @@ namespace ConGame.Runtime.Interaction
         {
             CancelCollisionRestore();
             RestoreIgnoredPlayerCollisions();
+            ReleaseCurrentSocket();
+            ClearFlightContext();
             SetState(ItemPhysicalState.Broken);
         }
 
@@ -151,6 +181,7 @@ namespace ConGame.Runtime.Interaction
         {
             CancelCollisionRestore();
             RestoreIgnoredPlayerCollisions();
+            ClearFlightContext();
             SetState(ItemPhysicalState.Placed);
         }
 
@@ -164,6 +195,11 @@ namespace ConGame.Runtime.Interaction
             _initialActive = gameObject.activeSelf;
             _initialIsKinematic = body != null && body.isKinematic;
             _initialUseGravity = body != null && body.useGravity;
+            _initialCollisionDetectionMode = body == null
+                ? CollisionDetectionMode.Discrete
+                : body.collisionDetectionMode;
+            CurrentSocket ??= GetComponentInParent<PlacementSocket>();
+            _initialSocket = CurrentSocket;
             _initialColliderEnabled = new bool[_colliders.Length];
             for (int i = 0; i < _colliders.Length; i++)
             {
@@ -180,15 +216,20 @@ namespace ConGame.Runtime.Interaction
             RestoreIgnoredPlayerCollisions();
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopBodyMotion();
                 body.isKinematic = true;
             }
+
+            ClearFlightContext();
         }
 
         public void Restore(in LoopResetContext context)
         {
             EnsureCaptured();
+            if (CurrentSocket != _initialSocket)
+            {
+                ReleaseCurrentSocket();
+            }
             gameObject.SetActive(_initialActive);
             transform.SetParent(_initialParent, false);
             transform.localPosition = _initialLocalPosition;
@@ -199,9 +240,9 @@ namespace ConGame.Runtime.Interaction
             {
                 body.position = transform.position;
                 body.rotation = transform.rotation;
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopBodyMotion();
                 body.useGravity = _initialUseGravity;
+                body.collisionDetectionMode = _initialCollisionDetectionMode;
             }
 
             for (int i = 0; i < _colliders.Length; i++)
@@ -212,6 +253,8 @@ namespace ConGame.Runtime.Interaction
                 }
             }
 
+            CurrentSocket = _initialSocket;
+            ClearFlightContext();
             SetState(initialState);
         }
 
@@ -228,6 +271,46 @@ namespace ConGame.Runtime.Interaction
             yield return new WaitForFixedUpdate();
             _collisionRestoreRoutine = null;
             RestoreIgnoredPlayerCollisions();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (CurrentState != ItemPhysicalState.Flying || _flightImpactConsumed || collision == null ||
+                collision.collider == null || collision.transform.IsChildOf(transform))
+            {
+                return;
+            }
+
+            _flightImpactConsumed = true;
+            Vector3 direction = _flightDirection.sqrMagnitude > 0.001f
+                                    ? _flightDirection
+                                    : -collision.relativeVelocity.normalized;
+            float mass = body == null ? 1f : Mathf.Max(0.01f, body.mass);
+            float force = Mathf.Max(collision.impulse.magnitude, collision.relativeVelocity.magnitude * mass);
+            Vector3 point = collision.contactCount > 0 ? collision.GetContact(0).point : transform.position;
+
+            MonoBehaviour[] behaviours = collision.collider.GetComponentsInParent<MonoBehaviour>(true);
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                if (behaviours[i] is IHitReceiver receiver)
+                {
+                    receiver.ReceiveHit(new HitInfo(
+                        flyingImpactKind,
+                        ResolveSourceId(),
+                        point,
+                        direction,
+                        force));
+                    break;
+                }
+            }
+
+            if (_throwEvents != null && collision.collider.GetComponentInParent<KillerDirector>() != null)
+            {
+                _throwEvents.EmitStimulus(KillerStimulusType.IncomingProjectile, ResolveSourceId());
+            }
+
+            _throwEvents = null;
+            _flightDirection = Vector3.zero;
         }
 
         private void IgnorePlayerCollisions(Collider[] playerColliders)
@@ -296,6 +379,42 @@ namespace ConGame.Runtime.Interaction
         {
             body ??= GetComponent<Rigidbody>();
             _colliders ??= GetComponentsInChildren<Collider>(true);
+        }
+
+        private void ReleaseCurrentSocket()
+        {
+            if (CurrentSocket == null)
+            {
+                return;
+            }
+
+            PlacementSocket previous = CurrentSocket;
+            CurrentSocket = null;
+            previous.Release(GetComponent<InteractableEntity>());
+        }
+
+        private void StopBodyMotion()
+        {
+            if (body == null || body.isKinematic)
+            {
+                return;
+            }
+
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+        }
+
+        private void ClearFlightContext()
+        {
+            _throwEvents = null;
+            _flightDirection = Vector3.zero;
+            _flightImpactConsumed = false;
+        }
+
+        private string ResolveSourceId()
+        {
+            InteractableEntity entity = GetComponent<InteractableEntity>();
+            return entity == null || string.IsNullOrEmpty(entity.ItemId) ? name : entity.ItemId;
         }
 
         private void SetState(ItemPhysicalState state)

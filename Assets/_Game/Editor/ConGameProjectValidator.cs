@@ -44,6 +44,15 @@ namespace ConGame.Editor
             return errors;
         }
 
+        public static void ValidateBatch()
+        {
+            int errors = ValidateProject(true);
+            if (errors != 0)
+            {
+                throw new InvalidOperationException($"ConGame validation failed with {errors} error(s).");
+            }
+        }
+
         private static int ValidateItems(bool log)
         {
             string[] guids = AssetDatabase.FindAssets("t:ItemDefinitionAsset", new[] { "Assets/_Game/Content/Items" });

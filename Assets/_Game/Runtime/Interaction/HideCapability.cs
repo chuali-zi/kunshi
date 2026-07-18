@@ -23,7 +23,8 @@ namespace ConGame.Runtime.Interaction
 
         public override bool CanExecute(in InteractionContext context)
         {
-            return context.Player != null && anchor != null;
+            return context.Player != null && context.Player.HeldEntity == null &&
+                   !context.Player.IsHiding && anchor != null;
         }
 
         public override InteractionResult Execute(in InteractionContext context)

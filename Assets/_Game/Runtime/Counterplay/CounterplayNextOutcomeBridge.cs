@@ -44,6 +44,11 @@ namespace ConGame.Runtime.Counterplay
             killer.TryStartOutcome(nextOutcomeId);
         }
 
+        private void OnOutcomeCompletionRequested(string outcomeId, int loopEpoch)
+        {
+            killer?.CompleteCurrentOutcome(outcomeId);
+        }
+
         private void Subscribe()
         {
             if (_subscribed || adapter == null)
@@ -52,6 +57,7 @@ namespace ConGame.Runtime.Counterplay
             }
 
             adapter.NextOutcomeRequested += OnNextOutcomeRequested;
+            adapter.OutcomeCompletionRequested += OnOutcomeCompletionRequested;
             _subscribed = true;
         }
 
@@ -63,6 +69,7 @@ namespace ConGame.Runtime.Counterplay
             }
 
             adapter.NextOutcomeRequested -= OnNextOutcomeRequested;
+            adapter.OutcomeCompletionRequested -= OnOutcomeCompletionRequested;
             _subscribed = false;
         }
     }

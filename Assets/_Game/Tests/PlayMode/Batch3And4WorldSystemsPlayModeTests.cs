@@ -77,6 +77,10 @@ namespace ConGame.Tests.PlayMode
                 events.KillerStimulusEmitted += value => stimulus = value;
 
                 PlayerInteractor interactor = player.AddComponent<PlayerInteractor>();
+                mirror.transform.position = new Vector3(0f, 1.4f, 1f);
+                mirror.AddComponent<BoxCollider>();
+                MirrorFlashlightReactive reactive = mirror.AddComponent<MirrorFlashlightReactive>();
+                reactive.Configure(facts, events);
                 FlashlightUseHandler flashlightUse = flashlight.AddComponent<FlashlightUseHandler>();
                 flashlightUse.Configure(facts, events);
                 InteractionContext context = new InteractionContext(interactor, null);
@@ -86,8 +90,6 @@ namespace ConGame.Tests.PlayMode
                 Assert.That(stimulus.Value.Type, Is.EqualTo(KillerStimulusType.Glare));
 
                 facts.SetGlareActive(false);
-                MirrorFlashlightReactive reactive = mirror.AddComponent<MirrorFlashlightReactive>();
-                reactive.Configure(facts, events);
                 reactive.React(new FlashlightHit("flashlight", Vector3.zero, Vector3.forward, 0.2f));
                 Assert.That(facts.CaptureSnapshot().IsGlareActive, Is.True);
                 yield return null;
@@ -131,7 +133,17 @@ namespace ConGame.Tests.PlayMode
 
                 BlanketTrapUseHandler trap = blanket.AddComponent<BlanketTrapUseHandler>();
                 trap.Configure(facts);
-                Assert.That(trap.Use(default), Is.EqualTo(InteractionResult.Accepted));
+                Rigidbody blanketBody = blanket.AddComponent<Rigidbody>();
+                InteractableEntity blanketEntity = blanket.AddComponent<InteractableEntity>();
+                blanketEntity.Configure(null, "blanket");
+                StatefulWorldItem blanketState = blanket.AddComponent<StatefulWorldItem>();
+                blanketState.Configure(blanketBody);
+                GameObject socketObject = new GameObject("blanket-socket");
+                socketObject.transform.SetParent(factsObject.transform);
+                PlacementSocket socket = socketObject.AddComponent<PlacementSocket>();
+                socket.Configure("blanket", ItemCategory.None, null, facts,
+                    DoorBlockState.None, TrapState.BlanketArmed);
+                Assert.That(socket.TryPlace(blanketEntity, blanketState), Is.True);
                 Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.BlanketArmed));
                 Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
                 Assert.That(trap.Use(default), Is.EqualTo(InteractionResult.Accepted));
