@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
+using ConGame.Presentation.Animation;
 using ConGame.Presentation.Audio;
 using ConGame.Presentation.Camera;
 using ConGame.Presentation.CRT;
@@ -488,6 +489,7 @@ namespace ConGame.Bootstrap
         {
             ShotFired = true;
             KillerStage = EndingKillerStage.ShotFired;
+            killer?.GetComponent<CharacterAnimatorDriver>()?.PlayAimFire();
             crtPass?.Pulse(1f);
             UnityEngine.Object.FindAnyObjectByType<SemanticAudioDirector>()?.Play(AudioCueId.Gunshot);
             EndingShotFired?.Invoke();

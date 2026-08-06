@@ -1,3 +1,4 @@
+using ConGame.Domain.Interaction;
 using ConGame.Runtime.Player;
 using UnityEngine;
 
@@ -29,7 +30,17 @@ namespace ConGame.Runtime.Interaction
             Refresh();
         }
 
-public InteractableEntity Refresh()
+        public InteractableEntity Refresh()
+        {
+            return RefreshInternal(InteractionVerb.None, true);
+        }
+
+        public InteractableEntity RefreshForVerb(InteractionVerb verb)
+        {
+            return RefreshInternal(verb, false);
+        }
+
+        private InteractableEntity RefreshInternal(InteractionVerb verb, bool updateCurrent)
         {
             Vector3 center = transform.position + Vector3.up;
             int count = Physics.OverlapSphereNonAlloc(center, radius, _hits, layerMask, QueryTriggerInteraction.Collide);
@@ -50,7 +61,7 @@ public InteractableEntity Refresh()
                     continue;
                 }
 
-                int capabilityPriority = candidate.GetBestExecutablePriority(player);
+                int capabilityPriority = candidate.GetExecutablePriority(player, verb);
                 if (capabilityPriority == int.MinValue)
                 {
                     continue;
@@ -78,8 +89,12 @@ public InteractableEntity Refresh()
                 }
             }
 
-            Current = best;
-            return Current;
+            if (updateCurrent)
+            {
+                Current = best;
+            }
+
+            return best;
         }
 
         private void OnDrawGizmosSelected()

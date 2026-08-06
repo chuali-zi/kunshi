@@ -46,6 +46,45 @@ namespace ConGame.Tests.PlayMode
             Assert.That(loot.MainFirearm, Is.Not.Null);
             Assert.That(killer.GetComponent<CounterplayFlashlightTarget>(), Is.Not.Null,
                 "Inactive Killer must still receive the D21 flashlight target at scene startup.");
+            Assert.That(killer.GetComponent<KillerHitReceiver>(), Is.Not.Null,
+                "Killer must receive real melee and thrown-item hits.");
+            Assert.That(killer.GetComponent<CapsuleCollider>(), Is.Not.Null,
+                "Killer must expose a physical hurtbox for weapon feedback.");
+
+            Transform sofa = null;
+            Transform blanket = null;
+            Transform chair = null;
+            foreach (Transform candidate in roomRoot.GetComponentsInChildren<Transform>(true))
+            {
+                switch (candidate.name)
+                {
+                    case "FUR_Armchair":
+                        sofa = candidate;
+                        break;
+                    case "PRP_Blanket":
+                        blanket = candidate;
+                        break;
+                    case "FUR_WoodChair":
+                        chair = candidate;
+                        break;
+                }
+            }
+
+            Assert.That(sofa, Is.Not.Null);
+            Assert.That(sofa.position.x, Is.EqualTo(-1.25f).Within(0.01f));
+            Assert.That(sofa.GetComponent<HideCapability>().HidePose, Is.EqualTo(PlayerPose.Crouched));
+            Assert.That(blanket, Is.Not.Null);
+            Assert.That(blanket.GetComponent<HideCapability>().RequiresPlacedItem, Is.True);
+            Assert.That(chair, Is.Not.Null);
+            Rigidbody chairBody = chair.GetComponent<Rigidbody>();
+            Assert.That(chairBody.constraints,
+                Is.EqualTo(RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ));
+            Assert.That(chairBody.angularDamping, Is.EqualTo(8f).Within(0.01f));
+
+            Camera fixedOutput = roomRoot.GetComponentInChildren<Camera>(true);
+            Assert.That(fixedOutput, Is.Not.Null);
+            Assert.That(fixedOutput.fieldOfView, Is.EqualTo(72f).Within(0.01f));
+            Assert.That(fixedOutput.transform.position.z, Is.EqualTo(-2.58f).Within(0.01f));
 
             float awakenWait = 0f;
             while (flow.CurrentPhase == GamePhase.Awakening && awakenWait < 5.5f)

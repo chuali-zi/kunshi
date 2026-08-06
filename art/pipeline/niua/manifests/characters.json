@@ -1,0 +1,27 @@
+{
+  "_comment": "角色管线清单。reference 为用户提供的参考图(art/reference/character/,2026-07-18 提供,以参考图造型为准:玩家=米色复古西装,覆盖台账旧的'居家服赤脚'设定)。sheet_prompt 用于 image img2img 标准化立绘。风衣直接并入 CH_Killer 本体网格;CH_Killer_Coat 独立披风件属 P1,不在本清单。",
+  "characters": {
+    "CH_Player": {
+      "reference": "art/reference/character/CH_player/正侧面_举起棒球棍准备反击.jpg",
+      "sheet_prompt": "full body character concept art of the same man as the reference image, slim East Asian man with short black hair and round glasses, wearing a beige retro 1970s suit jacket and trousers, white shirt, brown tie, dark leather shoes, ordinary unheroic build, standing straight in a neutral A-pose facing the camera, arms slightly away from body, hands empty, feet on the ground, plain light gray studio background, soft even lighting, no props, no occlusion, full figure head to toe visible, stylized retro painted look matching the reference, no text, no captions, no watermark, no labels",
+      "seed": null,
+      "aspect_ratio": "3:4"
+    },
+    "CH_Killer": {
+      "reference": "art/reference/character/CH_killer/侧面.jpg",
+      "sheet_prompt": "full body character concept art of the same figure as the reference image, tall imposing mysterious man wearing a black leather hooded trench coat with the hood up, face hidden in deep shadow under the hood, coat belted at the waist, knee-length coat, black trousers and black boots, calm restrained menacing posture, standing straight in a neutral A-pose facing the camera, arms slightly away from body, hands empty, feet on the ground, plain light gray studio background, soft even lighting, no props, no occlusion, full figure head to toe visible, stylized retro painted look matching the reference, no text, no captions, no watermark, no labels",
+      "seed": null,
+      "aspect_ratio": "3:4"
+    }
+  },
+  "mesh": {
+    "model": "niua-mesh-1",
+    "tier": "game",
+    "orient": "game",
+    "resolution": 1024
+  },
+  "rig": {
+    "target_skeleton": "mixamo-humanoid",
+    "output_format": "both"
+  }
+}

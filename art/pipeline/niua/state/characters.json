@@ -1,0 +1,52 @@
+{
+  "items": {
+    "CH_Player": {
+      "stages": {
+        "standardize": {
+          "status": "completed",
+          "r2_key": "outputs/2f50a0bd-8352-4d96-977c-6d22084bef89.jpg",
+          "reference_r2_key": "uploads/75e3082c-9f5d-4ecd-8cd3-9fc93bcf9172/c26a6a2e-7a4a-4d22-bfaf-66ddca69201d.jpg",
+          "file": "art\\exports\\characters\\CH_Player_sheet.png",
+          "seed": null
+        },
+        "mesh": {
+          "status": "completed",
+          "r2_key": "outputs/2a185ea8-1f9e-43f6-ac70-0427f768b106/mesh.glb",
+          "job_id": "2a185ea8-1f9e-43f6-ac70-0427f768b106",
+          "file": "art\\exports\\characters\\CH_Player.glb"
+        },
+        "rig": {
+          "status": "completed",
+          "r2_key": "outputs/edfbc004-3b20-41ed-b33a-8fe7b0c25a13/rigged.glb",
+          "job_id": "edfbc004-3b20-41ed-b33a-8fe7b0c25a13",
+          "file": "art\\exports\\characters\\CH_Player_rigged.glb",
+          "mixamo_bones_found": false
+        }
+      }
+    },
+    "CH_Killer": {
+      "stages": {
+        "standardize": {
+          "status": "completed",
+          "r2_key": "outputs/72722959-c05b-46c9-9297-ccb09da2a02d.jpg",
+          "reference_r2_key": "uploads/75e3082c-9f5d-4ecd-8cd3-9fc93bcf9172/aaad44e9-204d-4f2e-bc6d-c41a89522b6b.jpg",
+          "file": "art\\exports\\characters\\CH_Killer_sheet.png",
+          "seed": null
+        },
+        "mesh": {
+          "status": "completed",
+          "r2_key": "outputs/5fc79ca8-6b15-4d3b-b067-a469c958703b/mesh.glb",
+          "job_id": "5fc79ca8-6b15-4d3b-b067-a469c958703b",
+          "file": "art\\exports\\characters\\CH_Killer.glb"
+        },
+        "rig": {
+          "status": "completed",
+          "r2_key": "outputs/752996c2-c623-430f-bf9a-46e7639ce70d/rigged.glb",
+          "job_id": "752996c2-c623-430f-bf9a-46e7639ce70d",
+          "file": "art\\exports\\characters\\CH_Killer_rigged.glb",
+          "mixamo_bones_found": false
+        }
+      }
+    }
+  }
+}

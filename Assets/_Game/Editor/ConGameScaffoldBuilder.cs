@@ -439,15 +439,15 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
 
         private static Transform BuildFixedCamera(Transform parent, out Camera outputCamera)
         {
-            Vector3 position = new Vector3(0f, 1.15f, -2.14f);
-            Quaternion rotation = Quaternion.LookRotation(new Vector3(0f, 1.0f, 0.4f) - position, Vector3.up);
+            Vector3 position = new Vector3(0f, 2.75f, -2.58f);
+            Quaternion rotation = Quaternion.LookRotation(new Vector3(0f, 0f, 0.2f) - position, Vector3.up);
 
             GameObject output = new GameObject("Main Camera");
             output.tag = "MainCamera";
             output.transform.SetParent(parent);
             output.transform.SetPositionAndRotation(position, rotation);
             outputCamera = output.AddComponent<Camera>();
-            outputCamera.fieldOfView = 62f;
+            outputCamera.fieldOfView = 72f;
             outputCamera.nearClipPlane = 0.03f;
             outputCamera.farClipPlane = 30f;
             output.AddComponent<AudioListener>();
@@ -456,7 +456,18 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             GameObject rig = new GameObject("CM Fixed Television Camera");
             rig.transform.SetParent(parent);
             rig.transform.SetPositionAndRotation(position, rotation);
-            AddOptionalMonoBehaviour(rig, "CinemachineCamera", "CinemachineVirtualCamera");
+            Component virtualCamera = AddOptionalMonoBehaviour(rig, "CinemachineCamera", "CinemachineVirtualCamera");
+            if (virtualCamera != null)
+            {
+                SerializedObject serializedCamera = new SerializedObject(virtualCamera);
+                SerializedProperty lens = serializedCamera.FindProperty("m_Lens");
+                SerializedProperty fieldOfView = lens?.FindPropertyRelative("FieldOfView");
+                if (fieldOfView != null)
+                {
+                    fieldOfView.floatValue = 72f;
+                    serializedCamera.ApplyModifiedPropertiesWithoutUndo();
+                }
+            }
             return rig.transform;
         }
 
@@ -512,8 +523,9 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             GameObject furniture = new GameObject("Furniture");
             furniture.transform.SetParent(parent);
 
-            GameObject armchair = CreateCube("FUR_Armchair", new Vector3(-0.7f, 0.575f, -0.55f),
-                                             new Vector3(0.95f, 1.15f, 0.75f), furniture.transform, materials["chair"]);
+            GameObject armchair = CreateCube("FUR_Armchair", new Vector3(-1.25f, 0.575f, 1.05f),
+                                              new Vector3(0.95f, 1.15f, 0.75f), furniture.transform, materials["chair"]);
+            armchair.transform.rotation = Quaternion.Euler(0f, 160f, 0f);
             InteractableEntity chairEntity = armchair.AddComponent<InteractableEntity>();
             chairEntity.Configure(items["sofa_awaken"]);
             HideCapability hide = armchair.AddComponent<HideCapability>();
@@ -522,13 +534,14 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
 
             GameObject hideAnchor = new GameObject("HideAnchor_SofaRear");
             hideAnchor.transform.SetParent(armchair.transform, false);
-            hideAnchor.transform.localPosition = new Vector3(0f, -0.5f, 1.05f);
-            hideAnchor.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-            hide.Configure(hideAnchor.transform, PlayerZone.SofaRear);
+            hideAnchor.transform.localPosition = new Vector3(0f, -0.575f, -0.78f);
+            hideAnchor.transform.localRotation = Quaternion.identity;
+            hide.Configure(hideAnchor.transform, PlayerZone.SofaRear, PlayerPose.Crouched);
 
             GameObject sofaZone = new GameObject("Zone_SofaRear");
             sofaZone.transform.SetParent(furniture.transform);
-            sofaZone.transform.position = new Vector3(-0.7f, 0.8f, 0.15f);
+            sofaZone.transform.SetPositionAndRotation(new Vector3(-1.52f, 0.8f, 1.78f),
+                                                       Quaternion.Euler(0f, 160f, 0f));
             BoxCollider sofaTrigger = sofaZone.AddComponent<BoxCollider>();
             sofaTrigger.size = new Vector3(1.25f, 1.6f, 0.7f);
             PlayerZoneTrigger zone = sofaZone.AddComponent<PlayerZoneTrigger>();
@@ -617,6 +630,7 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             InteractableEntity topEntity = bedTop.AddComponent<InteractableEntity>();
             topEntity.Configure(definition);
             HideCapability topHide = bedTop.AddComponent<HideCapability>();
+            topHide.enabled = false;
             bedTop.AddComponent<InspectCapability>();
             bedTop.AddComponent<TransformResettable>();
             GameObject topAnchor = new GameObject("HideAnchor_Bed");
@@ -642,8 +656,16 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             body.mass = meleeWeapon ? 8f : 18f;
             body.isKinematic = true;
             body.useGravity = true;
+            if (meleeWeapon)
+            {
+                body.linearDamping = 1.5f;
+                body.angularDamping = 8f;
+                body.interpolation = RigidbodyInterpolation.Interpolate;
+                body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            }
             StatefulWorldItem stateful = furniture.AddComponent<StatefulWorldItem>();
-            stateful.Configure(body);
+            stateful.Configure(body, ItemPhysicalState.Placed,
+                               meleeWeapon ? ImpactKind.Heavy : ImpactKind.Projectile);
             CarryCapability carry = furniture.AddComponent<CarryCapability>();
             carry.Configure(carrySpeedMultiplier);
             furniture.AddComponent<InspectCapability>();
@@ -884,6 +906,14 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             trap.Configure(facts, events);
             UseCapability use = blanket.AddComponent<UseCapability>();
             use.Configure(trap);
+            GameObject bedAnchor = GameObject.Find("HideAnchor_Bed");
+            if (bedAnchor == null)
+            {
+                throw new InvalidOperationException("HideAnchor_Bed missing while building blanket interaction.");
+            }
+
+            HideCapability hide = blanket.AddComponent<HideCapability>();
+            hide.Configure(bedAnchor.transform, PlayerZone.Bed, PlayerPose.Hidden, true);
             blanket.AddComponent<InspectCapability>();
             blanket.AddComponent<RigidbodyResettable>();
         }
@@ -1052,6 +1082,13 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             visual.transform.localPosition = Vector3.up;
             UnityEngine.Object.DestroyImmediate(visual.GetComponent<Collider>());
             visual.GetComponent<Renderer>().sharedMaterial = material;
+
+            CapsuleCollider hurtbox = killer.AddComponent<CapsuleCollider>();
+            hurtbox.center = Vector3.up;
+            hurtbox.radius = 0.42f;
+            hurtbox.height = 1.8f;
+            KillerHitReceiver hitReceiver = killer.AddComponent<KillerHitReceiver>();
+            hitReceiver.Configure(visual.transform);
 
             NavMeshAgent agent = killer.AddComponent<NavMeshAgent>();
             agent.speed = 2.4f;

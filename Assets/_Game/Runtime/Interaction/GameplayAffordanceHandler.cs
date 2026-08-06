@@ -44,7 +44,17 @@ namespace ConGame.Runtime.Interaction
 
         public bool CanUse(in InteractionContext context)
         {
-            return facts != null && kind != GameplayAffordanceKind.None;
+            if (facts == null || kind == GameplayAffordanceKind.None)
+            {
+                return false;
+            }
+
+            // These facts must come from their physical world systems. Exposing
+            // them as a generic Use action lets the player bypass the required
+            // weapon impact or flashlight reflection.
+            return kind != GameplayAffordanceKind.StrikeWall &&
+                   kind != GameplayAffordanceKind.StrikeWindow &&
+                   kind != GameplayAffordanceKind.ActivateGlare;
         }
 
         public InteractionResult Use(in InteractionContext context)

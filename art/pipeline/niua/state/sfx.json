@@ -1,0 +1,130 @@
+{
+  "items": {
+    "SFX_TV_Static_Cut": {
+      "status": "completed",
+      "job_id": "7f3d992e-5ddf-40f5-9f5b-f0ea3be74bd9",
+      "r2_key": "outputs/7f3d992e-5ddf-40f5-9f5b-f0ea3be74bd9/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/7f3d992e-5ddf-40f5-9f5b-f0ea3be74bd9/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_TV_Static_Cut.wav"
+    },
+    "SFX_TelevisionPower": {
+      "status": "completed",
+      "job_id": "00c60974-9735-43eb-b4f9-eeba5065046a",
+      "r2_key": "outputs/00c60974-9735-43eb-b4f9-eeba5065046a/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/00c60974-9735-43eb-b4f9-eeba5065046a/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_TelevisionPower.wav"
+    },
+    "SFX_EntryWarning": {
+      "status": "completed",
+      "job_id": "26c61173-6833-44d7-aae0-7a08efab9017",
+      "r2_key": "outputs/26c61173-6833-44d7-aae0-7a08efab9017/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/26c61173-6833-44d7-aae0-7a08efab9017/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_EntryWarning.wav"
+    },
+    "SFX_DoorBreach": {
+      "status": "completed",
+      "job_id": "7c3bf11e-2fb8-4729-a3b8-d3c76aafb421",
+      "r2_key": "outputs/7c3bf11e-2fb8-4729-a3b8-d3c76aafb421/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/7c3bf11e-2fb8-4729-a3b8-d3c76aafb421/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_DoorBreach.wav"
+    },
+    "SFX_Gunshot": {
+      "status": "completed",
+      "job_id": "9e413736-a408-4c71-ad28-6ef495a8fa2a",
+      "r2_key": "outputs/9e413736-a408-4c71-ad28-6ef495a8fa2a/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/9e413736-a408-4c71-ad28-6ef495a8fa2a/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Gunshot.wav"
+    },
+    "SFX_LoopReset": {
+      "status": "completed",
+      "job_id": "b07f326b-0c45-45a3-8570-06c2b96a979e",
+      "r2_key": "outputs/b07f326b-0c45-45a3-8570-06c2b96a979e/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/b07f326b-0c45-45a3-8570-06c2b96a979e/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_LoopReset.wav"
+    },
+    "SFX_TelevisionCrack": {
+      "status": "completed",
+      "job_id": "b437debf-3f2b-4260-9111-85762ae3ce54",
+      "r2_key": "outputs/b437debf-3f2b-4260-9111-85762ae3ce54/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/b437debf-3f2b-4260-9111-85762ae3ce54/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_TelevisionCrack.wav"
+    },
+    "SFX_TelevisionDestroyed": {
+      "status": "completed",
+      "job_id": "d225af73-7b8a-40eb-804d-10d21e8b682c",
+      "r2_key": "outputs/d225af73-7b8a-40eb-804d-10d21e8b682c/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/d225af73-7b8a-40eb-804d-10d21e8b682c/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_TelevisionDestroyed.wav"
+    },
+    "SFX_EndingSilence": {
+      "status": "completed",
+      "job_id": "64bb1f29-fe3c-413f-aa8e-46c2e74758c0",
+      "r2_key": "outputs/64bb1f29-fe3c-413f-aa8e-46c2e74758c0/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/64bb1f29-fe3c-413f-aa8e-46c2e74758c0/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_EndingSilence.wav"
+    },
+    "SFX_Footstep_Bare_Wood": {
+      "status": "completed",
+      "job_id": "372aaabd-d317-49b3-8434-862d897df445",
+      "r2_key": "outputs/372aaabd-d317-49b3-8434-862d897df445/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/372aaabd-d317-49b3-8434-862d897df445/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Footstep_Bare_Wood.wav"
+    },
+    "SFX_Footstep_Shoes_Wood": {
+      "status": "completed",
+      "job_id": "bb3b0272-bdd3-405a-9cae-d15d48135df8",
+      "r2_key": "outputs/bb3b0272-bdd3-405a-9cae-d15d48135df8/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/bb3b0272-bdd3-405a-9cae-d15d48135df8/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Footstep_Shoes_Wood.wav"
+    },
+    "SFX_Clock_Tick": {
+      "status": "completed",
+      "job_id": "8fcbb586-0014-4be0-962c-7f04d47608f7",
+      "r2_key": "outputs/8fcbb586-0014-4be0-962c-7f04d47608f7/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/8fcbb586-0014-4be0-962c-7f04d47608f7/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Clock_Tick.wav"
+    },
+    "SFX_Glass_Shatter": {
+      "status": "completed",
+      "job_id": "cbe3b407-d3fa-4c1b-85a0-9fb2f3cde46d",
+      "r2_key": "outputs/cbe3b407-d3fa-4c1b-85a0-9fb2f3cde46d/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/cbe3b407-d3fa-4c1b-85a0-9fb2f3cde46d/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Glass_Shatter.wav"
+    },
+    "SFX_Mirror_Crack": {
+      "status": "completed",
+      "job_id": "7e415ae1-e0eb-44af-9272-83f694fbf892",
+      "r2_key": "outputs/7e415ae1-e0eb-44af-9272-83f694fbf892/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/7e415ae1-e0eb-44af-9272-83f694fbf892/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Mirror_Crack.wav"
+    },
+    "SFX_Wood_Splinter": {
+      "status": "completed",
+      "job_id": "11ba7000-8bc7-4794-9608-43d31d94ff79",
+      "r2_key": "outputs/11ba7000-8bc7-4794-9608-43d31d94ff79/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/11ba7000-8bc7-4794-9608-43d31d94ff79/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Wood_Splinter.wav"
+    },
+    "SFX_Cloth_Rustle": {
+      "status": "completed",
+      "job_id": "d1e81513-a969-4d39-9734-89cbfc549059",
+      "r2_key": "outputs/d1e81513-a969-4d39-9734-89cbfc549059/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/d1e81513-a969-4d39-9734-89cbfc549059/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Cloth_Rustle.wav"
+    },
+    "SFX_Bat_Impact": {
+      "status": "completed",
+      "job_id": "bd756724-fb24-4f08-bfb1-42f318e95308",
+      "r2_key": "outputs/bd756724-fb24-4f08-bfb1-42f318e95308/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/bd756724-fb24-4f08-bfb1-42f318e95308/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Bat_Impact.wav"
+    },
+    "SFX_Window_Board_Break": {
+      "status": "completed",
+      "job_id": "b32c4f20-cb85-4830-8de0-d15d86a5afb4",
+      "r2_key": "outputs/b32c4f20-cb85-4830-8de0-d15d86a5afb4/sfx.wav",
+      "url": "https://cdn.niua.ohao.tech/outputs/b32c4f20-cb85-4830-8de0-d15d86a5afb4/sfx.wav",
+      "file": "art\\exports\\audio\\SFX_Window_Board_Break.wav"
+    }
+  }
+}

@@ -168,7 +168,7 @@ namespace ConGame.Runtime.Player
             return true;
         }
 
-        public void EnterHide(Transform anchor, PlayerZone zone)
+        public void EnterHide(Transform anchor, PlayerZone zone, PlayerPose pose = PlayerPose.Hidden)
         {
             if (anchor == null || HeldEntity != null)
             {
@@ -187,7 +187,7 @@ namespace ConGame.Runtime.Player
             _isHiding = true;
             ApplyMovementLock();
             facts?.SetPlayerZone(zone);
-            facts?.SetPlayerPose(PlayerPose.Hidden);
+            facts?.SetPlayerPose(pose);
         }
 
         public void ExitHide()
@@ -236,6 +236,15 @@ namespace ConGame.Runtime.Player
         public void ThrowHeld()
         {
             if (HeldEntity == null || !AllowsCounterplayWindow(CounterplayInputWindow.Throw))
+            {
+                return;
+            }
+
+            // Carryable furniture such as the dresser is deliberately not
+            // throwable. The input path is global, so enforce the authored
+            // category here instead of letting every held rigidbody fly.
+            if (HeldEntity.HasAuthoredDefinition &&
+                (HeldEntity.Categories & ItemCategory.Throwable) == 0)
             {
                 return;
             }
@@ -435,7 +444,7 @@ namespace ConGame.Runtime.Player
                 return;
             }
 
-            InteractableEntity target = scanner == null ? null : scanner.Refresh();
+            InteractableEntity target = scanner == null ? null : scanner.RefreshForVerb(InteractionVerb.Hide);
             if (target != null && target.TryExecute(this, InteractionVerb.Hide))
             {
                 return;

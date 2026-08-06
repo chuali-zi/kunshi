@@ -16,6 +16,7 @@ namespace ConGame.Runtime.Interaction
 
         public string ItemId => definition == null ? fallbackItemId : definition.ItemId;
         public ItemCategory Categories => definition == null ? ItemCategory.None : definition.Categories;
+        public bool HasAuthoredDefinition => definition != null;
         public bool IsHeld { get; private set; }
 
         public void Configure(ItemDefinitionAsset itemDefinition, string fallbackId = "")
@@ -39,7 +40,8 @@ namespace ConGame.Runtime.Interaction
             for (int i = 0; i < _capabilities.Length; i++)
             {
                 InteractionCapability capability = _capabilities[i];
-                if (capability == null || (requestedVerb != InteractionVerb.None && capability.Verb != requestedVerb))
+                if (capability == null || !capability.isActiveAndEnabled ||
+                    (requestedVerb != InteractionVerb.None && capability.Verb != requestedVerb))
                 {
                     continue;
                 }
@@ -62,6 +64,11 @@ namespace ConGame.Runtime.Interaction
 
         public int GetBestExecutablePriority(PlayerInteractor player)
         {
+            return GetExecutablePriority(player, InteractionVerb.None);
+        }
+
+        public int GetExecutablePriority(PlayerInteractor player, InteractionVerb requestedVerb)
+        {
             StatefulWorldItem stateful = GetComponent<StatefulWorldItem>();
             if (stateful != null && !stateful.AllowsOrdinaryInteraction)
             {
@@ -74,8 +81,11 @@ namespace ConGame.Runtime.Interaction
             for (int i = 0; i < _capabilities.Length; i++)
             {
                 InteractionCapability capability = _capabilities[i];
-                if (capability == null || capability.Verb == InteractionVerb.Hide ||
-                    capability.Verb == InteractionVerb.Swing || capability.Verb == InteractionVerb.Throw)
+                if (capability == null || !capability.isActiveAndEnabled ||
+                    (requestedVerb != InteractionVerb.None && capability.Verb != requestedVerb) ||
+                    (requestedVerb == InteractionVerb.None &&
+                     (capability.Verb == InteractionVerb.Hide || capability.Verb == InteractionVerb.Swing ||
+                      capability.Verb == InteractionVerb.Throw)))
                 {
                     continue;
                 }

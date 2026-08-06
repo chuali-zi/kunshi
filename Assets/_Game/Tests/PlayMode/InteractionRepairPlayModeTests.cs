@@ -386,6 +386,73 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator SofaHideUsesConfiguredCrouchedPose()
+        {
+            GameObject player = new GameObject("player");
+            GameObject sofa = new GameObject("sofa");
+            GameObject anchor = new GameObject("sofa-hide-anchor");
+            try
+            {
+                CharacterController controller = player.AddComponent<CharacterController>();
+                GameplayFactService facts = player.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                PlayerMotor motor = player.AddComponent<PlayerMotor>();
+                motor.Configure(controller, null, null, facts, null);
+                PlayerInteractor interactor = player.AddComponent<PlayerInteractor>();
+                interactor.Configure(null, null, null, motor, facts, null, null);
+
+                InteractableEntity entity = sofa.AddComponent<InteractableEntity>();
+                entity.Configure(null, "sofa");
+                HideCapability hide = sofa.AddComponent<HideCapability>();
+                hide.Configure(anchor.transform, PlayerZone.SofaRear, PlayerPose.Crouched);
+
+                Assert.That(entity.TryExecute(interactor, InteractionVerb.Hide), Is.True);
+                Assert.That(interactor.IsHiding, Is.True);
+                Assert.That(interactor.IsMovementLocked, Is.True);
+                Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.SofaRear));
+                Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Crouched));
+                yield return null;
+            }
+            finally
+            {
+                Object.Destroy(player);
+                Object.Destroy(sofa);
+                Object.Destroy(anchor);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator KillerHitReceiverPlaysNonLethalRecoil()
+        {
+            GameObject killer = new GameObject("killer");
+            GameObject model = new GameObject("model");
+            try
+            {
+                model.transform.SetParent(killer.transform, false);
+                KillerHitReceiver receiver = killer.AddComponent<KillerHitReceiver>();
+                receiver.Configure(model.transform);
+                Vector3 rest = model.transform.localPosition;
+
+                HitResult result = receiver.ReceiveHit(
+                    new HitInfo(ImpactKind.Heavy, "baseball_bat", Vector3.zero, Vector3.forward, 6f));
+
+                Assert.That(result, Is.EqualTo(HitResult.Accepted));
+                Assert.That(receiver.IsReacting, Is.True);
+                Assert.That(receiver.LastHitSourceId, Is.EqualTo("baseball_bat"));
+                yield return null;
+                Assert.That(model.transform.localPosition, Is.Not.EqualTo(rest));
+
+                yield return new WaitForSeconds(0.35f);
+                Assert.That(receiver.IsReacting, Is.False);
+                Assert.That(model.transform.localPosition, Is.EqualTo(rest));
+            }
+            finally
+            {
+                Object.Destroy(killer);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator FlashlightGlareExpiresAfterConfiguredDuration()
         {
             GameObject factsObject = new GameObject("facts");

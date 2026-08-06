@@ -1,0 +1,129 @@
+{
+  "_comment": "文件名 SFX_<AudioCueId> 与 SemanticAudioDirector.AudioCueId 对应,AudioCueAutoBinder 按此自动绑定。extra 组是设计文档明确提到但尚未接线的音效,先入素材库。",
+  "defaults": {
+    "format": "wav",
+    "negative_prompt": "music, melody, singing, voice, speech, talking",
+    "num_inference_steps": 100,
+    "cfg_scale": 5.0
+  },
+  "items": [
+    {
+      "name": "SFX_TelevisionPower",
+      "prompt": "old CRT television turning on and running, steady electrical hum, 50hz mains buzz, faint static fizz, constant tone",
+      "seconds": 8.0,
+      "loop": true
+    },
+    {
+      "name": "SFX_EntryWarning",
+      "prompt": "ominous low tension sting, deep sub bass swell rising, horror suspense drone, short build-up",
+      "seconds": 3.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_DoorBreach",
+      "prompt": "wooden apartment door violently kicked open, lock breaking, wood splintering, door slamming against wall",
+      "seconds": 2.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_Gunshot",
+      "prompt": "single pistol gunshot indoors, dry sharp crack, close range, no reverb tail, abrupt end",
+      "seconds": 1.5,
+      "loop": false
+    },
+    {
+      "name": "SFX_LoopReset",
+      "prompt": "fast tape rewind glitch, time rewinding effect, quick pitch-down sweep ending with a soft click",
+      "seconds": 2.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_TelevisionCrack",
+      "prompt": "thick glass screen cracking, single sharp crack with electrical fizz and a short static burst",
+      "seconds": 1.5,
+      "loop": false
+    },
+    {
+      "name": "SFX_TelevisionDestroyed",
+      "prompt": "CRT television imploding, deep muffled thud, glass shattering, electrical pop, then power dying down",
+      "seconds": 3.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_EndingSilence",
+      "prompt": "near silent room tone, faint air movement, very quiet distant hum, empty room ambience",
+      "seconds": 5.0,
+      "loop": true
+    },
+    {
+      "name": "SFX_Footstep_Bare_Wood",
+      "group": "extra",
+      "prompt": "barefoot footsteps walking slowly on creaky wooden floor, soft skin pats, steady pace",
+      "seconds": 4.0,
+      "loop": true
+    },
+    {
+      "name": "SFX_Footstep_Shoes_Wood",
+      "group": "extra",
+      "prompt": "hard-soled leather shoes walking slowly on wooden floor, heavy deliberate steps, menacing steady pace",
+      "seconds": 4.0,
+      "loop": true
+    },
+    {
+      "name": "SFX_Clock_Tick",
+      "group": "extra",
+      "prompt": "old wall clock ticking, mechanical tick tock, steady rhythm, quiet room",
+      "seconds": 4.0,
+      "loop": true
+    },
+    {
+      "name": "SFX_Glass_Shatter",
+      "group": "extra",
+      "prompt": "small glass lamp falling and shattering on wooden floor, glass shards scattering",
+      "seconds": 2.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_Mirror_Crack",
+      "group": "extra",
+      "prompt": "mirror glass cracking and splintering, sharp brittle cracks spreading",
+      "seconds": 1.5,
+      "loop": false
+    },
+    {
+      "name": "SFX_Wood_Splinter",
+      "group": "extra",
+      "prompt": "wooden furniture cracking and splintering, plank snapping under force",
+      "seconds": 2.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_Cloth_Rustle",
+      "group": "extra",
+      "prompt": "heavy blanket and fabric rustling, cloth being pulled and moved",
+      "seconds": 2.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_Bat_Impact",
+      "group": "extra",
+      "prompt": "baseball bat striking a hard object, dull heavy whack with slight wooden knock",
+      "seconds": 1.5,
+      "loop": false
+    },
+    {
+      "name": "SFX_TV_Static_Cut",
+      "group": "extra",
+      "prompt": "harsh television static burst, loud white noise, cut off abruptly",
+      "seconds": 1.0,
+      "loop": false
+    },
+    {
+      "name": "SFX_Window_Board_Break",
+      "group": "extra",
+      "prompt": "wooden boards prying off a window frame, nails creaking and squeaking, planks clattering down",
+      "seconds": 2.5,
+      "loop": false
+    }
+  ]
+}

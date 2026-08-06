@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ConGame.Runtime::ConGame.Runtime.Counterplay.CounterplayDefinitionAsset
   outcomeId: D16
   sortOrder: 800
-  triggerMode: 3
+  triggerMode: 2
   conditions:
   - Key: 5
     Operator: 0

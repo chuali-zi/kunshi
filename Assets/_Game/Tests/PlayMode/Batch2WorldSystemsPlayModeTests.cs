@@ -54,6 +54,70 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator BookcaseHideIsUnavailableUntilBookcaseIsTipped()
+        {
+            GameObject factsObject = new GameObject("facts");
+            GameObject player = new GameObject("player");
+            GameObject bookcase = new GameObject("bookcase");
+            GameObject anchor = new GameObject("hide-anchor");
+            try
+            {
+                GameplayFactService facts = factsObject.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                PlayerInteractor interactor = player.AddComponent<PlayerInteractor>();
+                TipBookcaseUseHandler tip = bookcase.AddComponent<TipBookcaseUseHandler>();
+                tip.Configure(facts, null);
+                tip.CaptureInitialState();
+                HideCapability hide = bookcase.AddComponent<HideCapability>();
+                hide.Configure(anchor.transform, PlayerZone.Other);
+                InteractionContext context = new InteractionContext(interactor, null);
+
+                Assert.That(hide.CanExecute(context), Is.False);
+                Assert.That(tip.Use(context), Is.EqualTo(InteractionResult.Accepted));
+                Assert.That(hide.CanExecute(context), Is.True);
+                yield return null;
+            }
+            finally
+            {
+                Object.Destroy(factsObject);
+                Object.Destroy(player);
+                Object.Destroy(bookcase);
+                Object.Destroy(anchor);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator StrikeAffordancesCannotBypassPhysicalHitReceivers()
+        {
+            GameObject factsObject = new GameObject("facts");
+            GameObject wall = new GameObject("wall");
+            GameObject window = new GameObject("window");
+            try
+            {
+                GameplayFactService facts = factsObject.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                GameplayAffordanceHandler wallAffordance = wall.AddComponent<GameplayAffordanceHandler>();
+                wallAffordance.Configure(GameplayAffordanceKind.StrikeWall, facts);
+                GameplayAffordanceHandler windowAffordance = window.AddComponent<GameplayAffordanceHandler>();
+                windowAffordance.Configure(GameplayAffordanceKind.StrikeWindow, facts);
+
+                Assert.That(wallAffordance.CanUse(default), Is.False);
+                Assert.That(wallAffordance.Use(default), Is.EqualTo(InteractionResult.Rejected));
+                Assert.That(windowAffordance.CanUse(default), Is.False);
+                Assert.That(windowAffordance.Use(default), Is.EqualTo(InteractionResult.Rejected));
+                Assert.That(facts.CaptureSnapshot().IsStrikingWall, Is.False);
+                Assert.That(facts.CaptureSnapshot().IsStrikingWindow, Is.False);
+                yield return null;
+            }
+            finally
+            {
+                Object.Destroy(factsObject);
+                Object.Destroy(wall);
+                Object.Destroy(window);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator WindowHitMarksStrikingWindowForD15()
         {
             GameObject factsObject = new GameObject("facts");

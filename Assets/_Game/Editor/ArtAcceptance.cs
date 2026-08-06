@@ -63,7 +63,8 @@ namespace ConGame.Editor
             new Placement("Environment/ENV_BlackCorridor", Vector3.zero),
             new Placement("Environment/FUR_Bookcase", new Vector3(-2.925f, 0, 1.8f), 90f),
             new Placement("Environment/FUR_WoodChair", new Vector3(0, 0, 2.35f), 180f),
-            new Placement("Environment/FUR_Armchair", new Vector3(-2.15f, 0, 2.05f), 180f),
+            // 扶手椅: 不靠墙(椅背↔北墙≈0.7m 蹲行通道)、与书柜留≈0.5m 空隙、微侧向门 (items_interactions §一)
+            new Placement("Environment/FUR_Armchair", new Vector3(-1.8f, 0, 1.5f), 160f),
             new Placement("Environment/FUR_Bed", new Vector3(1.3f, 0, 2.1f), 180f),
             new Placement("Environment/FUR_TVCabinet", new Vector3(0, 0, -2.375f)),
             new Placement("Environment/FUR_Dresser", new Vector3(-2.86f, 0, 0.3f), 90f),
@@ -71,9 +72,11 @@ namespace ConGame.Editor
             new Placement("Environment/ENV_BoardedWindow", new Vector3(-1.2f, 0.9f, 2.61f)),
             new Placement("Props/PRP_CRTTV_Intact", new Vector3(0, 0.65f, -2.438f)),
             new Placement("Props/PRP_Blanket_Crumpled", new Vector3(1.15f, 0.62f, 2.1f)),
-            new Placement("Props/PRP_CeilingLamp_Intact", new Vector3(0, 2.8f, 0)),
+            // 吊灯: 参考图罩体完整入画; §2 相机下 2.8m 安装点只剩灯泡底, 降到 2.55 (杆顶出画不穿帮)
+            new Placement("Props/PRP_CeilingLamp_Intact", new Vector3(0, 2.55f, 0)),
             new Placement("Props/PRP_TableLamp_Intact", new Vector3(-2.86f, 0.85f, -0.02f), 90f),
-            new Placement("Props/PRP_Rug", new Vector3(0.4f, 0, 1.3f), 16f),
+            // 地毯: 西端对齐扶手椅(新位)前脚, 东端留门口 1m 铺被空地 (items_interactions §一)
+            new Placement("Props/PRP_Rug", new Vector3(0f, 0, 0.85f), 16f),
             new Placement("Props/PRP_Remote", Vector3.zero, 90f, "FUR_Dresser", "SOCKET_RemoteTop"),
             new Placement("Props/PRP_Books_Set", Vector3.zero, 90f, "FUR_Bookcase", "SOCKET_Shelf_02"),
             new Placement("Props/PRP_Vase", Vector3.zero, 0f, "FUR_SideTable", "SOCKET_Vase"),
@@ -221,19 +224,19 @@ namespace ConGame.Editor
             var sunGo = new GameObject("Sun");
             var sun = sunGo.AddComponent<Light>();
             sun.type = LightType.Directional;
-            sun.intensity = 1.4f;
+            sun.intensity = 0.9f;
             sun.shadows = LightShadows.Soft;
             sunGo.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
             var lampGo = new GameObject("CeilingLight");
             var pl = lampGo.AddComponent<Light>();
             pl.type = LightType.Point;
-            pl.intensity = 1.5f;
+            pl.intensity = 1.2f;
             pl.shadows = LightShadows.Soft;
             pl.range = 8f;
             pl.color = new Color(1f, 0.92f, 0.78f);
-            lampGo.transform.position = new Vector3(0, 2.55f, 0);
+            lampGo.transform.position = new Vector3(0, 2.3f, 0);
             RenderSettings.ambientMode = AmbientMode.Flat;
-            RenderSettings.ambientLight = new Color(0.30f, 0.30f, 0.30f);
+            RenderSettings.ambientLight = new Color(0.22f, 0.22f, 0.22f);
 
             // 摆放
             var placed = new Dictionary<string, GameObject>();
@@ -271,6 +274,8 @@ namespace ConGame.Editor
             Shoot("B08U_mirror.png", new Vector3(-1.0f, 1.3f, -1.5f), new Vector3(3.0f, 1.1f, -1.0f), 45f, false, 0f);
             Shoot("B08U_vase_dresser.png", new Vector3(1.6f, 1.1f, 0.3f), new Vector3(2.45f, 0.7f, 1.35f), 40f, false, 0f);
             Shoot("B08U_clock.png", new Vector3(1.3f, 1.85f, 1.2f), new Vector3(1.3f, 1.85f, 2.56f), 30f, false, 0f);
+            // 地毯特写: 验证 3.5×0.9 平铺朝向与卷翘角
+            Shoot("B08U_rug.png", new Vector3(0.4f, 1.7f, -1.4f), new Vector3(0.4f, 0f, 1.3f), 45f, false, 0f);
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             Debug.Log("ACCEPT scene saved " + ScenePath);

@@ -4,6 +4,7 @@ using ConGame.Domain.Facts;
 using ConGame.Domain.Interaction;
 using ConGame.Runtime.AI;
 using ConGame.Runtime.Counterplay;
+using ConGame.Runtime.Data;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Interaction;
 using ConGame.Runtime.Lighting;
@@ -111,6 +112,46 @@ namespace ConGame.Tests.PlayMode
                 Object.Destroy(player);
                 Object.Destroy(dresser);
                 Object.Destroy(door);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DresserCannotBeThrownThroughGlobalThrowInput()
+        {
+            GameObject player = new GameObject("player");
+            GameObject hand = new GameObject("hand");
+            GameObject dresser = new GameObject("dresser");
+            ItemDefinitionAsset definition = ScriptableObject.CreateInstance<ItemDefinitionAsset>();
+            try
+            {
+                hand.transform.SetParent(player.transform);
+                CharacterController controller = player.AddComponent<CharacterController>();
+                PlayerMotor motor = player.AddComponent<PlayerMotor>();
+                motor.Configure(controller, null, null, null, null);
+                PlayerInteractor interactor = player.AddComponent<PlayerInteractor>();
+                interactor.Configure(null, null, hand.transform, motor, null, null, null);
+
+                definition.Configure("dresser", "dresser", InteractionVerb.Carry,
+                    ItemCategory.Heavy | ItemCategory.DoorBlocker, ContentStatus.Implemented);
+                Rigidbody body = dresser.AddComponent<Rigidbody>();
+                InteractableEntity entity = dresser.AddComponent<InteractableEntity>();
+                entity.Configure(definition);
+                StatefulWorldItem stateful = dresser.AddComponent<StatefulWorldItem>();
+                stateful.Configure(body);
+                stateful.CaptureInitialState();
+
+                Assert.That(interactor.TryCarry(entity, body, 0.33f), Is.True);
+                interactor.ThrowHeld();
+
+                Assert.That(interactor.HeldEntity, Is.SameAs(entity));
+                Assert.That(body.isKinematic, Is.True);
+                yield return null;
+            }
+            finally
+            {
+                Object.Destroy(player);
+                Object.Destroy(dresser);
+                Object.Destroy(definition);
             }
         }
 
@@ -294,7 +335,8 @@ namespace ConGame.Tests.PlayMode
             rug.TrapPulled = true;
             rug.HasMeaningfulInput = true;
             rug.IsAtAwakeningPoint = false;
-            Assert.That(catalog.Select(CounterplayTriggerMode.Entry, rug)?.OutcomeId, Is.EqualTo("D16"));
+            Assert.That(catalog.Select(CounterplayTriggerMode.Entry, rug)?.OutcomeId, Is.EqualTo("D01"));
+            Assert.That(catalog.Select(CounterplayTriggerMode.Reactive, rug)?.OutcomeId, Is.EqualTo("D16"));
 
             FactSnapshot strike = FactSnapshot.CreateBaseline();
             strike.IsStrikingWall = true;

@@ -42,6 +42,8 @@ namespace ConGame.Runtime.Interaction
 
             Vector3 aimForward = player.AimForward;
             Vector3 origin = player.transform.position + Vector3.up + aimForward * 0.8f;
+            InteractableEntity entity = GetComponent<InteractableEntity>();
+            string sourceId = entity == null || string.IsNullOrEmpty(entity.ItemId) ? name : entity.ItemId;
             int count = Physics.OverlapSphereNonAlloc(origin, reach, _hits, ~0, QueryTriggerInteraction.Collide);
             for (int i = 0; i < count; i++)
             {
@@ -57,7 +59,12 @@ namespace ConGame.Runtime.Interaction
                     if (behaviours[j] is IHitReceiver receiver)
                     {
                         Vector3 point = hit.ClosestPoint(origin);
-                        receiver.ReceiveHit(new HitInfo(impactKind, name, point, aimForward, force));
+                        HitResult result = receiver.ReceiveHit(new HitInfo(impactKind, sourceId, point, aimForward, force));
+                        if (result == HitResult.Ignored)
+                        {
+                            continue;
+                        }
+
                         events?.EmitNoise(NoiseLevel.Loud, point, name);
                         i = count;
                         break;

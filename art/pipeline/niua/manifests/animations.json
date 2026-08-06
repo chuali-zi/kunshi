@@ -1,0 +1,52 @@
+{
+  "_comment": "P0 七条单人动画,对应 art/requirements/animation_manifest.md §2。全部 In-Place(位移由控制器/Timeline 提供),mixamo 骨架,Unity 以 Humanoid 导入后自动重定向到双角色。",
+  "defaults": {
+    "skeleton": "mixamo",
+    "in_place": true,
+    "num_denoising_steps": 150
+  },
+  "items": [
+    {
+      "name": "AN_Player_Idle",
+      "prompt": "a person stands still in a relaxed neutral idle pose, breathing gently, slight weight shifts, subtle head movement",
+      "duration": 6.0,
+      "loop": true
+    },
+    {
+      "name": "AN_Player_Walk",
+      "prompt": "a person walks forward at a normal cautious pace, ordinary relaxed gait, arms swinging naturally",
+      "duration": 4.0,
+      "loop": true
+    },
+    {
+      "name": "AN_Player_WakeUp",
+      "prompt": "a person slumped sitting asleep slowly wakes up, lifts their head, looks around confused, then stands up",
+      "duration": 8.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Player_Swing",
+      "prompt": "a person swings a baseball bat with both hands in a strong horizontal strike, winds up then swings hard and follows through",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Player_HitFall",
+      "prompt": "a person is shot in the chest, jerks backward from the impact and collapses falling to the ground",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_Walk",
+      "prompt": "a tall man walks forward slowly with calm heavy menacing steps, upright posture, deliberate unhurried pace",
+      "duration": 4.0,
+      "loop": true
+    },
+    {
+      "name": "AN_Killer_AimFire",
+      "prompt": "a man holding a pistol low raises it with one hand, aims steadily at a target, fires one shot with slight recoil, keeps aiming",
+      "duration": 4.0,
+      "loop": false
+    }
+  ]
+}

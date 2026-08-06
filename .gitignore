@@ -37,3 +37,6 @@ TestResults/
 # Keep DCC sources out of Unity; art/source is intentionally tracked separately.
 Assets/**/*.blend
 Assets/**/*.blend1
+
+# NIUA generation pipeline secrets
+art/pipeline/niua/.env

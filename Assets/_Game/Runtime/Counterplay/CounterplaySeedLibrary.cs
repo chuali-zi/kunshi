@@ -50,7 +50,7 @@ namespace ConGame.Runtime.Counterplay
                 Eq(FactKey.RoomLight, (int)RoomLightState.PersistentBlack)),
             new CounterplaySeed("D18", 700, CounterplayTriggerMode.Entry, ContentStatus.Implemented,
                 Eq(FactKey.RoomLight, (int)RoomLightState.RecoverableDark)),
-            new CounterplaySeed("D16", 800, CounterplayTriggerMode.Entry | CounterplayTriggerMode.Reactive, ContentStatus.Implemented,
+            new CounterplaySeed("D16", 800, CounterplayTriggerMode.Reactive, ContentStatus.Implemented,
                 Eq(FactKey.Trap, (int)TrapState.RugArmed), IsTrue(FactKey.TrapPulled)),
             new CounterplaySeed("D17", 900, CounterplayTriggerMode.Reactive, ContentStatus.Implemented,
                 IsTrue(FactKey.IsGlareActive)),
