@@ -83,8 +83,8 @@ namespace ConGame.Tests.PlayMode
             }
 
             Assert.That(sofa, Is.Not.Null);
-            Assert.That(sofa.position.x, Is.EqualTo(-1.8f).Within(0.01f));
-            Assert.That(sofa.position.z, Is.EqualTo(1.5f).Within(0.01f));
+            Assert.That(sofa.position.x, Is.EqualTo(-1.45f).Within(0.01f));
+            Assert.That(sofa.position.z, Is.EqualTo(1.3f).Within(0.01f));
             Assert.That(sofa.GetComponent<HideCapability>().HidePose, Is.EqualTo(PlayerPose.Crouched));
             Assert.That(blanket, Is.Not.Null);
             Assert.That(blanket.GetComponent<HideCapability>().RequiresPlacedItem, Is.True);
