@@ -18,10 +18,10 @@ MonoBehaviour:
     m_Value: 2
   intensity:
     m_OverrideState: 1
-    m_Value: 0.18
+    m_Value: 0.28
   response:
     m_OverrideState: 1
-    m_Value: 0.75
+    m_Value: 0.65
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
@@ -40,7 +40,7 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.3
+    m_Value: 0.6
   contrast:
     m_OverrideState: 1
     m_Value: 9
@@ -74,10 +74,10 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.34
+    m_Value: 0.32
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.62
+    m_Value: 0.65
   rounded:
     m_OverrideState: 1
     m_Value: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 11
   tint:
     m_OverrideState: 1
     m_Value: 0

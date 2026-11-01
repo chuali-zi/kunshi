@@ -12,7 +12,7 @@ namespace ConGame.Editor
 {
     public static partial class MvMainShotBuilder
     {
-        [MenuItem("ConGame/Art/Build Reference Main Shot (Round 1)")]
+        [MenuItem("ConGame/Art/Build Reference Main Shot (Round 2)")]
         public static void Build()
         {
             if (EditorApplication.isPlaying) throw new InvalidOperationException("Leave Play Mode before editing room art.");
@@ -60,7 +60,7 @@ namespace ConGame.Editor
             Wall(details,"Floral Back Wall",new Vector3(0,1.55f,2.595f),new Vector2(6.2f,3.1f),wallpaper);
             foreach(var r in All<Renderer>().Where(r=>r.name=="Shell_Wall_W")) r.enabled=false;
             Wall(details,"Floral Left Return",new Vector3(-3.095f,1.55f,0),new Vector2(5.2f,3.1f),wallpaper).localRotation=Quaternion.Euler(0,-90,0);
-            // Back-wall print: 8 motifs per 2.8 metres, matching the botanical density in the frame.
+            // Tiny rose sprigs: 8 repeats per 1.8 metres, measured against the real wide frame.
             var painting = Child(details,"Framed Dark Painting");
             painting.position=new Vector3(-1.62f,1.94f,2.535f);
             Box(painting,"Canvas backing",Vector3.zero,new Vector3(1.39f,.94f,.055f),ink);
@@ -82,8 +82,16 @@ namespace ConGame.Editor
             }
             Move("Shell_Ceiling",new Vector3(0,3.15f,0));
             Move("Ceiling",new Vector3(0,3.15f,0));
+            var ceilingPaint=MvMainShotAssets.Material("ShadowedCeiling",new Color(.42f,.38f,.31f),.02f);
+            foreach(var r in All<Renderer>().Where(r=>r.name=="Shell_Ceiling")) r.enabled=false;
+            Box(details,"Plain shadowed ceiling",new Vector3(0,3.13f,0),new Vector3(6.2f,.06f,5.2f),ceilingPaint);
+            // Ground the controller root; the chair pose supplies its own visual drop.
+            var player=Find("Player");
+            player.position=new Vector3(player.position.x,0,player.position.z);
+            // CharacterController settles one skin width above the floor; keep the visible soles below that root.
+            Find("CH_Player_Model").localPosition=Vector3.down*player.GetComponent<CharacterController>().skinWidth;
             ConfigureDoor(details,wallpaper,cream);
-            ConfigureMainCamera();
+            ConfigureMainCamera(details);
             ConfigureLighting();
             ConfigurePostProcessRenderer();
             ConfigureMainGrade();
@@ -131,6 +139,10 @@ namespace ConGame.Editor
             wingback.localScale=Vector3.one*.85f;
             // The host faces local +Z; all details remain attached to the existing hideable chair.
             BuildWingback(wingback,leather,wood);
+            // Raise the wooden seat to meet the pelvis while its legs stay on the carpet.
+            foreach(Transform visual in Find("FUR_WoodChair"))
+                if(visual.name.Contains("Visual"))
+                    visual.localScale=new Vector3(visual.localScale.x,1.12f,visual.localScale.z);
             var rear=Find("Zone_SofaRear");
             if(rear!=null) rear.position=new Vector3(-1.56f,.8f,1.92f);
 
@@ -147,7 +159,7 @@ namespace ConGame.Editor
             // Lamp on a slender table, between the case and the wingback.
             var dresser=Find("FUR_Dresser");
             // The dresser remains on the unseen front wall and keeps its drawers/carry interaction.
-            if(dresser!=null) dresser.position=new Vector3(-2.20f,.425f,-1.85f);
+            if(dresser!=null) dresser.position=new Vector3(-2.65f,.425f,-1.85f);
             var table=Child(details,"Lamp Side Table");
             table.position=new Vector3(-2.34f,0,1.82f);
             Box(table,"Table top",new Vector3(0,.78f,0),new Vector3(.66f,.05f,.44f),wood).gameObject.AddComponent<BoxCollider>();
@@ -186,9 +198,9 @@ namespace ConGame.Editor
                 crumpled.localPosition=Vector3.zero;crumpled.localScale=Vector3.one;crumpled.localRotation=Quaternion.identity;
                 var cloth=MvMainShotAssets.Surface("RumpledWhiteLinen",70,72,(u,v)=>
                 {
-                    float wave=Mathf.Sin(u*39+Mathf.Sin(v*9)*1.4f)*Mathf.Sin(v*17+u*6)*.017f;
-                    float mound=.085f*Mathf.Exp(-((u-.66f)*(u-.66f)*32+(v-.38f)*(v-.38f)*40));
-                    return new Vector3((u-.5f)*1.25f,.018f+wave+mound,(v-.5f)*1.35f);
+                    float wave=Mathf.Sin(u*14+Mathf.Sin(v*5)*.8f)*Mathf.Sin(v*8+u*3)*.013f;
+                    float mound=.065f*Mathf.Exp(-((u-.66f)*(u-.66f)*22+(v-.38f)*(v-.38f)*25));
+                    return new Vector3((u-.5f)*1.25f,.045f+wave+mound,(v-.5f)*1.35f);
                 });
                 crumpled.GetComponent<MeshFilter>().sharedMesh=cloth;
             }
@@ -249,7 +261,7 @@ namespace ConGame.Editor
             // Soft overhang across the front edge; the top stays below the interactive blanket.
             var sheet=MvMainShotAssets.Surface("LinenFrontDrape",70,24,(u,v)=>
             {
-                float fold=Mathf.Sin(u*43)*.018f+Mathf.Sin(u*77+.6f)*.009f;
+                float fold=Mathf.Sin(u*19)*.012f+Mathf.Sin(u*31+.6f)*.005f;
                 return new Vector3((u-.5f)*1.46f,.66f-v*.28f+.025f*Mathf.Sin(u*15+v*2),-.81f-(.085f+fold)*Mathf.Sin(v*Mathf.PI*.5f));
             });
             ReverseFaces(sheet);
@@ -308,27 +320,48 @@ namespace ConGame.Editor
             mesh.triangles=indices;mesh.RecalculateNormals();EditorUtility.SetDirty(mesh);
         }
 
-        static void ConfigureMainCamera()
+        static void ConfigureMainCamera(Transform details)
         {
-            Vector3 pos=new Vector3(0,1.38f,-2.11f);
+            // A distant, longer-lens view flattens the room into a stage diorama.
+            Vector3 pos=new Vector3(0,1.55f,-5.2f);
             Quaternion rot=Quaternion.Euler(3,0,0);
             var camera=Camera.main;
             camera.transform.SetPositionAndRotation(pos,rot);
-            camera.fieldOfView=50;
+            camera.fieldOfView=36;
             camera.nearClipPlane=.03f;
             camera.farClipPlane=35;
             camera.allowHDR=true;
+            // Look through the stage's front wall without changing room collisions or the first-person view.
+            const int cutawayLayer=30;
+            var tags=new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            tags.FindProperty("layers").GetArrayElementAtIndex(cutawayLayer).stringValue="MainShotCutaway";
+            tags.ApplyModifiedPropertiesWithoutUndo();
+            foreach(var r in All<Renderer>().Where(r=>r.name=="Shell_Wall_S"||r.name=="Shell_Baseboard_S"))
+                r.gameObject.layer=cutawayLayer;
+            foreach(string name in new[]{"PRP_CRTTV","FUR_TVCabinet_Visual","PRP_DrawerClutter_Visual"})
+                foreach(var r in Find(name).GetComponentsInChildren<Renderer>(true)) r.gameObject.layer=cutawayLayer;
+            // Movable furniture must remain visible when carried into the stage.
+            foreach(var r in Find("FUR_Dresser").GetComponentsInChildren<Renderer>(true)) r.gameObject.layer=0;
+            camera.cullingMask &= ~(1<<cutawayLayer);
+            var cameraMode=new SerializedObject(All<ConGame.Presentation.Camera.CameraModeController>().Single());
+            cameraMode.FindProperty("fixedViewHiddenLayers").intValue=1<<cutawayLayer;
+            var viewAnchor=Child(details,"Main Shot Camera Anchor");
+            viewAnchor.SetPositionAndRotation(pos,rot);
+            cameraMode.FindProperty("fixedViewAnchor").objectReferenceValue=viewAnchor;
+            cameraMode.ApplyModifiedPropertiesWithoutUndo();
             var data=camera.GetUniversalAdditionalCameraData();
             data.renderPostProcessing=true;
             data.volumeLayerMask=1;
             data.antialiasing=AntialiasingMode.FastApproximateAntialiasing;
+            data.dithering=true;
             var rig=Find("CM Fixed Television Camera");
             rig.SetPositionAndRotation(pos,rot);
             var screen=Find("CameraScreenAnchor");
             if(screen!=null)
             {
-                screen.rotation=rot*Quaternion.Euler(-.912f,0,0);
-                screen.position=pos-screen.forward*.04f;
+                // This is the physical TV glass / ending observer entry, independent of the distant lens.
+                screen.rotation=Quaternion.Euler(2.088f,0,0);
+                screen.position=new Vector3(0,1.38f,-2.11f)-screen.forward*.04f;
             }
             foreach(var component in rig.GetComponents<Component>())
             {
@@ -344,15 +377,15 @@ namespace ConGame.Editor
         {
             var ceiling=Find("PRP_CeilingLamp");
             var table=Find("PRP_TableLamp");
-            ConfigurePractical(ceiling,.65f,7);
+            ConfigurePractical(ceiling,1.1f,7);
             ConfigurePractical(table,.35f,4.5f);
             foreach(var bounce in All<PracticalLightBounce>())
             {
-                float ratio=bounce.name=="RoomBounce"?1f:bounce.name=="CeilingBounce"?.8f:.35f;
+                float ratio=bounce.name=="RoomBounce"?1.1f:bounce.name=="CeilingBounce"?.28f:.35f;
                 bounce.Configure(bounce.SourceLight,bounce.TargetLight,ratio);
             }
             RenderSettings.ambientMode=AmbientMode.Flat;
-            RenderSettings.ambientLight=new Color(.065f,.065f,.055f);
+            RenderSettings.ambientLight=new Color(.043f,.038f,.028f);
             RenderSettings.reflectionIntensity=.18f;
         }
 
@@ -361,7 +394,7 @@ namespace ConGame.Editor
             var emitter=host.Find("PracticalEmitter");
             if(emitter==null) throw new InvalidOperationException(host.name+" missing wired practical light.");
             var light=emitter.GetComponent<Light>();
-            light.color=new Color(1,.91f,.80f);
+            light.color=new Color(1,.85f,.66f);
             light.intensity=intensity;
             light.range=range;
             light.shadows=LightShadows.Soft;
@@ -374,6 +407,7 @@ namespace ConGame.Editor
             var pipeline=GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
             if(pipeline==null) throw new InvalidOperationException("The main shot requires URP.");
             pipeline.supportsHDR=true;EditorUtility.SetDirty(pipeline);
+            pipeline.colorGradingMode=ColorGradingMode.HighDynamicRange;
             var renderer=AssetDatabase.LoadAssetAtPath<UniversalRendererData>("Assets/_Game/Content/Config/RP_ConGame_Renderer.asset");
             renderer.postProcessData=AssetDatabase.LoadAssetAtPath<PostProcessData>("Packages/com.unity.render-pipelines.universal/Runtime/Data/PostProcessData.asset");
             if(renderer.postProcessData==null) throw new InvalidOperationException("URP post-process resources are missing.");
@@ -385,15 +419,15 @@ namespace ConGame.Editor
             var volume=All<Volume>().First(v=>v.name=="MV Room Grade");
             var profile=volume.sharedProfile;
             var color=Get<ColorAdjustments>(profile);
-            color.postExposure.Override(.3f);
+            color.postExposure.Override(.6f);
             color.contrast.Override(9);
             color.saturation.Override(-10);
             Get<Tonemapping>(profile).mode.Override(TonemappingMode.ACES);
-            Get<WhiteBalance>(profile).temperature.Override(4);
+            Get<WhiteBalance>(profile).temperature.Override(11);
             var vignette=Get<Vignette>(profile);
-            vignette.intensity.Override(.34f);vignette.smoothness.Override(.62f);
+            vignette.intensity.Override(.32f);vignette.smoothness.Override(.65f);
             var grain=Get<FilmGrain>(profile);
-            grain.type.Override(FilmGrainLookup.Medium1);grain.intensity.Override(.18f);grain.response.Override(.75f);
+            grain.type.Override(FilmGrainLookup.Medium1);grain.intensity.Override(.28f);grain.response.Override(.65f);
             var bloom=Get<Bloom>(profile);
             bloom.intensity.Override(.12f);bloom.threshold.Override(1.25f);
             foreach(var component in profile.components) EditorUtility.SetDirty(component);
@@ -420,7 +454,7 @@ namespace ConGame.Editor
             {
                 var mesh=UnityEngine.Object.Instantiate(go.GetComponent<MeshFilter>().sharedMesh);
                 mesh.name="FloralWallUV";
-                mesh.uv=mesh.uv.Select(uv=>new Vector2(uv.x*size.x/2.8f,uv.y*size.y/2.8f)).ToArray();
+                mesh.uv=mesh.uv.Select(uv=>new Vector2(uv.x*size.x/1.8f,uv.y*size.y/1.8f)).ToArray();
                 string path=MvMainShotAssets.Root+"/"+name.Replace(" ","")+"UV.asset";
                 var existing=AssetDatabase.LoadAssetAtPath<Mesh>(path);
                 if(existing==null) AssetDatabase.CreateAsset(mesh,path);

@@ -34,9 +34,9 @@ Unity 固定机位死亡循环解谜游戏。玩法与剧情设计位于 `docs/`
 
 架构说明见 `docs/technical_architecture.md`。
 
-## MV 主镜头 / Round 1（2026-11-01）
+## MV 主镜头（2026-11-01）
 
-`Room_M1.unity` 已按 `art/reference/mv_frames/mv_t0006.0s.jpg` 调整固定正面机位、家具与灯光，可直接从 Bootstrap 进入。菜单 `ConGame > Art > Build Reference Main Shot (Round 1)` 在现有玩法接线之上重建这次的视觉细节，并重烘焙导航；程序生成资产保存在 `Assets/_Game/Art/MainShot_20261101/`。本轮以真实帧为参照，早期未看 MV 的文档不作为外观依据。
+`Room_M1.unity` 已按 `art/reference/mv_frames/mv_t0006.0s.jpg` 调整固定正面机位、家具与灯光，可直接从 Bootstrap 进入。菜单 `ConGame > Art > Build Reference Main Shot (Round 2)` 在现有玩法接线之上重建这次的视觉细节，并重烘焙导航；程序生成资产保存在 `Assets/_Game/Art/MainShot_20261101/`。本轮以真实帧为参照，早期未看 MV 的文档不作为外观依据。
 
 可重复的批处理入口（均保留图形设备，不使用 `-nographics`）：
 
@@ -54,4 +54,10 @@ DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
 
 默认输出 `/workspace/ref/progress.png`（1920×1080），可用 `-mvScreenshot <path>` 覆盖。`ConGame.Editor.MvMainShotBuilder.Capture` 则直接捕获已保存场景的主相机，不推进玩法。捕获包含 URP 调色、暗角和颗粒。
 
-本轮验证：Unity `6000.4.6f1` 编译零错误；EditMode `169/173`，所选 PlayMode `10/14`（导航、主场景 smoke、灯光跟随与循环重置通过）。四个 EditMode 失败项涉及 aim fallback 默认值与 SemanticVfx 事件，四个 PlayMode 失败项涉及输入注入后的起身、地板移动、被子拾取与台灯开关；这八项均在原始场景/配置基线复测中复现。批处理日志与 NUnit XML 位于 `/workspace/ref/mv_*`。
+Round 1 验证：Unity `6000.4.6f1` 编译零错误；EditMode `169/173`，所选 PlayMode `10/14`（导航、主场景 smoke、灯光跟随与循环重置通过）。四个 EditMode 失败项涉及 aim fallback 默认值与 SemanticVfx 事件，四个 PlayMode 失败项涉及输入注入后的起身、地板移动、被子拾取与台灯开关；这八项均在原始场景/配置基线复测中复现。批处理日志与 NUnit XML 位于 `/workspace/ref/mv_*`。
+
+Round 2：相机后移至 `(0, 1.55, -5.2)`，垂直 FOV `36°`，俯角 `3°`，让左侧书柜、完整门框、天花边缘与更多地板入镜。固定机位使用独立的观看锚点；前墙与电视等前景仅在固定视角剖开，第一人称恢复可见，结局的电视前出生点仍留在房间内。角色默认在木椅上面向镜头坐着；模型偏移补偿 CharacterController 的 `0.08m` skin width，坐姿再单独校准鞋底与椅面。墙纸每组玫瑰间隔由 `0.35m` 缩为 `0.225m`；被褥采用更少、更宽的褶皱，并加强暖琥珀色、暗角与颗粒，压暗天花。
+
+截图现在使用 `RenderPipeline.StandardRequest` 更新 Volume 后捕获，避免 `SingleCameraRequest` 跳过 Volume 更新造成 PNG 缺失调色、暗角和颗粒。可在上述运行捕获命令末尾加 `-mvStanding true -mvScreenshot /workspace/ref/round2_standing.png`，直接触发坐姿 presenter 的起身方法并检查站姿接地；这不代替真实设备输入测试。
+
+Round 2 验证：Unity `6000.4.6f1` 编译零错误，导航重烘焙后全部战术锚点可达。所选 PlayMode `8/10`：新增的无输入坐姿保持、坐/站实际鞋底接地、固定镜头构图与第一人称剖面恢复测试通过，主场景 smoke、导航、灯光跟随、结局接管测试通过。剩余两项仍是 Round 1 已复现的键盘注入起身/地板移动失败，本轮没有修改输入系统。最终场景再次运行主场景 smoke、坐/站与镜头、导航三项，`3/3` 通过。日志与 XML：`/workspace/ref/mv_round2_playmode_verified.*`、`/workspace/ref/mv_round2_final_smoke.*`；最终游戏相机图：`/workspace/ref/progress.png`。

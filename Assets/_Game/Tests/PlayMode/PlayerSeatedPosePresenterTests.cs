@@ -4,6 +4,7 @@ using ConGame.Bootstrap;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Presentation.Animation;
+using ConGame.Presentation.Camera;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Input;
@@ -44,6 +45,78 @@ namespace ConGame.Tests.PlayMode
             }
 
             _room = default;
+        }
+
+        [UnityTest]
+        public IEnumerator MainShotKeepsIdlePlayerGroundedAndCutawayOnlyInFixedView()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+
+            Camera camera = FindInRoom<Camera>();
+            camera.aspect = 16f / 9f; // The deliverable shot is 1920 x 1080; Test Runner uses its own Game View size.
+            Vector3 cameraPosition = camera.transform.position;
+            Quaternion cameraRotation = camera.transform.rotation;
+            yield return new WaitForSeconds(4.5f);
+
+            var facts = FindInRoom<GameplayFactService>();
+            var motor = FindInRoom<PlayerMotor>();
+            var presenter = FindInRoom<PlayerSeatedPosePresenter>();
+            var chair = FindInRoomTransform("FUR_WoodChair");
+            AssertSeatedAtChair(facts, motor, presenter, chair);
+            var animator = motor.GetComponentInChildren<Animator>();
+            Assert.That(animator.GetBoneTransform(HumanBodyBones.Hips).position.y,
+                Is.InRange(.58f, .7f), "The hips should meet the raised wooden seat.");
+            foreach (var foot in new[] { HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot })
+                Assert.That(animator.GetBoneTransform(foot).position.y, Is.InRange(.09f, .17f),
+                    "The seated feet must meet the floor rather than hang above it.");
+            AssertSolesOnFloor(motor);
+            Assert.That(Vector3.Dot(motor.transform.forward, cameraPosition - motor.transform.position), Is.GreaterThan(0),
+                "The seated man should face the audience.");
+            Assert.That(Vector3.Distance(camera.transform.position, cameraPosition), Is.LessThan(.001f));
+            Assert.That(Quaternion.Angle(camera.transform.rotation, cameraRotation), Is.LessThan(.01f));
+            foreach (var point in new[] {
+                new Vector3(-3f, 2.6f, .9f), new Vector3(3.1f, 1.18f, 1.9f),
+                new Vector3(0, 3.1f, 2.595f), new Vector3(0, 0, -.25f) })
+            {
+                var viewport = camera.WorldToViewportPoint(point);
+                Assert.That(viewport.x, Is.InRange(0f, 1f), "The stage edges must fit horizontally.");
+                Assert.That(viewport.y, Is.InRange(0f, 1f), "The ceiling and foreground floor must fit vertically.");
+                Assert.That(viewport.z, Is.GreaterThan(0));
+            }
+
+            // The distant stage lens must not displace the playable ending entry beyond the front wall.
+            Assert.That(FindInRoomTransform("EndingObserverEntry").position.z, Is.GreaterThan(-2.6f));
+            int cutawayMask = 1 << LayerMask.NameToLayer("MainShotCutaway");
+            Assert.That(camera.cullingMask & cutawayMask, Is.Zero);
+            var mode = FindInRoom<CameraModeController>();
+            mode.SwitchToFirstPerson();
+            Assert.That(camera.cullingMask & cutawayMask, Is.Not.Zero,
+                "First person must restore the front wall and television.");
+            mode.SwitchToFixed();
+            Assert.That(camera.cullingMask & cutawayMask, Is.Zero);
+
+            // Exercise the pose transition separately from device injection (covered by the input integration test).
+            presenter.SendMessage("OnMeaningfulAction", SendMessageOptions.RequireReceiver);
+            yield return new WaitForSeconds(.5f);
+            Assert.That(presenter.IsAwakeningSeated, Is.False);
+            AssertSolesOnFloor(motor);
+        }
+
+        private static void AssertSolesOnFloor(PlayerMotor motor)
+        {
+            foreach (var skin in motor.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                var mesh = new Mesh();
+                skin.BakeMesh(mesh, true);
+                float soleY = float.PositiveInfinity;
+                foreach (var vertex in mesh.vertices)
+                    soleY = Mathf.Min(soleY, skin.transform.TransformPoint(vertex).y);
+                Object.Destroy(mesh);
+                Assert.That(soleY, Is.InRange(-.02f, .03f), "The actual shoe soles must meet the carpet.");
+            }
         }
 
         [UnityTest]

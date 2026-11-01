@@ -15,7 +15,8 @@ namespace ConGame.Presentation.Animation
     [DisallowMultipleComponent]
     public sealed class PlayerSeatedPosePresenter : MonoBehaviour, ILoopResettable
     {
-        private const float SeatedVisualDrop = 0.4f;
+        // Calibrated to the imported chair pose's shoe soles, not its ankle joints.
+        private const float SeatedVisualDrop = 0.205f;
         private const float StandBlendSeconds = 0.25f;
 
         [SerializeField] private LoopDirector loop;

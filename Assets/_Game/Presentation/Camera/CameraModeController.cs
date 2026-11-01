@@ -9,6 +9,8 @@ namespace ConGame.Presentation.Camera
     {
         [SerializeField] private GameObject fixedCameraRig;
         [SerializeField] private GameObject firstPersonCameraRig;
+        [SerializeField] private LayerMask fixedViewHiddenLayers;
+        [SerializeField] private Transform fixedViewAnchor;
 
         private Vector3 _fixedPosition;
         private Quaternion _fixedRotation;
@@ -26,6 +28,13 @@ namespace ConGame.Presentation.Camera
         public void AlignFixedView(Transform screenAnchor)
         {
             if (screenAnchor == null || fixedCameraRig == null) return;
+            if (fixedViewAnchor != null)
+            {
+                _fixedPosition = fixedViewAnchor.position;
+                _fixedRotation = fixedViewAnchor.rotation;
+                fixedCameraRig.transform.SetPositionAndRotation(_fixedPosition, _fixedRotation);
+                return;
+            }
             // The viewer looks out through the television glass into the room.
             _fixedPosition = screenAnchor.position + screenAnchor.forward * 0.04f;
             _fixedRotation = screenAnchor.rotation * Quaternion.Euler(.912f, 0f, 0f);
@@ -43,6 +52,7 @@ namespace ConGame.Presentation.Camera
         public void SwitchToFixed()
         {
             IsFirstPerson = false;
+            SetCutawayVisible(false);
             if (fixedCameraRig != null)
             {
                 fixedCameraRig.SetActive(true);
@@ -57,6 +67,7 @@ namespace ConGame.Presentation.Camera
         public void SwitchToFirstPerson()
         {
             IsFirstPerson = true;
+            SetCutawayVisible(true);
             if (fixedCameraRig != null)
             {
                 fixedCameraRig.SetActive(false);
@@ -66,6 +77,14 @@ namespace ConGame.Presentation.Camera
             {
                 firstPersonCameraRig.SetActive(true);
             }
+        }
+
+        private void SetCutawayVisible(bool visible)
+        {
+            var camera = UnityEngine.Camera.main;
+            if (camera == null) return;
+            if (visible) camera.cullingMask |= fixedViewHiddenLayers.value;
+            else camera.cullingMask &= ~fixedViewHiddenLayers.value;
         }
 
         public void CaptureInitialState()
