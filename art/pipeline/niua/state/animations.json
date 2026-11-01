@@ -48,6 +48,223 @@
       "r2_key": "outputs/37a4b208-b622-422d-92fb-64954ee07f8c/retarget.glb",
       "url": "https://cdn.niua.ohao.tech/outputs/37a4b208-b622-422d-92fb-64954ee07f8c/retarget.glb",
       "file": "art\\exports\\animations\\AN_Killer_AimFire.glb"
+    },
+    "AN_Player_Pickup": {
+      "status": "completed",
+      "job_id": "bb4baacb-f1d8-4e19-8cb0-6d4bf2b7b019",
+      "r2_key": "outputs/bb4baacb-f1d8-4e19-8cb0-6d4bf2b7b019/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/bb4baacb-f1d8-4e19-8cb0-6d4bf2b7b019/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Player_Pickup.glb"
+    },
+    "AN_Player_Throw": {
+      "status": "completed",
+      "job_id": "a8761955-ecbc-4b51-a521-d6b34e9f3b8c",
+      "r2_key": "outputs/a8761955-ecbc-4b51-a521-d6b34e9f3b8c/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/a8761955-ecbc-4b51-a521-d6b34e9f3b8c/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Player_Throw.glb"
+    },
+    "AN_Killer_DodgeSide": {
+      "status": "completed",
+      "job_id": "63f45f44-1946-4db0-8d32-4372545bc6e3",
+      "r2_key": "outputs/63f45f44-1946-4db0-8d32-4372545bc6e3/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/63f45f44-1946-4db0-8d32-4372545bc6e3/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_DodgeSide.glb"
+    },
+    "AN_Killer_KickDoor": {
+      "status": "completed",
+      "job_id": "72dd34a3-d015-47a0-a5f5-58fb9262b173",
+      "r2_key": "outputs/72dd34a3-d015-47a0-a5f5-58fb9262b173/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/72dd34a3-d015-47a0-a5f5-58fb9262b173/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_KickDoor.glb"
+    },
+    "AN_Killer_Stumble": {
+      "status": "completed",
+      "job_id": "a13e5bb6-baf2-4304-9778-8852b87c59d6",
+      "r2_key": "outputs/a13e5bb6-baf2-4304-9778-8852b87c59d6/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/a13e5bb6-baf2-4304-9778-8852b87c59d6/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_Stumble.glb"
+    },
+    "AN_Killer_Fall": {
+      "status": "completed",
+      "job_id": "37b3b424-d8af-4624-b36c-0641ab0912e2",
+      "r2_key": "outputs/37b3b424-d8af-4624-b36c-0641ab0912e2/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/37b3b424-d8af-4624-b36c-0641ab0912e2/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_Fall.glb"
+    },
+    "AN_Killer_BlockLight": {
+      "status": "completed",
+      "job_id": "2d71d88b-f66b-4f55-8da1-ba388b2f4c86",
+      "r2_key": "outputs/2d71d88b-f66b-4f55-8da1-ba388b2f4c86/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/2d71d88b-f66b-4f55-8da1-ba388b2f4c86/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_BlockLight.glb"
+    },
+    "AN_Killer_DrawBackupFire": {
+      "status": "completed",
+      "job_id": "af895f1f-5fde-44c7-8c8e-27fe970eae30",
+      "r2_key": "outputs/af895f1f-5fde-44c7-8c8e-27fe970eae30/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/af895f1f-5fde-44c7-8c8e-27fe970eae30/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_DrawBackupFire.glb"
+    },
+    "POSE_Player_SitChair": {
+      "status": "completed",
+      "job_id": "cb15b813-3670-4885-8137-260b4a587b2a",
+      "r2_key": "outputs/cb15b813-3670-4885-8137-260b4a587b2a/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/cb15b813-3670-4885-8137-260b4a587b2a/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_SitChair.glb"
+    },
+    "POSE_Player_CrouchHide": {
+      "status": "completed",
+      "job_id": "7a66976f-758f-425e-9fa4-6516cca7eeee",
+      "r2_key": "outputs/7a66976f-758f-425e-9fa4-6516cca7eeee/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/7a66976f-758f-425e-9fa4-6516cca7eeee/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_CrouchHide.glb"
+    },
+    "POSE_Player_Prone": {
+      "status": "completed",
+      "job_id": "cd4e6820-9ac4-4313-9701-33d2e7e0d26c",
+      "r2_key": "outputs/cd4e6820-9ac4-4313-9701-33d2e7e0d26c/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/cd4e6820-9ac4-4313-9701-33d2e7e0d26c/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_Prone.glb"
+    },
+    "POSE_Player_KneelHandsUp": {
+      "status": "completed",
+      "job_id": "55e84411-253c-4b86-b7d7-c20d258e6a7e",
+      "r2_key": "outputs/55e84411-253c-4b86-b7d7-c20d258e6a7e/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/55e84411-253c-4b86-b7d7-c20d258e6a7e/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_KneelHandsUp.glb"
+    },
+    "POSE_Player_HoldSmall_R": {
+      "status": "completed",
+      "job_id": "5a793c37-ff1e-4156-8f87-dcbf28f3f62a",
+      "r2_key": "outputs/5a793c37-ff1e-4156-8f87-dcbf28f3f62a/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/5a793c37-ff1e-4156-8f87-dcbf28f3f62a/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_HoldSmall_R.glb"
+    },
+    "POSE_Player_HoldBat": {
+      "status": "completed",
+      "job_id": "173743a9-0891-4c9c-8bd6-465718dec49e",
+      "r2_key": "outputs/173743a9-0891-4c9c-8bd6-465718dec49e/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/173743a9-0891-4c9c-8bd6-465718dec49e/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_HoldBat.glb"
+    },
+    "POSE_Player_CarryLarge": {
+      "status": "completed",
+      "job_id": "a333610c-f2bb-4b01-98de-5b9d7481396b",
+      "r2_key": "outputs/a333610c-f2bb-4b01-98de-5b9d7481396b/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/a333610c-f2bb-4b01-98de-5b9d7481396b/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_CarryLarge.glb"
+    },
+    "POSE_Player_AimPistol": {
+      "status": "completed",
+      "job_id": "cc6d40df-dacb-4474-8403-4e52d189f757",
+      "r2_key": "outputs/cc6d40df-dacb-4474-8403-4e52d189f757/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/cc6d40df-dacb-4474-8403-4e52d189f757/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Player_AimPistol.glb"
+    },
+    "POSE_Killer_LowReady": {
+      "status": "completed",
+      "job_id": "9de7fe46-43c3-4c8e-920e-68678f947ecf",
+      "r2_key": "outputs/9de7fe46-43c3-4c8e-920e-68678f947ecf/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/9de7fe46-43c3-4c8e-920e-68678f947ecf/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Killer_LowReady.glb"
+    },
+    "POSE_Killer_Kneel": {
+      "status": "completed",
+      "job_id": "a94c55b5-e287-49ee-8816-2143f013dc26",
+      "r2_key": "outputs/a94c55b5-e287-49ee-8816-2143f013dc26/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/a94c55b5-e287-49ee-8816-2143f013dc26/retarget.glb",
+      "file": "art\\exports\\animations\\POSE_Killer_Kneel.glb"
+    },
+    "PAIR_D08_PlayerSide": {
+      "status": "completed",
+      "job_id": "5a41e2a9-7856-4dd1-a299-06d9fcddfbeb",
+      "r2_key": "outputs/5a41e2a9-7856-4dd1-a299-06d9fcddfbeb/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/5a41e2a9-7856-4dd1-a299-06d9fcddfbeb/retarget.glb",
+      "file": "art\\exports\\animations\\PAIR_D08_PlayerSide.glb"
+    },
+    "PAIR_D08_KillerSide": {
+      "status": "completed",
+      "job_id": "b8e55020-df85-487e-9e56-2e267682030a",
+      "r2_key": "outputs/b8e55020-df85-487e-9e56-2e267682030a/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/b8e55020-df85-487e-9e56-2e267682030a/retarget.glb",
+      "file": "art\\exports\\animations\\PAIR_D08_KillerSide.glb"
+    },
+    "PAIR_D11_PlayerSide": {
+      "status": "completed",
+      "job_id": "6e91a4ae-c946-4429-96bf-0687852c6d82",
+      "r2_key": "outputs/6e91a4ae-c946-4429-96bf-0687852c6d82/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/6e91a4ae-c946-4429-96bf-0687852c6d82/retarget.glb",
+      "file": "art\\exports\\animations\\PAIR_D11_PlayerSide.glb"
+    },
+    "PAIR_D11_KillerSide": {
+      "status": "completed",
+      "job_id": "270968bc-8af0-4976-b8b9-2bf225051fc6",
+      "r2_key": "outputs/270968bc-8af0-4976-b8b9-2bf225051fc6/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/270968bc-8af0-4976-b8b9-2bf225051fc6/retarget.glb",
+      "file": "art\\exports\\animations\\PAIR_D11_KillerSide.glb"
+    },
+    "PAIR_D21_PlayerSide": {
+      "status": "completed",
+      "job_id": "e8cef4cf-d6af-4caa-b9fc-291ed15cbddb",
+      "r2_key": "outputs/e8cef4cf-d6af-4caa-b9fc-291ed15cbddb/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/e8cef4cf-d6af-4caa-b9fc-291ed15cbddb/retarget.glb",
+      "file": "art\\exports\\animations\\PAIR_D21_PlayerSide.glb"
+    },
+    "PAIR_D21_KillerSide": {
+      "status": "completed",
+      "job_id": "435eb92f-3487-4541-9434-73592ab65450",
+      "r2_key": "outputs/435eb92f-3487-4541-9434-73592ab65450/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/435eb92f-3487-4541-9434-73592ab65450/retarget.glb",
+      "file": "art\\exports\\animations\\PAIR_D21_KillerSide.glb"
+    },
+    "AN_Player_Climb": {
+      "status": "completed",
+      "job_id": "f2d56466-9a0c-41e2-8d45-5d82f4a9c845",
+      "r2_key": "outputs/f2d56466-9a0c-41e2-8d45-5d82f4a9c845/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/f2d56466-9a0c-41e2-8d45-5d82f4a9c845/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Player_Climb.glb"
+    },
+    "AN_Player_PutDownLarge": {
+      "status": "completed",
+      "job_id": "45b78bfd-292a-4b25-bf30-c19991eca711",
+      "r2_key": "outputs/45b78bfd-292a-4b25-bf30-c19991eca711/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/45b78bfd-292a-4b25-bf30-c19991eca711/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Player_PutDownLarge.glb"
+    },
+    "AN_Killer_AimEnter": {
+      "status": "completed",
+      "job_id": "15d9a7d0-896b-4544-a62e-aa10ac6cd83a",
+      "r2_key": "outputs/15d9a7d0-896b-4544-a62e-aa10ac6cd83a/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/15d9a7d0-896b-4544-a62e-aa10ac6cd83a/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_AimEnter.glb"
+    },
+    "AN_Killer_AimHold": {
+      "status": "completed",
+      "job_id": "5073275b-09c2-4ec6-976d-1a6a6b62afde",
+      "r2_key": "outputs/5073275b-09c2-4ec6-976d-1a6a6b62afde/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/5073275b-09c2-4ec6-976d-1a6a6b62afde/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_AimHold.glb"
+    },
+    "AN_Killer_Fire": {
+      "status": "completed",
+      "job_id": "51012bbf-1baa-4f46-ace3-45795696b301",
+      "r2_key": "outputs/51012bbf-1baa-4f46-ace3-45795696b301/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/51012bbf-1baa-4f46-ace3-45795696b301/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_Fire.glb"
+    },
+    "AN_Killer_SearchLoop": {
+      "status": "completed",
+      "job_id": "46e0dd7e-3000-456d-a56c-e9c9914160b9",
+      "r2_key": "outputs/46e0dd7e-3000-456d-a56c-e9c9914160b9/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/46e0dd7e-3000-456d-a56c-e9c9914160b9/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_SearchLoop.glb"
+    },
+    "AN_Killer_Run": {
+      "status": "completed",
+      "job_id": "9ab977cf-36a0-4a1e-8688-a95359185ebb",
+      "r2_key": "outputs/9ab977cf-36a0-4a1e-8688-a95359185ebb/retarget.glb",
+      "url": "https://cdn.niua.ohao.tech/outputs/9ab977cf-36a0-4a1e-8688-a95359185ebb/retarget.glb",
+      "file": "art\\exports\\animations\\AN_Killer_Run.glb"
     }
   }
 }

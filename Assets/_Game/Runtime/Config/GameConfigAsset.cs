@@ -37,6 +37,11 @@ namespace ConGame.Runtime.Config
         [SerializeField, Range(45f, 140f)]
         private float breachOpenAngle = 105f;
 
+        [Header("Killer hunt")]
+        [SerializeField] private KillerHuntSettings killerHunt = KillerHuntSettings.Default;
+        [SerializeField, Min(0.1f)] private float killImpactHoldSeconds = 0.8f;
+        [SerializeField, Min(0.1f)] private float playerFootstepNoiseInterval = 0.42f;
+
         public float WalkSpeed => walkSpeed;
         public float SprintSpeed => sprintSpeed;
         public float TurnSpeedDegrees => turnSpeedDegrees;
@@ -46,6 +51,9 @@ namespace ConGame.Runtime.Config
         public float BreachDuration => breachDuration;
         public float BreachOpenAngle => breachOpenAngle;
         public float KillerCounterplayDelay => killerCounterplayDelay;
+        public KillerHuntSettings KillerHunt => killerHunt.Validated();
+        public float KillImpactHoldSeconds => killImpactHoldSeconds;
+        public float PlayerFootstepNoiseInterval => playerFootstepNoiseInterval;
 
         public EntryClockSettings CreateEntryClockSettings()
         {

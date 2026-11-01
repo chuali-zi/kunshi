@@ -17,13 +17,24 @@ namespace ConGame.Runtime.Lighting
 
         public void Configure(BreakableLight ceiling, BreakableLight table, GameplayFactService factService)
         {
+            UnbindEvents();
             ceilingLight = ceiling;
             tableLight = table;
             facts = factService;
+            if (isActiveAndEnabled)
+            {
+                BindEvents();
+            }
         }
 
         private void OnEnable()
         {
+            BindEvents();
+        }
+
+        private void BindEvents()
+        {
+            UnbindEvents();
             if (ceilingLight != null)
             {
                 ceilingLight.BrokenChanged += OnLightChanged;
@@ -41,6 +52,11 @@ namespace ConGame.Runtime.Lighting
         }
 
         private void OnDisable()
+        {
+            UnbindEvents();
+        }
+
+        private void UnbindEvents()
         {
             if (ceilingLight != null)
             {
@@ -73,7 +89,11 @@ namespace ConGame.Runtime.Lighting
             {
                 CurrentState = RoomLightState.PersistentBlack;
             }
-            else if (!tableLight.IsPowered)
+            // RecoverableDark means the killer can physically reach and turn the
+            // table lamp back on. A carried/unplugged lamp is not that state;
+            // keep it out of the D18 candidate instead of advertising a remote
+            // repair that cannot happen.
+            else if (!tableLight.IsPowered && tableLight.IsCableConnected && !tableLight.IsDraped)
             {
                 CurrentState = RoomLightState.RecoverableDark;
             }

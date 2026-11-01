@@ -61,6 +61,9 @@ def bevel(obj, width=0.005, segments=3):
     m.width = width
     m.segments = segments
     m.limit_method = 'ANGLE'
+    m.harden_normals = True
+    m.mark_sharp = True
+    m.face_strength_mode = 'FSTR_AFFECTED'
     apply_mod(obj, m.name)
 
 def apply_scale(obj):

@@ -4,6 +4,7 @@ using ConGame.Domain.Interaction;
 using ConGame.Domain.Counterplay;
 using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Data;
+using ConGame.Presentation.M1;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -35,6 +36,7 @@ namespace ConGame.Editor
             errors += ValidateBuildScenes(log);
             errors += ValidateProjectSettings(log);
             errors += ValidateRoomAnchors(log);
+            errors += ValidateDeliveredArt(log);
 
             if (log && errors == 0)
             {
@@ -212,6 +214,59 @@ namespace ConGame.Editor
                     {
                         Debug.LogError("CRT fullscreen shader missing (ConGame/CRT/FullscreenOverlay).");
                     }
+                }
+            }
+
+            return errors;
+        }
+
+        private static int ValidateDeliveredArt(bool log)
+        {
+            int errors = 0;
+            string[] performanceGuids = AssetDatabase.FindAssets(
+                "t:M1GreyboxPlayableAsset",
+                new[] { "Assets/_Game/Content/Performances" });
+            if (performanceGuids.Length != CounterplaySeedLibrary.All.Count)
+            {
+                errors++;
+                if (log)
+                {
+                    Debug.LogError(
+                        $"Expected {CounterplaySeedLibrary.All.Count} animation-backed performances, " +
+                        $"found {performanceGuids.Length}.");
+                }
+            }
+
+            for (int i = 0; i < performanceGuids.Length; i++)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(performanceGuids[i]);
+                M1GreyboxPlayableAsset performance =
+                    AssetDatabase.LoadAssetAtPath<M1GreyboxPlayableAsset>(path);
+                if (performance != null && performance.PlayerAnimation != null &&
+                    performance.KillerAnimation != null)
+                {
+                    continue;
+                }
+
+                errors++;
+                if (log)
+                {
+                    Debug.LogError($"Performance must reference player and killer animation clips: {path}",
+                        performance);
+                }
+            }
+
+            string[] roomDependencies = AssetDatabase.GetDependencies(ExpectedScenes[2], true);
+            bool hasHolster = Array.IndexOf(roomDependencies,
+                "Assets/_Game/Art/Props/PRP_KillerHolster.fbx") >= 0;
+            bool hasBackupPistol = Array.IndexOf(roomDependencies,
+                "Assets/_Game/Art/Props/PRP_Pistol_Backup.fbx") >= 0;
+            if (!hasHolster || !hasBackupPistol)
+            {
+                errors++;
+                if (log)
+                {
+                    Debug.LogError("Room_M1 must mount the killer holster and its visible backup pistol.");
                 }
             }
 

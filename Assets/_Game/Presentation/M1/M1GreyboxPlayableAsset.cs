@@ -22,6 +22,8 @@ namespace ConGame.Presentation.M1
         [SerializeField] private QteWindowDefinition[] qteWindows = Array.Empty<QteWindowDefinition>();
         [SerializeField] private PerformanceBranchDefinition[] resultBranches =
             Array.Empty<PerformanceBranchDefinition>();
+        [SerializeField] private AnimationClip playerAnimation;
+        [SerializeField] private AnimationClip killerAnimation;
 
         public M1GreyboxDeathStyle Style => style;
         public string OutcomeId => outcomeId ?? string.Empty;
@@ -29,6 +31,8 @@ namespace ConGame.Presentation.M1
         public QteWindowDefinition[] QteWindows => qteWindows ?? Array.Empty<QteWindowDefinition>();
         public PerformanceBranchDefinition[] ResultBranches =>
             resultBranches ?? Array.Empty<PerformanceBranchDefinition>();
+        public AnimationClip PlayerAnimation => playerAnimation;
+        public AnimationClip KillerAnimation => killerAnimation;
         public float SequenceDuration => Mathf.Max(0.25f, sequenceDuration);
 
         public float TotalQteDuration
@@ -69,6 +73,12 @@ namespace ConGame.Presentation.M1
             heldItemPolicy = itemPolicy;
             qteWindows = CopyWindows(windows);
             resultBranches = CopyBranches(branches);
+        }
+
+        public void ConfigureAnimations(AnimationClip playerClip, AnimationClip killerClip)
+        {
+            playerAnimation = playerClip;
+            killerAnimation = killerClip;
         }
 
         public bool TryResolveBranch(

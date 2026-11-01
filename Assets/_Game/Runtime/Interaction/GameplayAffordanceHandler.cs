@@ -72,8 +72,7 @@ namespace ConGame.Runtime.Interaction
                     break;
                 case GameplayAffordanceKind.PullRugTrap:
                     facts.SetTrap(TrapState.RugArmed);
-                    facts.SetTrapPulled(true);
-                    ResolveEvents()?.EmitStimulus(KillerStimulusType.TrapPull, "rug");
+                    facts.SetTrapPulled(false);
                     break;
                 case GameplayAffordanceKind.BlockDoorWithFurniture:
                     facts.SetDoorBlock(DoorBlockState.Furniture);

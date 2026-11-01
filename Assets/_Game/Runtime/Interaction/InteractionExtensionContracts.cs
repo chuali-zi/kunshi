@@ -32,6 +32,11 @@ namespace ConGame.Runtime.Interaction
         InteractionResult Use(in InteractionContext context);
     }
 
+    public interface IHoldUseHandler : IUseHandler
+    {
+        float HoldSeconds { get; }
+    }
+
     internal sealed class GlareLifetime : MonoBehaviour
     {
         private GameplayFactService _facts;

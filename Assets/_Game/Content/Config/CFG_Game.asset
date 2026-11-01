@@ -22,3 +22,26 @@ MonoBehaviour:
   interactionRadius: 1.2
   throwSpeed: 8
   killerCounterplayDelay: 2.5
+  breachDuration: 0.9
+  breachOpenAngle: 105
+  killerHunt:
+    ViewAngle: 120
+    LitViewDistance: 12
+    DarkViewDistance: 1.5
+    HiddenSearchRevealDistance: 1.35
+    DetectionSeconds: 0.3
+    AimSeconds: 0.7
+    ShootRange: 4.25
+    StandoffDistance: 3
+    SearchSeconds: 8
+    InvestigatePauseSeconds: 1.2
+    NormalHearingRadius: 12
+    LoudHearingRadius: 30
+    PatrolSpeed: 1.25
+    PursuitSpeed: 2.25
+    SprintInterruptSpeed: 5.5
+    ShotImpactDelay: 0.18
+    HitRecoverySeconds: 0.55
+    RepathSeconds: 0.45
+  killImpactHoldSeconds: 0.8
+  playerFootstepNoiseInterval: 0.42

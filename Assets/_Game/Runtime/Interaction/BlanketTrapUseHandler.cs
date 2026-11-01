@@ -27,8 +27,15 @@ namespace ConGame.Runtime.Interaction
 
             FactSnapshot snapshot = facts.CaptureSnapshot();
             StatefulWorldItem item = GetComponent<StatefulWorldItem>();
-            return item != null && item.CurrentSocket != null &&
-                   snapshot.Trap == TrapState.BlanketArmed && !snapshot.TrapPulled;
+            if (item == null || item.CurrentSocket == null ||
+                snapshot.Trap != TrapState.BlanketArmed || snapshot.TrapPulled)
+            {
+                return false;
+            }
+
+            TripTrapController contact = item.CurrentSocket.GetComponent<TripTrapController>() ??
+                                         item.CurrentSocket.GetComponentInParent<TripTrapController>();
+            return contact != null && contact.CanUse(context);
         }
 
         public InteractionResult Use(in InteractionContext context)
@@ -38,10 +45,9 @@ namespace ConGame.Runtime.Interaction
                 return InteractionResult.Rejected;
             }
 
-            FactSnapshot snapshot = facts.CaptureSnapshot();
-            facts.SetTrapPulled(true);
-            events?.EmitStimulus(KillerStimulusType.TrapPull, "blanket");
-            return InteractionResult.Accepted;
+            TripTrapController contact = GetComponent<StatefulWorldItem>()?.CurrentSocket?.GetComponent<TripTrapController>() ??
+                                         GetComponent<StatefulWorldItem>()?.CurrentSocket?.GetComponentInParent<TripTrapController>();
+            return contact == null ? InteractionResult.Rejected : contact.Use(context);
         }
     }
 }

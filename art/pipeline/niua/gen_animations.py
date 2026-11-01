@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 from niua_client import (
@@ -68,7 +69,16 @@ def main() -> int:
             payload["seed"] = args.seed
         key = idem_key("text2motion", item["name"], payload)
         print(f"提交 {item['name']} ...")
-        resp = client.generate("text2motion", payload, key)
+        resp = None
+        for attempt in range(4):  # 网络瞬时失败重试;幂等键保证不重复扣费
+            try:
+                resp = client.generate("text2motion", payload, key)
+                break
+            except Exception as err:
+                print(f"  提交失败(第 {attempt + 1} 次): {err}", file=sys.stderr)
+                if attempt == 3:
+                    raise
+                time.sleep(10)
         state["items"][item["name"]] = {
             "status": "submitted",
             "job_id": resp.get("job_id"),

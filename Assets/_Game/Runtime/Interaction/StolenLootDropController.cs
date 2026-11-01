@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ConGame.Domain.Counterplay;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Interaction;
@@ -7,10 +8,22 @@ using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Events;
 using ConGame.Runtime.Loop;
 using ConGame.Runtime.Player;
+using ConGame.Domain.Choreography;
 using UnityEngine;
 
 namespace ConGame.Runtime.Interaction
 {
+    /// <summary>Plays D22's terminal draw/fire beat and reports its authored cues.</summary>
+    public interface ID22FinalePresentation
+    {
+        bool PlayD22Finale(Action backupDrawCue, Action shotCue, Action completed);
+    }
+
+    public interface ID21FlashlightGrapplePresentation
+    {
+        bool NotifyD21FlashlightPicked(int loopEpoch);
+    }
+
     public enum CounterplayLootWindowState
     {
         Inactive = 0,
@@ -21,12 +34,15 @@ namespace ConGame.Runtime.Interaction
         D22AwaitMainShot = 5,
         D22Dodging = 6,
         D22AwaitMainDryFire = 7,
-        Resolved = 8
+        Resolved = 8,
+        D21Grappling = 9,
+        D21FlashlightRecovery = 10
     }
 
     [DisallowMultipleComponent]
     public sealed class StolenLootDropController : MonoBehaviour, ILoopResettable
     {
+        private static readonly int DodgeHash = Animator.StringToHash("Dodge");
         [SerializeField] private GameObject pistolDrop;
         [SerializeField] private GameObject flashlightDrop;
         [SerializeField] private GameObject backupPistolDrop;
@@ -48,7 +64,18 @@ namespace ConGame.Runtime.Interaction
         private bool _initialFlashlightActive;
         private bool _initialBackupActive;
         private bool _subscribed;
+        private bool _d22FinaleStarted;
+        private ID22FinalePresentation _d22FinalePresentation;
+        private Transform _d22BackupShotCueSource;
+        private ID21FlashlightGrapplePresentation _d21PairedPerformance;
+        private PlayerInteractor _playerInteractor;
+        private Transform _d21PistolDropOrigin;
+        private Transform _d21FlashlightDropOrigin;
+        private int _d21PistolDropHandledEpoch = int.MinValue;
+        private int _d21FlashlightDropHandledEpoch = int.MinValue;
+        private int _d21FlashlightDislodgedEpoch = int.MinValue;
         private int _activeLoopEpoch;
+        private string _activeOutcomeId;
         private float _remainingWindow;
         private float _dodgeElapsed;
         private Vector3 _dodgeStart;
@@ -59,6 +86,33 @@ namespace ConGame.Runtime.Interaction
         public float RemainingWindowSeconds => Mathf.Max(0f, _remainingWindow);
         public FirearmUseHandler MainFirearm => _mainFirearm;
         public FirearmUseHandler BackupFirearm => _backupFirearm;
+        public event Action<int> D21FlashlightSuccess;
+        public event Action<bool, Transform, int> D22ShotCueRequested;
+        public event Action<bool, int> D22BackupVisualRequested;
+
+        public void ConfigureD22FinalePresentation(ID22FinalePresentation presentation)
+        {
+            _d22FinalePresentation = presentation;
+        }
+
+        public void ConfigureD22ShotCueSource(Transform backupVisualOrMuzzle)
+        {
+            _d22BackupShotCueSource = backupVisualOrMuzzle;
+        }
+
+        public void ConfigureD21PairedPerformance(
+            ID21FlashlightGrapplePresentation pairedPerformance,
+            PlayerInteractor playerInteractor)
+        {
+            _d21PairedPerformance = pairedPerformance;
+            _playerInteractor = playerInteractor;
+        }
+
+        public void ConfigureD21DropOrigins(Transform mainPistolVisual, Transform railFlashlightVisual)
+        {
+            _d21PistolDropOrigin = mainPistolVisual;
+            _d21FlashlightDropOrigin = railFlashlightVisual;
+        }
 
         public void Configure(
             GameObject pistol,
@@ -118,7 +172,8 @@ namespace ConGame.Runtime.Interaction
             {
                 string outcomeId = State == CounterplayLootWindowState.D08LootWindow ? "D08" :
                     State == CounterplayLootWindowState.D21Choice ||
-                    State == CounterplayLootWindowState.D21FlashlightArmed ? "D21" : "D22";
+                    State == CounterplayLootWindowState.D21FlashlightArmed ||
+                    State == CounterplayLootWindowState.D21FlashlightRecovery ? "D21" : "D22";
                 CompleteOutcome(outcomeId, false);
             }
         }
@@ -140,8 +195,10 @@ namespace ConGame.Runtime.Interaction
 
         public void Quiesce(in LoopResetContext context)
         {
+            _activeOutcomeId = null;
             State = CounterplayLootWindowState.Inactive;
             _remainingWindow = 0f;
+            _d22FinaleStarted = false;
         }
 
         public void Restore(in LoopResetContext context)
@@ -152,8 +209,13 @@ namespace ConGame.Runtime.Interaction
             _mainFirearm?.Arm(0);
             _backupFirearm?.Arm(0);
             _activeLoopEpoch = context.NextEpoch;
+            _activeOutcomeId = null;
             State = CounterplayLootWindowState.Inactive;
             _remainingWindow = 0f;
+            _d22FinaleStarted = false;
+            _d21PistolDropHandledEpoch = int.MinValue;
+            _d21FlashlightDropHandledEpoch = int.MinValue;
+            _d21FlashlightDislodgedEpoch = int.MinValue;
         }
 
         public void Resume(in LoopResetContext context)
@@ -164,7 +226,116 @@ namespace ConGame.Runtime.Interaction
         {
             if (State == CounterplayLootWindowState.D21FlashlightArmed)
             {
-                CompleteOutcome("D21", true);
+                State = CounterplayLootWindowState.Resolved;
+                _remainingWindow = 0f;
+                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.None);
+                D21FlashlightSuccess?.Invoke(_activeLoopEpoch);
+            }
+        }
+
+        public void NotifyPairedSemanticEvent(in PairedPerformanceSemanticEvent semanticEvent)
+        {
+            if (semanticEvent.LoopEpoch != _activeLoopEpoch ||
+                !string.Equals(semanticEvent.OutcomeId, _activeOutcomeId, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            if (string.Equals(semanticEvent.OutcomeId, "D08", StringComparison.Ordinal) &&
+                semanticEvent.LoopEpoch == _activeLoopEpoch &&
+                string.Equals(semanticEvent.EventId, "D08.LootWindow.Open", StringComparison.Ordinal))
+            {
+                SetActive(pistolDrop, true);
+                SetActiveIfNotHeld(flashlightDrop, false);
+                SetActive(backupPistolDrop, false);
+                PlaceDropNearKiller(pistolDrop, 0.35f);
+                _mainFirearm?.Arm(0);
+                State = CounterplayLootWindowState.D08LootWindow;
+                _remainingWindow = d08LootWindowSeconds;
+                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Grab);
+                return;
+            }
+
+            if (!string.Equals(semanticEvent.OutcomeId, "D21", StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            if (semanticEvent.LoopEpoch != _activeLoopEpoch)
+            {
+                return;
+            }
+
+            if (string.Equals(semanticEvent.EventId, "D21.Pair.Begin", StringComparison.Ordinal))
+            {
+                if (State != CounterplayLootWindowState.D21Choice &&
+                    State != CounterplayLootWindowState.D21Grappling) return;
+                State = CounterplayLootWindowState.D21Grappling;
+                _remainingWindow = 0f;
+                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Qte);
+                return;
+            }
+
+            if (string.Equals(semanticEvent.EventId, "D21.Flashlight.Dislodged", StringComparison.Ordinal))
+            {
+                if (State != CounterplayLootWindowState.D21Grappling) return;
+                if (_d21FlashlightDislodgedEpoch == semanticEvent.LoopEpoch)
+                {
+                    return;
+                }
+
+                _d21FlashlightDislodgedEpoch = semanticEvent.LoopEpoch;
+                InteractableEntity flashlightEntity = flashlightDrop == null
+                    ? null
+                    : flashlightDrop.GetComponent<InteractableEntity>();
+                if (_playerInteractor != null && flashlightEntity != null &&
+                    _playerInteractor.HeldEntity == flashlightEntity)
+                {
+                    _playerInteractor.ForceDropHeld();
+                    _flashlightStateful?.AddFlightImpulse(
+                        ResolveD21TossDirection() * 0.4f + Vector3.up * 0.15f,
+                        Vector3.right * 1.2f + Vector3.up * 0.5f);
+                }
+
+                State = CounterplayLootWindowState.D21Grappling;
+                _remainingWindow = 0f;
+                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.None);
+                return;
+            }
+
+            if (string.Equals(semanticEvent.EventId, "D21.Flashlight.Recovery.Open", StringComparison.Ordinal))
+            {
+                if (State != CounterplayLootWindowState.D21Grappling ||
+                    _d21FlashlightDislodgedEpoch != semanticEvent.LoopEpoch) return;
+                State = CounterplayLootWindowState.D21FlashlightRecovery;
+                _remainingWindow = d21ChoiceWindowSeconds;
+                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Grab);
+                return;
+            }
+
+            if (string.Equals(semanticEvent.EventId, "D21.Pistol.Dropped", StringComparison.Ordinal))
+            {
+                if (_d21PistolDropHandledEpoch == semanticEvent.LoopEpoch)
+                {
+                    return;
+                }
+
+                _d21PistolDropHandledEpoch = semanticEvent.LoopEpoch;
+                LaunchD21Drop(pistolDrop, _pistolStateful, _d21PistolDropOrigin, 0.35f, 4f);
+                TryOpenD21ChoiceWindow(semanticEvent.LoopEpoch);
+                return;
+            }
+
+            if (string.Equals(semanticEvent.EventId, "D21.Flashlight.Dropped", StringComparison.Ordinal))
+            {
+                if (_d21FlashlightDropHandledEpoch == semanticEvent.LoopEpoch)
+                {
+                    return;
+                }
+
+                _d21FlashlightDropHandledEpoch = semanticEvent.LoopEpoch;
+                LaunchD21Drop(flashlightDrop, _flashlightStateful, _d21FlashlightDropOrigin, -0.35f, -4f);
+                TryOpenD21ChoiceWindow(semanticEvent.LoopEpoch);
             }
         }
 
@@ -184,6 +355,7 @@ namespace ConGame.Runtime.Interaction
         {
             EnsureKillerTarget();
             _activeLoopEpoch = loopEpoch;
+            _activeOutcomeId = outcomeId;
             if (string.Equals(outcomeId, "D08", StringComparison.Ordinal))
             {
                 HideWindowLoot();
@@ -194,13 +366,8 @@ namespace ConGame.Runtime.Interaction
 
             if (string.Equals(outcomeId, "D21", StringComparison.Ordinal))
             {
-                SetActive(pistolDrop, true);
-                SetActive(flashlightDrop, true);
-                SetActive(backupPistolDrop, false);
-                _mainFirearm?.Arm(0);
-                State = CounterplayLootWindowState.D21Choice;
-                _remainingWindow = d21ChoiceWindowSeconds;
-                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Grab);
+                // The paired phase owns D21 timing; open the choice window only when
+                // its authored pistol/flashlight drop semantic event arrives.
                 return;
             }
 
@@ -211,6 +378,7 @@ namespace ConGame.Runtime.Interaction
                 SetActive(backupPistolDrop, false);
                 _mainFirearm?.Arm(1);
                 _backupFirearm?.Arm(0);
+                _d22FinaleStarted = false;
                 State = CounterplayLootWindowState.D22AwaitMainShot;
                 _remainingWindow = d22WindowSeconds;
                 adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Use);
@@ -263,9 +431,31 @@ namespace ConGame.Runtime.Interaction
 
         private void OnFlashlightStateChanged(ItemPhysicalState itemState)
         {
-            if (itemState == ItemPhysicalState.Held && State == CounterplayLootWindowState.D21Choice)
+            if (itemState != ItemPhysicalState.Held)
+            {
+                return;
+            }
+
+            if (State == CounterplayLootWindowState.D21Choice)
+            {
+                if (_d21PairedPerformance != null &&
+                    _d21PairedPerformance.NotifyD21FlashlightPicked(_activeLoopEpoch))
+                {
+                    State = CounterplayLootWindowState.D21Grappling;
+                    _remainingWindow = 0f;
+                    adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Qte);
+                    return;
+                }
+
+                State = CounterplayLootWindowState.D21FlashlightArmed;
+                adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Use);
+                return;
+            }
+
+            if (State == CounterplayLootWindowState.D21FlashlightRecovery)
             {
                 State = CounterplayLootWindowState.D21FlashlightArmed;
+                _remainingWindow = d21ChoiceWindowSeconds;
                 adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Use);
             }
         }
@@ -278,11 +468,17 @@ namespace ConGame.Runtime.Interaction
             }
 
             killer?.SuspendPerformanceForInteractiveWindow();
+            D22ShotCueRequested?.Invoke(false, firearm == null ? null : firearm.transform, _activeLoopEpoch);
             _dodgeElapsed = 0f;
             if (killer != null)
             {
                 _dodgeStart = killer.transform.position;
                 _dodgeTarget = _dodgeStart + killer.transform.right * dodgeDistance;
+                Animator animator = killer.GetComponentInChildren<Animator>(true);
+                if (animator != null && Array.Exists(animator.parameters, parameter => parameter.nameHash == DodgeHash))
+                {
+                    animator.SetTrigger(DodgeHash);
+                }
             }
 
             State = CounterplayLootWindowState.D22Dodging;
@@ -320,7 +516,7 @@ namespace ConGame.Runtime.Interaction
             }
 
             _mainFirearm?.Arm(0);
-            SetActive(backupPistolDrop, true);
+            SetActive(backupPistolDrop, false);
             State = CounterplayLootWindowState.D22AwaitMainDryFire;
             adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Use);
         }
@@ -335,7 +531,52 @@ namespace ConGame.Runtime.Interaction
             State = CounterplayLootWindowState.Resolved;
             _remainingWindow = 0f;
             adapter?.SetCounterplayInputWindows(CounterplayInputWindow.None);
+
+            if (string.Equals(outcomeId, "D22", StringComparison.Ordinal))
+            {
+                _d22FinaleStarted = true;
+                int finaleEpoch = _activeLoopEpoch;
+                bool finaleStarted = _d22FinalePresentation != null &&
+                                     _d22FinalePresentation.PlayD22Finale(
+                                         () =>
+                                         {
+                                             if (IsCurrentD22Finale(finaleEpoch))
+                                             {
+                                                 D22BackupVisualRequested?.Invoke(true, finaleEpoch);
+                                             }
+                                         },
+                                         () =>
+                                         {
+                                             if (IsCurrentD22Finale(finaleEpoch))
+                                             {
+                                                 D22ShotCueRequested?.Invoke(true,
+                                                     _d22BackupShotCueSource != null
+                                                         ? _d22BackupShotCueSource
+                                                         : (killer == null ? transform : killer.transform),
+                                                     finaleEpoch);
+                                             }
+                                         },
+                                         () =>
+                                         {
+                                             if (IsCurrentD22Finale(finaleEpoch))
+                                             {
+                                                 adapter?.RequestOutcomeCompletion(outcomeId, finaleEpoch, markD21Seen);
+                                             }
+                                         });
+                if (finaleStarted)
+                {
+                    return;
+                }
+            }
+
+            _d22FinaleStarted = false;
             adapter?.RequestOutcomeCompletion(outcomeId, _activeLoopEpoch, markD21Seen);
+        }
+
+        private bool IsCurrentD22Finale(int loopEpoch)
+        {
+            return _d22FinaleStarted && _activeLoopEpoch == loopEpoch &&
+                   State == CounterplayLootWindowState.Resolved;
         }
 
         private void RequestNextOutcome(string outcomeId, string nextOutcomeId)
@@ -353,11 +594,108 @@ namespace ConGame.Runtime.Interaction
             SetActiveIfNotHeld(backupPistolDrop, false);
         }
 
+        private void PlaceDropNearKiller(GameObject item, float lateralOffset)
+        {
+            if (item == null || killer == null)
+            {
+                return;
+            }
+
+            item.transform.SetPositionAndRotation(
+                killer.transform.position + killer.transform.right * lateralOffset,
+                killer.transform.rotation);
+        }
+
+        private void TryOpenD21ChoiceWindow(int loopEpoch)
+        {
+            if (loopEpoch != _activeLoopEpoch ||
+                _d21PistolDropHandledEpoch != loopEpoch ||
+                _d21FlashlightDropHandledEpoch != loopEpoch ||
+                State == CounterplayLootWindowState.D21Choice)
+            {
+                return;
+            }
+
+            SetActive(backupPistolDrop, false);
+            _mainFirearm?.Arm(0);
+            State = CounterplayLootWindowState.D21Choice;
+            _remainingWindow = d21ChoiceWindowSeconds;
+            adapter?.SetCounterplayInputWindows(CounterplayInputWindow.Grab);
+        }
+
+        private void LaunchD21Drop(
+            GameObject item,
+            StatefulWorldItem stateful,
+            Transform authoredOrigin,
+            float fallbackLateralOffset,
+            float angularSpeed)
+        {
+            if (item == null || stateful == null || stateful.CurrentState != ItemPhysicalState.Placed)
+            {
+                return;
+            }
+
+            SetActive(item, true);
+            if (killer == null)
+            {
+                return;
+            }
+
+            Vector3 launchPosition = authoredOrigin != null
+                ? authoredOrigin.position
+                : killer.transform.position + Vector3.up * 0.65f + killer.transform.right * fallbackLateralOffset;
+            Quaternion launchRotation = authoredOrigin != null
+                ? authoredOrigin.rotation
+                : killer.transform.rotation;
+            Vector3 direction = ResolveD21TossDirection();
+            launchPosition += direction * 0.25f;
+            // Fall clips can put a hand below the floor. Release the prop clear
+            // of the room floor instead of spawning a dynamic collider through it.
+            launchPosition.y = Mathf.Max(launchPosition.y, killer.transform.position.y + 0.18f);
+            Vector3 velocity = direction * 1.05f + Vector3.up * 1.5f;
+            Vector3 angularVelocity = killer.transform.right * angularSpeed + Vector3.up * (angularSpeed * 0.35f);
+
+            if (stateful.TossIntoWorld(launchPosition, launchRotation, velocity, angularVelocity,
+                    GetD21IgnoredColliders()))
+            {
+                return;
+            }
+
+            // Keep the drop usable if a production prop temporarily lacks a body.
+            item.transform.SetParent(null, true);
+            item.transform.SetPositionAndRotation(launchPosition, launchRotation);
+            stateful.MarkPlaced();
+        }
+
+        private Vector3 ResolveD21TossDirection()
+        {
+            Vector3 direction = killer == null ? Vector3.forward : killer.transform.forward;
+            direction.y = 0f;
+            return direction.sqrMagnitude > 0.001f ? direction.normalized : Vector3.forward;
+        }
+
+        private Collider[] GetD21IgnoredColliders()
+        {
+            var ignored = new List<Collider>(16);
+            if (killer != null)
+            {
+                ignored.AddRange(killer.GetComponentsInChildren<Collider>(true));
+            }
+
+            if (_playerInteractor != null)
+            {
+                ignored.AddRange(_playerInteractor.GetComponentsInChildren<Collider>(true));
+            }
+
+            return ignored.ToArray();
+        }
+
         private void ResolveDependencies()
         {
             _pistolStateful = pistolDrop == null ? null : pistolDrop.GetComponent<StatefulWorldItem>();
             _flashlightStateful = flashlightDrop == null ? null : flashlightDrop.GetComponent<StatefulWorldItem>();
             _backupStateful = backupPistolDrop == null ? null : backupPistolDrop.GetComponent<StatefulWorldItem>();
+            _playerInteractor ??= UnityEngine.Object.FindAnyObjectByType<PlayerInteractor>();
             events ??= UnityEngine.Object.FindAnyObjectByType<GameplayEventHub>();
             EnsureKillerTarget();
             EnsureFirearm(pistolDrop, FirearmRole.MainPistol, out _mainFirearm);
@@ -492,6 +830,7 @@ namespace ConGame.Runtime.Interaction
             return state == CounterplayLootWindowState.D08LootWindow ||
                    state == CounterplayLootWindowState.D21Choice ||
                    state == CounterplayLootWindowState.D21FlashlightArmed ||
+                   state == CounterplayLootWindowState.D21FlashlightRecovery ||
                    state == CounterplayLootWindowState.D22AwaitMainShot ||
                    state == CounterplayLootWindowState.D22Dodging ||
                    state == CounterplayLootWindowState.D22AwaitMainDryFire;

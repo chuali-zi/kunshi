@@ -13,8 +13,14 @@ MonoBehaviour:
   m_Name: PERF_D22_Greybox
   m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.M1.M1GreyboxPlayableAsset
   style: 2
-  sequenceDuration: 12
+  sequenceDuration: 1.8
   outcomeId: D22
   heldItemPolicy: 2
   qteWindows: []
-  resultBranches: []
+  resultBranches:
+  - BranchId: single_round_dodged
+    RequiresAllQteWindows: 1
+    NextOutcomeId: D22
+    MarksD21Seen: 0
+  playerAnimation: {fileID: 928988099095703498, guid: aea2dc5760ae470a8d97369d8e55ef8e, type: 3}
+  killerAnimation: {fileID: -7163681636452116516, guid: 72dcaccb9dcf4830bd5472a4d3680612, type: 3}

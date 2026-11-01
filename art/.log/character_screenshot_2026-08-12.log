@@ -1,0 +1,435 @@
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Channel LicenseClient-chual doesn't exist
+Built from '6000.4/staging' branch; Version is '6000.4.6f1 (0b051c2e5d54) revision 722204'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26200) CoreCountrySpecific' Language: 'zh' Physical Memory: 32278 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-12T14:31:07Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 18660)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+D:\game\con_game
+-executeMethod
+ConGame.Editor.ConGameCharacterInstaller.Screenshot
+-logFile
+D:\game\con_game\art\.log\character_screenshot_2026-08-12.log
+Successfully changed project path to: D:\game\con_game
+D:/game/con_game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [26908]  Target information:
+
+Player connection [26908]  * "[IP] 192.168.132.1 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908]  * "[IP] 192.168.47.1 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908]  * "[IP] 169.254.25.8 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908]  * "[IP] 172.30.48.1 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908]  * "[IP] 100.123.192.77 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908]  * "[IP] 198.18.0.1 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908]  * "[IP] 192.168.2.5 [Port] 55504 [Flags] 2 [Guid] 304794471 [EditorId] 304794471 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [26908] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [26908] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual" at "2026-08-12T14:31:07.7812125Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 18660, path: "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              bf8cba97e2844df9b9b36acb81258a76
+  Correlation Id:          4e5494062f965efa28c9ea7a332adef6
+  External correlation Id: 1861797606459616586
+  Machine Id:              fwc+ZXC8gUl3/PnhHFwDpEWQZa8=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-chual" (connect: 0.37s, validation: 0.26s, handshake: 0.07s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual-notifications" at "2026-08-12T14:31:08.1059991Z"
+[Licensing::Module] Connected to LicensingClient (PId: 18660, launch time: 0.01, total connection time: 0.70s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 15669700394519-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.75s
+[Package Manager] Connected to IPC stream "Upm-30936" after 0.4 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.4.6f1 (0b051c2e5d54)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/game/con_game/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) Arc(TM) Graphics (ID=0x7d55)
+    Vendor:   Intel
+    VRAM:     18398 MB
+    Driver:   32.0.101.8724
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56936
+CodeReloadManager initialized
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003757 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.428 seconds
+Domain Reload Profiling: 913ms
+	BeginReloadAssembly (137ms)
+		CreateAndSetChildDomain (8ms)
+	RebuildCommonClasses (40ms)
+	RebuildNativeTypeToScriptingClass (16ms)
+	initialDomainReloadingComplete (74ms)
+	LoadAllAssembliesAndSetupDomain (215ms)
+		LoadAssemblies (127ms)
+		AnalyzeDomain (205ms)
+			TypeCache.Refresh (203ms)
+				TypeCache.ScanAssembly (188ms)
+	FinalizeReload (431ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (51ms)
+			BeforeProcessingInitializeOnLoad (85ms)
+			ProcessInitializeOnLoadAttributes (121ms)
+			ProcessInitializeOnLoadMethodAttributes (99ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 36 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ai.navigation@2.0.12 (location: D:\game\con_game\Library\PackageCache\com.unity.ai.navigation@734c2c4c5591)
+    com.unity.animation.rigging@1.4.1 (location: D:\game\con_game\Library\PackageCache\com.unity.animation.rigging@ae5f251e1ed4)
+    com.unity.cinemachine@2.10.7 (location: D:\game\con_game\Library\PackageCache\com.unity.cinemachine@631385387c5a)
+    com.unity.inputsystem@1.19.0 (location: D:\game\con_game\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.timeline@1.8.12 (location: D:\game\con_game\Library\PackageCache\com.unity.timeline@8cd8509afae5)
+    com.unity.burst@1.8.29 (location: D:\game\con_game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.searcher@4.9.4 (location: D:\game\con_game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.mathematics@1.3.3 (location: D:\game\con_game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.nuget.mono-cecil@1.11.6 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework.performance@aa81a99c4a75)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal@0d0659f1368d)
+    com.unity.test-framework@1.6.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework@76560ee600cb)
+    com.unity.modules.audio@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.director@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.animation@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.ext.nunit@2.0.5 (location: D:\game\con_game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.core@630143bbfe2b)
+    com.unity.shadergraph@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.shadergraph@04a6ef07359e)
+    com.unity.render-pipelines.universal-config@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal-config@0db4263b9e6b)
+    com.unity.modules.uielements@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.ai@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.physics@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.ugui@2.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.ugui@473409526770)
+    com.unity.collections@6.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.collections@65f499a3cc26)
+    com.unity.modules.terrain@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.hierarchycore)
+  Git packages:
+    com.coplaydev.unity-mcp@https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main (location: D:\game\con_game\Library\PackageCache\com.coplaydev.unity-mcp@a4c2d0a84573)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/game/con_game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s274ms
+[655/842    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.23 seconds), 1 items updated, 842 evaluated
+AssetDatabase: script compilation time: 0.761726s
+Begin MonoManager ReloadAssembly
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Editor.Tests.dll at Library/ScriptAssemblies/Cinemachine.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Runtime.Tests.dll at Library/ScriptAssemblies/Cinemachine.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly DocCodeExamples.dll at Library/ScriptAssemblies/DocCodeExamples.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.BurstCompatibilityGen.dll at Library/ScriptAssemblies/Unity.Collections.BurstCompatibilityGen.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Collections.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.PerformanceTests.dll at Library/ScriptAssemblies/Unity.Collections.PerformanceTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.dll at Library/ScriptAssemblies/Unity.Collections.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.Playmode.dll at Library/ScriptAssemblies/Unity.Collections.Tests.Playmode.dll not valid. Loading of assembly skipped.
+Assembly Unity.InputSystem.IntegrationTests.dll at Library/ScriptAssemblies/Unity.InputSystem.IntegrationTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Nuget.Mono-Cecil.dll at Library/ScriptAssemblies/Unity.Nuget.Mono-Cecil.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Config.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Config.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Searcher.EditorTests.dll at Library/ScriptAssemblies/Unity.Searcher.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ShaderGraph.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ShaderGraph.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.UnifiedRayTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.UnifiedRayTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-con_game
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.906 seconds
+Domain Reload Profiling: 5812ms
+	BeginReloadAssembly (341ms)
+		DisableScriptedObjects (26ms)
+		CreateAndSetChildDomain (144ms)
+	RebuildCommonClasses (40ms)
+	RebuildNativeTypeToScriptingClass (19ms)
+	initialDomainReloadingComplete (91ms)
+	LoadAllAssembliesAndSetupDomain (414ms)
+		LoadAssemblies (345ms)
+		AnalyzeDomain (182ms)
+			TypeCache.Refresh (127ms)
+				TypeCache.ScanAssembly (114ms)
+			BuildScriptInfoCaches (40ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (4907ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (29ms)
+			BeforeProcessingInitializeOnLoad (169ms)
+			ProcessInitializeOnLoadAttributes (4035ms)
+			ProcessInitializeOnLoadMethodAttributes (413ms)
+			AfterProcessingInitializeOnLoad (7ms)
+		AwakeInstancesAfterBackupRestoration (25ms)
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=223cb2752b7ef6141b8f2c622a3b545d): Total: 7.182 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=5406 ms
+		Asset DB Callback time: managed=43 ms, native=19 ms
+		Scripting: domain reloads=1, domain reload time=909 ms, compile time=763 ms, other=40 ms
+		Project Asset Count: scripts=1071, non-scripts=2191
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 20.981ms
+	ApplyChangesToAssetFolders: 0.690ms
+	Scan: 191.593ms
+	CategorizeScriptCompilationAssets: 28.401ms
+	ProcessAssetsWithTransientArtifactChanges: 66.728ms
+	CategorizeAssets: 66.214ms
+	CompileScripts: 763.499ms
+	ImportOutOfDateAssets: 4915.699ms (4912.542ms without children)
+		ReloadNativeAssets: 0.051ms
+		UnloadImportedAssets: 1.577ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.629ms
+		OnDemandSchedulerStart: 0.895ms
+	PostProcessAllAssets: 43.539ms
+		MonoPostProcessAllAssets: 43.421ms
+			UniversalRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 15.796ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 2.804ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 2.656ms
+			SyncVS.PostprocessSyncProject 2.167ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.989ms
+			CinemachineSettings.OnPostprocessAllAssets 0.528ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.439ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.388ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.263ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.258ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.192ms
+	UnloadStreamsBegin: 2.006ms
+	PersistCurrentRevisions: 0.212ms
+	GenerateScriptTypeHashes: 4.915ms
+	GenerateScriptTypeSerializationHashes: 9.426ms
+	Untracked: 1076.903ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Scanning for USB devices : 2.080ms
+Initializing Unity extensions:
+Unloading 74 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4824 unused Assets / (14.0 MB). Loaded Objects now: 5591.
+Memory consumption went from 179.9 MB to 165.9 MB.
+Total: 23.232800 ms (FindLiveObjects: 0.501700 ms CreateObjectMapping: 0.231700 ms MarkObjects: 11.443300 ms  DeleteObjects: 11.049200 ms)
+
+Opening scene 'Assets/_Game/Scenes/Room_M1.unity'
+Unloading 107 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/_Game/Scenes/Room_M1.unity'
+	Deserialize:            60.897 ms
+	Integration:            351.022 ms
+	Integration of assets:  7.059 ms
+	Thread Wait Time:       0.055 ms
+	Total Operation Time:   419.032 ms
+Unloading 2 unused Assets / (1.0 KB). Loaded Objects now: 7834.
+Memory consumption went from 207.9 MB to 207.9 MB.
+Total: 9.081800 ms (FindLiveObjects: 0.791300 ms CreateObjectMapping: 0.219300 ms MarkObjects: 8.027600 ms  DeleteObjects: 0.042000 ms)
+
+INSTALL shot M3_fixed_a_asis.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:493)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:422)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 493)
+
+INSTALL shot M3_fixed_b_forward.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:493)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:424)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 493)
+
+INSTALL shot M3_fixed_c_nokiller.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:493)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:431)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 493)
+
+INSTALL shot M3_player_front.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:493)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:446)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 493)
+
+INSTALL shot M3_killer_front.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:493)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:447)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 493)
+
+INSTALL shot M3_killer_side.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Shoot (string,UnityEngine.Vector3,UnityEngine.Vector3,single) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:493)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:448)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 493)
+
+INSTALL screenshots done
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Screenshot () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:450)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 450)
+
+Batchmode quit successfully invoked - shutting down!
+Curl error 42: Callback aborted
+Start importing Assets/_Game/Art/Materials/MAT_Metal_Dark_Backup.mat using Guid(5581818551f746b45809be41fd47d0e3) (NativeFormatImporter) -> (Import Result ID: '819a84d35ab218dd80580c795a58b77a') in 0.0094169 seconds [static dependencies only]. Details - ImportResultOutputID=5f4b4924285be1d309371552d385bec1 DependenciesID=5a91272698075196bcebc1a7cfa1599b StaticDependenciesID=6f427671b739c3741b4512718b4291af 
+Asset Pipeline Refresh (id=e9df723aa19000e468a011eda91bec2a): Total: 0.198 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-chual-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-chual channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

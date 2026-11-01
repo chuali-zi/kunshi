@@ -123,6 +123,74 @@ namespace ConGame.Runtime.Interaction
             }
         }
 
+        /// <summary>
+        /// Launches an unheld placed item from a scripted world position. Staged
+        /// drops use the regular rigidbody and reset path without player-throw cues.
+        /// </summary>
+        public bool TossIntoWorld(
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 velocity,
+            Vector3 angularVelocity,
+            Collider[] initiallyIgnoredColliders = null)
+        {
+            if (CurrentState != ItemPhysicalState.Placed || body == null)
+            {
+                return false;
+            }
+
+            EnsureCaptured();
+            CancelCollisionRestore();
+            RestoreIgnoredPlayerCollisions();
+            ReleaseCurrentSocket();
+            transform.SetParent(null, true);
+            transform.SetPositionAndRotation(position, rotation);
+            Physics.SyncTransforms();
+            IgnorePlayerCollisions(initiallyIgnoredColliders);
+
+            StopBodyMotion();
+            body.isKinematic = false;
+            body.useGravity = true;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            body.position = position;
+            body.rotation = rotation;
+            body.linearVelocity = velocity;
+            body.angularVelocity = angularVelocity;
+
+            _throwEvents = null;
+            _flightDirection = velocity.sqrMagnitude > 0.001f ? velocity.normalized : transform.forward;
+            _flightImpactConsumed = false;
+            SetState(ItemPhysicalState.Flying);
+            if (isActiveAndEnabled)
+            {
+                _collisionRestoreRoutine = StartCoroutine(RestoreIgnoredCollisionsAfterD21Toss());
+            }
+            else
+            {
+                RestoreIgnoredPlayerCollisions();
+            }
+
+            return true;
+        }
+
+        /// <summary>Applies a small follow-up nudge to an item already in flight.</summary>
+        public bool AddFlightImpulse(Vector3 velocityChange, Vector3 angularVelocityChange)
+        {
+            if (CurrentState != ItemPhysicalState.Flying || body == null || body.isKinematic)
+            {
+                return false;
+            }
+
+            body.linearVelocity += velocityChange;
+            body.angularVelocity += angularVelocityChange;
+            if (velocityChange.sqrMagnitude > 0.001f)
+            {
+                _flightDirection = velocityChange.normalized;
+            }
+
+            return true;
+        }
+
         public bool PlaceAt(PlacementSocket socket)
         {
             if (socket == null || !socket.CanAccept(GetComponent<InteractableEntity>()))
@@ -149,6 +217,53 @@ namespace ConGame.Runtime.Interaction
             }
 
             CurrentSocket = socket;
+            ClearFlightContext();
+            SetState(ItemPhysicalState.Placed);
+            return true;
+        }
+
+        public bool PlaceInWorld(Vector3 groundPosition, Quaternion rotation)
+        {
+            if (CurrentState != ItemPhysicalState.Held)
+            {
+                return false;
+            }
+
+            EnsureComponents();
+            CancelCollisionRestore();
+            RestoreIgnoredPlayerCollisions();
+            ReleaseCurrentSocket();
+            transform.SetParent(null, true);
+            transform.SetPositionAndRotation(groundPosition, rotation);
+            Physics.SyncTransforms();
+
+            float lowestPoint = transform.position.y;
+            for (int i = 0; i < _colliders.Length; i++)
+            {
+                Collider itemCollider = _colliders[i];
+                if (itemCollider != null && itemCollider.enabled)
+                {
+                    lowestPoint = Mathf.Min(lowestPoint, itemCollider.bounds.min.y);
+                }
+            }
+
+            transform.position += Vector3.up * (groundPosition.y - lowestPoint);
+            if (body != null)
+            {
+                InteractableEntity entity = GetComponent<InteractableEntity>();
+                bool isHeavy = entity != null &&
+                               ((entity.Categories & ItemCategory.Heavy) != 0 ||
+                                entity.GetComponent<CarryCapability>() != null);
+                body.isKinematic = false;
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+                body.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                body.useGravity = !isHeavy;
+                body.isKinematic = isHeavy;
+                body.position = transform.position;
+                body.rotation = transform.rotation;
+            }
+
             ClearFlightContext();
             SetState(ItemPhysicalState.Placed);
             return true;
@@ -273,9 +388,19 @@ namespace ConGame.Runtime.Interaction
             RestoreIgnoredPlayerCollisions();
         }
 
+        private IEnumerator RestoreIgnoredCollisionsAfterD21Toss()
+        {
+            // D21 drops begin at a hand/holster position that can overlap a character collider.
+            yield return new WaitForSeconds(0.2f);
+            _collisionRestoreRoutine = null;
+            RestoreIgnoredPlayerCollisions();
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
-            if (CurrentState != ItemPhysicalState.Flying || _flightImpactConsumed || collision == null ||
+            // Scripted falls and ordinary drops still collide physically. Only an
+            // intentional player throw may invoke gameplay hit receivers.
+            if (_throwEvents == null || CurrentState != ItemPhysicalState.Flying || _flightImpactConsumed || collision == null ||
                 collision.collider == null || collision.transform.IsChildOf(transform))
             {
                 return;
@@ -294,12 +419,19 @@ namespace ConGame.Runtime.Interaction
             {
                 if (behaviours[i] is IHitReceiver receiver)
                 {
-                    receiver.ReceiveHit(new HitInfo(
+                    HitInfo hit = new HitInfo(
                         flyingImpactKind,
                         ResolveSourceId(),
                         point,
                         direction,
-                        force));
+                        force);
+                    HitResult result = receiver.ReceiveHit(hit);
+                    _throwEvents?.EmitImpact(hit, result, behaviours[i]);
+                    if (result != HitResult.Ignored)
+                    {
+                        _throwEvents?.EmitNoise(force >= 6f ? NoiseLevel.Loud : NoiseLevel.Normal, point,
+                            ResolveSourceId());
+                    }
                     break;
                 }
             }

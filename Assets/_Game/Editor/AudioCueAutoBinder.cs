@@ -54,7 +54,7 @@ namespace ConGame.Editor
             var missing = new List<string>();
             foreach (AudioCueId cue in Enum.GetValues(typeof(AudioCueId)))
             {
-                string assetPath = $"{AudioAssetDir}/SFX_{cue}.wav";
+                string assetPath = $"{AudioAssetDir}/{GetAssetFileName(cue)}";
                 AudioClip clip = AssetDatabase.LoadAssetAtPath<AudioClip>(assetPath);
                 if (clip == null)
                 {
@@ -88,5 +88,16 @@ namespace ConGame.Editor
             Debug.Log($"[AudioCueAutoBinder] 绑定 {bindings.Count} 个音效槽位" +
                       (missing.Count > 0 ? $";缺失: {string.Join(", ", missing)}" : ",全部命中"));
         }
-    }
+
+
+static string GetAssetFileName(AudioCueId cue)
+        {
+            return cue switch
+            {
+                AudioCueId.BatImpact => "SFX_Bat_Impact.wav",
+                AudioCueId.GlassShatter => "SFX_Glass_Shatter.wav",
+                _ => $"SFX_{cue}.wav"
+            };
+        }
+}
 }

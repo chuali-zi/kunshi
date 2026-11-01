@@ -173,10 +173,12 @@ namespace ConGame.Tests.PlayMode
                 GameplayFactService facts = root.AddComponent<GameplayFactService>();
                 facts.CaptureInitialState();
                 facts.SetRoomLight(RoomLightState.PersistentBlack);
-                GameplayAffordanceHandler affordance = root.AddComponent<GameplayAffordanceHandler>();
-                affordance.Configure(GameplayAffordanceKind.StartAmbush, facts);
-                PlayerInteractor interactor = root.AddComponent<PlayerInteractor>();
-                Assert.That(affordance.Use(new InteractionContext(interactor, null)), Is.EqualTo(InteractionResult.Accepted));
+                facts.SetPlayerZone(PlayerZone.DoorBlind);
+                facts.SetPlayerPose(PlayerPose.Crouched);
+                facts.SetMoving(false);
+                AmbushFactDriver driver = root.AddComponent<AmbushFactDriver>();
+                driver.Configure(facts);
+                yield return null;
                 Assert.That(facts.CaptureSnapshot().IsAmbushing, Is.True);
 
                 CounterplayEvaluator evaluator = new CounterplayEvaluator();

@@ -19,22 +19,29 @@ def build_armchair():
     mat = MAT_LEATHER()
     root = empty('FUR_Armchair', display='CUBE', size=0.1)
     parts = []
-    # 尺寸 0.95w × 0.95d × 1.15h; 座面高 0.42, 背高到 1.15 (遮蹲姿硬性)
-    parts.append(box('base', 0.80, 0.76, 0.30, loc=(0, 0.03, 0.19), bev=0.05))        # 座台
-    parts.append(box('back', 0.80, 0.26, 0.79, loc=(0, 0.35, 0.755), bev=0.07))       # 高背
-    parts.append(box('backtop', 0.80, 0.26, 0.18, loc=(0, 0.34, 1.09), bev=0.08))     # 背顶卷
-    for sx in (-1, 1):                                                                # 扶手
-        parts.append(box('arm', 0.16, 0.80, 0.40, loc=(sx * 0.395, 0.02, 0.55), bev=0.06))
-        parts.append(sphere('armfront', 0.085, loc=(sx * 0.395, -0.37, 0.50), scale=(0.95, 1.0, 1.25)))
+    # 分层软包轮廓，避免大圆角盒体和球形扶手产生充气玩具感。
+    parts.append(box('base', 0.82, 0.76, 0.28, loc=(0, 0.04, 0.18), bev=0.025))
+    back = box('back', 0.76, 0.20, 0.70, loc=(0, 0.33, 0.78), bev=0.035)
+    back.rotation_euler.x = math.radians(-6)
+    parts.append(back)
+    parts.append(box('backtop', 0.78, 0.22, 0.12, loc=(0, 0.37, 1.08), bev=0.035))
+    parts.append(box('back_inset', 0.62, 0.035, 0.48, loc=(0, 0.215, 0.79), bev=0.018))
+    for sx in (-1, 1):
+        parts.append(box('side', 0.14, 0.76, 0.34, loc=(sx * 0.39, 0.04, 0.52), bev=0.025))
+        pad = box('arm_pad', 0.17, 0.72, 0.11, loc=(sx * 0.39, -0.01, 0.70), bev=0.035)
+        pad.rotation_euler.x = math.radians(2)
+        parts.append(pad)
+        parts.append(cyl('arm_roll', 0.055, 0.17, loc=(sx * 0.39, -0.39, 0.68),
+                         rot=(0, math.pi / 2, 0), verts=20, bev=0.006))
     for fx in (-1, 1):                                                                # 短脚
         for fy in (-1, 1):
             parts.append(cyl('foot', 0.035, 0.08, loc=(fx * 0.33, fy * 0.28 + 0.02, 0.04), verts=12))
     body = join_into(parts, 'Armchair_Body', root)
     assign(body, mat)
     # 坐垫独立 (可被掀), 原点在垫底中心
-    cushion = box('Armchair_Cushion', 0.62, 0.56, 0.16, bev=0.06, mat=mat)
+    cushion = box('Armchair_Cushion', 0.62, 0.54, 0.14, bev=0.035, mat=mat)
     cushion.data.transform(Matrix.Translation(Vector((0, 0, 0.08))))   # 顶点: 底面齐局部 0
-    cushion.location = (0, -0.03, 0.34)                                # 落在座台上
+    cushion.location = (0, -0.04, 0.33)                                # 落在座台上
     cushion.parent = root
     save_blend(os.path.join(ROOT, 'source/blender/environment/FUR_Armchair_v001.blend'))
     export_fbx(os.path.join(ROOT, 'exports/environment/FUR_Armchair.fbx'))
@@ -190,9 +197,10 @@ def build_tvcabinet():
             target=(0, 0, 0.32), dist=1.8, angle=30, height=0.35)
 
 
-build_armchair()
-build_bed()
-build_woodchair()
-build_bookcase()
-build_tvcabinet()
-print('B02_DONE')
+if __name__ == '__main__':
+    build_armchair()
+    build_bed()
+    build_woodchair()
+    build_bookcase()
+    build_tvcabinet()
+    print('B02_DONE')

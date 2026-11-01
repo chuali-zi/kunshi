@@ -33,7 +33,11 @@ def convert(src: Path, dst: Path, with_anim: bool) -> None:
 for glb in sorted(CHAR_DIR.glob("CH_*_rigged.glb")):
     convert(glb, glb.with_suffix(".fbx"), with_anim=False)
 
-for glb in sorted(ANIM_DIR.glob("AN_*.glb")):
-    convert(glb, glb.with_suffix(".fbx"), with_anim=True)
+for pattern in ("AN_*.glb", "POSE_*.glb", "PAIR_*.glb"):
+    for glb in sorted(ANIM_DIR.glob(pattern)):
+        fbx = glb.with_suffix(".fbx")
+        if fbx.exists() and fbx.stat().st_mtime >= glb.stat().st_mtime:
+            continue  # 已转换且未更新,跳过
+        convert(glb, fbx, with_anim=True)
 
 print("done")

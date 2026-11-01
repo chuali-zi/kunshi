@@ -23,6 +23,15 @@ namespace ConGame.Presentation.Camera
             firstPersonCameraRig = firstPersonRig;
         }
 
+        public void AlignFixedView(Transform screenAnchor)
+        {
+            if (screenAnchor == null || fixedCameraRig == null) return;
+            // The viewer looks out through the television glass into the room.
+            _fixedPosition = screenAnchor.position + screenAnchor.forward * 0.04f;
+            _fixedRotation = screenAnchor.rotation * Quaternion.Euler(.912f, 0f, 0f);
+            fixedCameraRig.transform.SetPositionAndRotation(_fixedPosition, _fixedRotation);
+        }
+
         private void LateUpdate()
         {
             if (!IsFirstPerson && fixedCameraRig != null)

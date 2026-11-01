@@ -18,7 +18,7 @@ namespace ConGame.Runtime.Lighting
 
         public bool CanUse(in InteractionContext context)
         {
-            return target != null && !target.IsBroken;
+            return target != null && !target.IsBroken && target.IsCableConnected;
         }
 
         public InteractionResult Use(in InteractionContext context)
@@ -28,7 +28,7 @@ namespace ConGame.Runtime.Lighting
                 return InteractionResult.Rejected;
             }
 
-            target.SetPowered(!target.IsPowered);
+            target.SetSwitchOn(!target.IsSwitchOn);
             return InteractionResult.Accepted;
         }
 

@@ -198,6 +198,8 @@ namespace ConGame.Tests.PlayMode
             GameObject rug = new GameObject("rug");
             GameObject blanket = new GameObject("blanket");
             GameObject blanketSocketObject = new GameObject("blanket-socket");
+            GameObject player = new GameObject("player");
+            GameObject killer = new GameObject("killer");
             try
             {
                 GameplayFactService facts = factsObject.AddComponent<GameplayFactService>();
@@ -207,7 +209,7 @@ namespace ConGame.Tests.PlayMode
                 rugAffordance.Configure(GameplayAffordanceKind.PullRugTrap, facts);
                 Assert.That(rugAffordance.Use(default), Is.EqualTo(InteractionResult.Accepted));
                 Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.RugArmed));
-                Assert.That(facts.CaptureSnapshot().TrapPulled, Is.True);
+                Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
 
                 BlanketTrapUseHandler blanketTrap = blanket.AddComponent<BlanketTrapUseHandler>();
                 blanketTrap.Configure(facts);
@@ -216,13 +218,41 @@ namespace ConGame.Tests.PlayMode
                 blanketEntity.Configure(null, "blanket");
                 StatefulWorldItem blanketState = blanket.AddComponent<StatefulWorldItem>();
                 blanketState.Configure(blanketBody);
+                Vector3 blanketInitialPosition = blanket.transform.position;
                 PlacementSocket blanketSocket = blanketSocketObject.AddComponent<PlacementSocket>();
                 blanketSocket.Configure("blanket", ItemCategory.None, null, facts,
                     DoorBlockState.None, TrapState.BlanketArmed);
+                Assert.That(blanketSocket.TryPlace(blanketEntity, blanketState), Is.False);
+                Assert.That(blanketSocket.Occupant, Is.Null);
+                Assert.That(blanketState.CurrentSocket, Is.Null);
+                Assert.That(blanket.transform.position, Is.EqualTo(blanketInitialPosition));
+                Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.RugArmed));
+
+                facts.SetTrap(TrapState.None);
+                facts.SetTrapPulled(false);
+                BoxCollider socketTrigger = blanketSocketObject.AddComponent<BoxCollider>();
+                socketTrigger.isTrigger = true;
+                socketTrigger.size = Vector3.one * 2f;
+                TripTrapController contact = blanketSocketObject.AddComponent<TripTrapController>();
+                contact.Configure(facts, null, TrapState.BlanketArmed, false);
+                contact.ConfigureSocket(blanketSocket);
+                PlayerInteractor interactor = player.AddComponent<PlayerInteractor>();
+                player.transform.position = blanketSocketObject.transform.position - Vector3.forward;
                 Assert.That(blanketSocket.TryPlace(blanketEntity, blanketState), Is.True);
                 Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.BlanketArmed));
                 Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
-                Assert.That(blanketTrap.Use(default), Is.EqualTo(InteractionResult.Accepted));
+                InteractionContext context = new InteractionContext(interactor, null);
+                Assert.That(blanketTrap.Use(context), Is.EqualTo(InteractionResult.Rejected));
+                Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
+
+                killer.AddComponent<KillerDirector>();
+                Collider killerCollider = killer.AddComponent<BoxCollider>();
+                killer.transform.position = blanketSocketObject.transform.position;
+                Physics.SyncTransforms();
+                blanketSocketObject.GetComponent<TripTrapController>().SendMessage(
+                    "OnTriggerEnter", killerCollider, SendMessageOptions.DontRequireReceiver);
+                Assert.That(contact.OccupantPresent, Is.True);
+                Assert.That(blanketTrap.Use(context), Is.EqualTo(InteractionResult.Accepted));
                 Assert.That(facts.CaptureSnapshot().TrapPulled, Is.True);
                 yield return null;
             }
@@ -232,6 +262,8 @@ namespace ConGame.Tests.PlayMode
                 Object.Destroy(rug);
                 Object.Destroy(blanket);
                 Object.Destroy(blanketSocketObject);
+                Object.Destroy(player);
+                Object.Destroy(killer);
             }
         }
 

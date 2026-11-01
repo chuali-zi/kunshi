@@ -31,7 +31,7 @@ Material:
     m_Floats:
     - _Blackout: 0
     - _CrackAmount: 0
-    - _NoiseStrength: 0.092
+    - _NoiseStrength: 0.576
     - _PulseAmount: 0
     - _ReverseShot: 0
     - _TitleAmount: 0

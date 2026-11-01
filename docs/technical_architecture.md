@@ -12,7 +12,7 @@
 | 输入 | Input System 1.19，键鼠与 Xbox 布局手柄 |
 | 相机 | Cinemachine 2.10；常规固定机位与结局第一人称硬切 |
 | 动画 | Animator、Timeline、Animation Rigging；配对演出使用统一锚点 |
-| 寻路 | AI Navigation 2.0；神秘人只在演出锚点间使用 NavMeshAgent |
+| 寻路 | AI Navigation 2.0；神秘人只在场景预挂的战术/演出锚点间使用 NavMeshAgent |
 | 测试 | Unity Test Framework；Domain 用 EditMode，场景契约用 PlayMode |
 | 存档 | 版本化 JSON，单存档，临时文件替换与 `.bak` 回退 |
 
@@ -69,6 +69,8 @@ Boot → Menu → Awakening → FreeRoam → Breach → Counterplay
 Counterplay → KillImpact → LoopReset → Awakening
 ```
 
+`Breach` 包含两个连续子段：门破演出期间短暂锁定输入；门演出完成后仍保持 `Breach`，恢复玩家自由移动、藏匿、交互和攻击，并运行神秘人的 live hunt。只有神秘人取得清晰射击解并提交攻击，或规则明确要求配对演出时，才请求进入 `Counterplay`；入场本身不得直接锁入处决。
+
 所有系统只能提交 `FlowTransitionRequest`，不能自行修改阶段。请求带优先级：
 
 1. `EndingCommitted`：电视第二次有效重击；最高。
@@ -88,6 +90,8 @@ Counterplay → KillImpact → LoopReset → Awakening
 - `LoopDirector`
 - `PlayerInputRouter` / `PlayerMotor` / `PlayerInteractor`
 - `KillerDirector`
+- `KillerTacticalController` / `KillerPerceptionSensor`
+- `PlayerNoiseEmitter` / 场景预挂的战术锚点
 - `CameraModeController`
 - `JsonSaveStore`
 
@@ -193,19 +197,26 @@ Placed ↔ Held → Flying → Placed
 Dormant → Entering → Perceiving → Navigating → PerformanceLocked → Dormant
 ```
 
-- `NavMeshAgent` 只负责走到演出锚点；开枪、闪避、踹门、搏斗和处决由 Timeline/Animator 完成。
+- `KillerDirector` 负责高层阶段、反制意图和结果仲裁；`KillerTacticalController` 负责 live hunt，内部状态为 `Observing → Investigating → Searching → Approaching → Aiming → Committing → Firing → Recovering`，并可按感知结果在这些状态间返回。
+- `KillerPerceptionSensor` 使用 120° 视锥、胸/头双采样物理视线和明暗可见距离；`Hidden` 不受普通远距视觉捕获，但 `Searching` 到达作者预挂的藏点锚点且与玩家相距不超过 `1.35m` 时会揭露玩家。失去视线时取消瞄准，转为调查最后已知位置或搜索。`PlayerNoiseEmitter` 把脚步/冲刺和既有巨响发布为听觉刺激。
+- `NavMeshAgent` 只负责走到场景预挂的战术/演出锚点，不以玩家实时位置自由追逐；路径失效时回退到最近的已烘焙锚点。
+- live hunt 在 `Breach` 中运行并保持玩家自由控制。连续可见满足检测阈值、进入射程且完成瞄准后，`Committing` 才请求 `Counterplay`；普通脚步不得让 `Aiming/Committing` 降级，进入 `Committing` 时原子冻结 outcome，提交后不得再重选结果。
+- live 枪杀使用 `AimStarted`、`ShotFired` 语义事件驱动现有 `AimFire`、`HitFall` 动画；`AimCancelled` 必须复位 `AimFire` trigger，并让已进入该状态的 Animator 回到 Idle。配对分支的开枪、闪避、踹门、搏斗和处决仍由 Timeline/Animator 完成。
+- 前两次近战命中可打断 live hunt，恢复时间依次为配置值和其一半；同一 `4s` 命中记忆窗口内的后续命中不再打断，并促使神秘人继续追查。窗口到期后重新从第一次反应计算。
 - 进入 `PerformanceLocked` 后停止 Agent 并把双方对齐到 `PerformanceAnchor`。
 - Timeline 轨道不按名称猜测绑定，使用 `BindingRole` 显式映射 Player、Killer、MainPistol、Flashlight、Door、Camera 等角色。
 - `KillImpact`、`Attach`、`Detach`、`HitStart`、`HitEnd` 和输入对抗窗口使用标记/信号，不依赖动画长度硬编码。
 - 普通演出锁定后不再重选反制；`EndingCommitted` 可取消一切普通演出。
 
+默认 live hunt 参数由 `GameConfigAsset.KillerHunt` 持有：明亮/黑暗可见距离 `12m/1.5m`、藏点揭露距离 `1.35m`、检测 `0.3s`、射程 `4.25m`、瞄准 `0.7s`、搜索 `8s`、普通/巨响听觉半径 `12m/30m`。Reactive intent 默认锁存 `2.5s`，期间 Continuous 不得覆盖，但更高优先级 Reactive 仍可替换。具体数值可经试玩调校，但必须继续由配置资产提供。
+
 ## 7. 循环重置与异步安全
 
 每轮拥有递增 `loopEpoch`。协程、延时调用、Timeline 信号和物理回调在执行前必须检查创建时 epoch；不匹配立即丢弃。
 
-击杀命中后的同帧重置顺序：
+live 枪击由 `ShotFired` 立即触发表现，默认 `0.18s` 后 `ShotResolved` 提交 Death；进入 `KillImpact` 的同帧锁定输入，并默认保留 `0.8s` 让命中和倒地可读。保留时间结束后开始以下重置顺序：
 
-1. `GameFlowController` 接受 Death，请求锁输入。
+1. `GameFlowController` 提交 `LoopReset`，并保持输入锁定。
 2. Registry 按序执行所有 `Quiesce`。
 3. 取消本轮 Timeline、导航路径、协程与延时动作。
 4. 回收本轮生成物并清空瞬时刺激。
@@ -215,7 +226,9 @@ Dormant → Entering → Perceiving → Navigating → PerformanceLocked → Dor
 8. 循环号加一并保存跨循环状态。
 9. 提交 `Awakening`，恢复输入；苏醒动画可被任何有效输入打断。
 
-目标是从 `KillImpact` 到下一轮第一次可读输入不超过 `0.5s`，正常机器上为一个渲染帧。
+目标是从 `KillImpact` 保留时间结束到下一轮第一次可读输入不超过 `0.5s`；不得用提前重置截断 `HitFall`。
+
+`KillerTacticalController` 与 `PlayerNoiseEmitter` 必须实现 `ILoopResettable`。`Quiesce` 清除导航路径、听觉记忆、最后已知位置、瞄准/射击进度和回调；所有瞄准、枪击、延时结算在执行前校验创建时的 `loopEpoch`。
 
 ## 8. 存档边界
 
@@ -255,3 +268,9 @@ Editor 验证器必须报告：
 - `Specified` 或 `Stub` 内容进入 Release 内容清单。
 
 一项内容只有同时满足“规则测试通过、场景可稳定触发、重置无残留、演出锚点验收”才能标记 `Implemented`。
+
+live hunt 属于技术基座与 D01 垂直切片，不代表环境 Visual State Presenter、D08/D11/D21 配对组或 D01–D22 全路线已经完成；这些内容仍按美术缺口规范分别验收。
+
+## 11. 当前技术债与接入缺口
+
+2026-08-16 的非美术缺口统一跟踪于 [non_art_runtime_gaps_2026-08-16.md](non_art_runtime_gaps_2026-08-16.md)。架构侧未完成项包括：交互动画事务、确认型 Performance 入口、双人 Anchor/取消协议、武器唯一所有权、Aim/Fire 权威时序、镜面 RenderTexture 生命周期、Animation Rigging/Ragdoll、VFX/音频池化及对应验证器。纯美术交付另见 `art/requirements/remaining_art_deliverables_2026-08-16.md`。

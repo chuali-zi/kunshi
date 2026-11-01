@@ -1,0 +1,1427 @@
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.4/staging' branch; Version is '6000.4.6f1 (0b051c2e5d54) revision 722204'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Channel LicenseClient-chual doesn't exist
+OS: 'Windows 11  (10.0.26200) CoreCountrySpecific' Language: 'zh' Physical Memory: 32278 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-12T14:28:49Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 27840)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+D:\game\con_game
+-executeMethod
+ConGame.Editor.ConGameCharacterInstaller.Run
+-logFile
+D:\game\con_game\art\.log\character_install_final_2026-08-12.log
+Successfully changed project path to: D:\game\con_game
+D:/game/con_game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [18148]  Target information:
+
+Player connection [18148]  * "[IP] 192.168.132.1 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148]  * "[IP] 192.168.47.1 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148]  * "[IP] 169.254.25.8 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148]  * "[IP] 172.30.48.1 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148]  * "[IP] 100.123.192.77 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148]  * "[IP] 198.18.0.1 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148]  * "[IP] 192.168.2.5 [Port] 55504 [Flags] 2 [Guid] 428266976 [EditorId] 428266976 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [18148] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [18148] Host joined alternative multi-casting on [225.0.0.222:34997]...
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual" at "2026-08-12T14:28:49.4787491Z"
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 27840, path: "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              36151c52fe1949d19813d74d754df8ff
+  Correlation Id:          c2e5a85bcfcff1fe31c7d65ddbee3cff
+  External correlation Id: 5910728774161748518
+  Machine Id:              fwc+ZXC8gUl3/PnhHFwDpEWQZa8=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-chual" (connect: 0.37s, validation: 0.23s, handshake: 0.07s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual-notifications" at "2026-08-12T14:28:49.7845012Z"
+[Licensing::Module] Connected to LicensingClient (PId: 27840, launch time: 0.01, total connection time: 0.68s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 15669700394519-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.74s
+[Package Manager] Connected to IPC stream "Upm-15444" after 0.4 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 1 unused hashed content files
+Initialize engine version: 6000.4.6f1 (0b051c2e5d54)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/game/con_game/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) Arc(TM) Graphics (ID=0x7d55)
+    Vendor:   Intel
+    VRAM:     18398 MB
+    Driver:   32.0.101.8724
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56444
+CodeReloadManager initialized
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002206 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.522 seconds
+Domain Reload Profiling: 1041ms
+	BeginReloadAssembly (158ms)
+		CreateAndSetChildDomain (4ms)
+	RebuildCommonClasses (53ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (74ms)
+	LoadAllAssembliesAndSetupDomain (218ms)
+		LoadAssemblies (151ms)
+		AnalyzeDomain (207ms)
+			TypeCache.Refresh (205ms)
+				TypeCache.ScanAssembly (191ms)
+	FinalizeReload (525ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (56ms)
+			BeforeProcessingInitializeOnLoad (95ms)
+			ProcessInitializeOnLoadAttributes (133ms)
+			ProcessInitializeOnLoadMethodAttributes (145ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 36 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ai.navigation@2.0.12 (location: D:\game\con_game\Library\PackageCache\com.unity.ai.navigation@734c2c4c5591)
+    com.unity.animation.rigging@1.4.1 (location: D:\game\con_game\Library\PackageCache\com.unity.animation.rigging@ae5f251e1ed4)
+    com.unity.cinemachine@2.10.7 (location: D:\game\con_game\Library\PackageCache\com.unity.cinemachine@631385387c5a)
+    com.unity.inputsystem@1.19.0 (location: D:\game\con_game\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.timeline@1.8.12 (location: D:\game\con_game\Library\PackageCache\com.unity.timeline@8cd8509afae5)
+    com.unity.burst@1.8.29 (location: D:\game\con_game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.searcher@4.9.4 (location: D:\game\con_game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.mathematics@1.3.3 (location: D:\game\con_game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.nuget.mono-cecil@1.11.6 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework.performance@aa81a99c4a75)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal@0d0659f1368d)
+    com.unity.test-framework@1.6.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework@76560ee600cb)
+    com.unity.modules.audio@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.director@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.animation@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.ext.nunit@2.0.5 (location: D:\game\con_game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.core@630143bbfe2b)
+    com.unity.shadergraph@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.shadergraph@04a6ef07359e)
+    com.unity.render-pipelines.universal-config@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal-config@0db4263b9e6b)
+    com.unity.modules.uielements@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.ai@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.physics@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.ugui@2.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.ugui@473409526770)
+    com.unity.collections@6.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.collections@65f499a3cc26)
+    com.unity.modules.terrain@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.hierarchycore)
+  Git packages:
+    com.coplaydev.unity-mcp@https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main (location: D:\game\con_game\Library\PackageCache\com.coplaydev.unity-mcp@a4c2d0a84573)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/game/con_game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 3s584ms
+[654/842    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[838/842    2s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Editor.dll (+2 others)
+Assets\_Game\Editor\AudioCueAutoBinder.cs(46,46): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\_Game\Editor\ArtAcceptance.cs(202,43): warning CS0618: 'ModelImporterMaterialLocation.External' is obsolete: 'External Material Location is no longer supported.'
+
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(213,39): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(214,41): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+[839/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Editor.dll, with 137 defines and 285 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[840/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Editor.pdb
+[841/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Editor.dll
+*** Tundra build success (3.54 seconds), 5 items updated, 842 evaluated
+Assets\_Game\Editor\AudioCueAutoBinder.cs(46,46): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\_Game\Editor\ArtAcceptance.cs(202,43): warning CS0618: 'ModelImporterMaterialLocation.External' is obsolete: 'External Material Location is no longer supported.'
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(213,39): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(214,41): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+AssetDatabase: script compilation time: 4.181170s
+Begin MonoManager ReloadAssembly
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Editor.Tests.dll at Library/ScriptAssemblies/Cinemachine.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Runtime.Tests.dll at Library/ScriptAssemblies/Cinemachine.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly DocCodeExamples.dll at Library/ScriptAssemblies/DocCodeExamples.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.BurstCompatibilityGen.dll at Library/ScriptAssemblies/Unity.Collections.BurstCompatibilityGen.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Collections.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.PerformanceTests.dll at Library/ScriptAssemblies/Unity.Collections.PerformanceTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.dll at Library/ScriptAssemblies/Unity.Collections.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.Playmode.dll at Library/ScriptAssemblies/Unity.Collections.Tests.Playmode.dll not valid. Loading of assembly skipped.
+Assembly Unity.InputSystem.IntegrationTests.dll at Library/ScriptAssemblies/Unity.InputSystem.IntegrationTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Nuget.Mono-Cecil.dll at Library/ScriptAssemblies/Unity.Nuget.Mono-Cecil.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Config.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Config.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Searcher.EditorTests.dll at Library/ScriptAssemblies/Unity.Searcher.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ShaderGraph.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ShaderGraph.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.UnifiedRayTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.UnifiedRayTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-con_game
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.787 seconds
+Domain Reload Profiling: 6224ms
+	BeginReloadAssembly (333ms)
+		DisableScriptedObjects (22ms)
+		CreateAndSetChildDomain (148ms)
+	RebuildCommonClasses (38ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (624ms)
+	LoadAllAssembliesAndSetupDomain (429ms)
+		LoadAssemblies (350ms)
+		AnalyzeDomain (181ms)
+			TypeCache.Refresh (128ms)
+				TypeCache.ScanAssembly (115ms)
+			BuildScriptInfoCaches (39ms)
+			ResolveRequiredComponents (11ms)
+	FinalizeReload (4788ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			BeforeProcessingInitializeOnLoad (163ms)
+			ProcessInitializeOnLoadAttributes (3932ms)
+			ProcessInitializeOnLoadMethodAttributes (396ms)
+			AfterProcessingInitializeOnLoad (6ms)
+		AwakeInstancesAfterBackupRestoration (25ms)
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=a724799d132cfaf4b99ec2d2103226ba): Total: 11.148 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=5298 ms
+		Asset DB Callback time: managed=146 ms, native=25 ms
+		Scripting: domain reloads=1, domain reload time=1439 ms, compile time=4183 ms, other=53 ms
+		Project Asset Count: scripts=1071, non-scripts=2191
+		Asset File Changes: new=0, changed=2, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 22.115ms
+	ApplyChangesToAssetFolders: 0.686ms
+	Scan: 216.120ms
+	OnSourceAssetsModified: 1.234ms
+	CategorizeScriptCompilationAssets: 26.560ms
+	ProcessAssetsWithTransientArtifactChanges: 60.991ms
+	CategorizeAssets: 63.000ms
+	CompileScripts: 4183.459ms
+	ImportOutOfDateAssets: 4797.074ms (4793.938ms without children)
+		UnloadImportedAssets: 1.184ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.591ms
+		OnDemandSchedulerStart: 1.306ms
+	PostProcessAllAssets: 148.205ms
+		VCAutoAddAssetPostprocess 2.357ms
+		XRBuildSystem.XRAssetImported 0.106ms
+		PostProcessCallbackCreateDeferredMaterials 0.065ms
+		AssemblyValidation.PostprocessAllAssets 0.055ms
+		MonoPostProcessAllAssets: 144.955ms
+			AssetPostprocessor.OnPostprocessAllAssets 67.860ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 17.295ms
+			UniversalRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 12.240ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 12.071ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 4.035ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 2.192ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 2.013ms
+			AssetChangedListener.OnPostprocessAllAssets 1.545ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 1.371ms
+			SyncVS.PostprocessSyncProject 1.355ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 1.083ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.869ms
+			MaterialPostprocessor.OnPostprocessAllAssets 0.796ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.641ms
+			CinemachineSettings.OnPostprocessAllAssets 0.623ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.585ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.476ms
+			PostProcessor.OnPostprocessAllAssets 0.400ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.397ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.379ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.306ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.305ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.305ms
+			AssetEvents.OnPostprocessAllAssets 0.288ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.262ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.227ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.206ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.179ms
+			AudioContainerPostProcessor.OnPostprocessAllAssets 0.175ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.143ms
+	PostAssetChangesProfiler: 1.826ms
+	UnloadStreamsBegin: 1.427ms
+	PersistCurrentRevisions: 0.135ms
+	GenerateScriptTypeHashes: 3.733ms
+	GenerateScriptTypeSerializationHashes: 6.709ms
+	Untracked: 1619.326ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Scanning for USB devices : 1.556ms
+Initializing Unity extensions:
+Unloading 74 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4824 unused Assets / (13.8 MB). Loaded Objects now: 5591.
+Memory consumption went from 194.3 MB to 180.5 MB.
+Total: 14.712400 ms (FindLiveObjects: 0.646800 ms CreateObjectMapping: 0.381600 ms MarkObjects: 7.755400 ms  DeleteObjects: 5.918600 ms)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Killer_rigged.fbx)
+Start importing Assets/_Game/Art/Characters/CH_Killer_rigged.fbx using Guid(ceeb2986b78d1f944a7d8cebc345cd41) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Killer_rigged.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Killer_rigged.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Killer_rigged.fbx)
+ -> (Import Result ID: '3f0cee3128dcdea5ca58eea4e493e25b') in 0.8031149 seconds [static dependencies only]. Details - ImportResultOutputID=5882d6c0d9ec601e6efaf5597a66865a DependenciesID=b9eb59ea8080f20ee36769a78520c1bc StaticDependenciesID=4e7b0d6a8cc7ff5faa5583a3d6df7413 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Killer_rigged.fbx)
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=ed57438f661c8d04aa53785612f7eef3): Total: 0.921 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=9 ms, native=865 ms
+		Asset DB Callback time: managed=3 ms, native=42 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1071, non-scripts=2191
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 5
+	ApplyChangesToAssetFolders: 0.129ms
+	Scan: 27.911ms
+	ProcessAssetsWithTransientArtifactChanges: 0.079ms
+	CategorizeAssets: 28.442ms
+	ImportOutOfDateAssets: 807.808ms (0.358ms without children)
+		ImportManagerImport: 806.015ms (1.849ms without children)
+		UnloadImportedAssets: 0.269ms
+		ReloadImportedAssets: 0.503ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.501ms
+		OnDemandSchedulerStart: 0.617ms
+	PostProcessAllAssets: 45.080ms
+		XRBuildSystem.XRAssetImported 0.413ms
+		MonoPostProcessAllAssets: 3.305ms
+			AssetPostprocessor.OnPostprocessAllAssets 2.437ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.091ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.084ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.065ms
+	PostAssetChangesProfiler: 0.353ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.214ms
+	UnloadStreamsBegin: 0.147ms
+	PersistCurrentRevisions: 0.204ms
+	Untracked: 6.178ms
+
+Start importing Assets/_Game/Art/Characters/TEX_CH_Killer_1.png using Guid(f40ffa6dcb98a4e488476e1f0d71d06e) (TextureImporter) -> (Import Result ID: 'bf826e00f738e7eb080a689a7ae66cdb') in 0.1040817 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=c248d66d1dbfee4910728a5d38aa956c DependenciesID=d1559a9fbe04e53cecd2f0d87aba1d23 StaticDependenciesID=2195556c0d47fb763535251354c9ecec 
+Asset Pipeline Refresh (id=a69a78be1ed4956409b22af3c88d5307): Total: 0.120 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Characters/CH_Killer_rigged.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:64)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 64)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Player_rigged.fbx)
+Start importing Assets/_Game/Art/Characters/CH_Player_rigged.fbx using Guid(190a5d814aba03740a7e223c0c48f7fb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Player_rigged.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Player_rigged.fbx)
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Player_rigged.fbx)
+ -> (Import Result ID: '07ee56bbbd6e5905825bf4d15bdd2f5c') in 0.7536873 seconds [static dependencies only]. Details - ImportResultOutputID=fbb786b988346a8f6f63206766c9e478 DependenciesID=9e55ee1218676c105fa2b802eeb26bb5 StaticDependenciesID=0ac5add44095368c3e1ef43c764b66ee 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Characters/CH_Player_rigged.fbx)
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=787ffaeb06d40384e92345cdd6cc9612): Total: 0.803 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=765 ms
+		Asset DB Callback time: managed=0 ms, native=36 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1071, non-scripts=2191
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 5
+	ApplyChangesToAssetFolders: 0.057ms
+	Scan: 5.161ms
+	CategorizeAssets: 1.369ms
+	ImportOutOfDateAssets: 757.049ms (0.309ms without children)
+		ImportManagerImport: 755.506ms (0.465ms without children)
+		UnloadImportedAssets: 0.204ms
+		ReloadImportedAssets: 0.711ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.574ms
+		OnDemandSchedulerStart: 0.409ms
+	PostProcessAllAssets: 36.389ms
+		XRBuildSystem.XRAssetImported 0.107ms
+		RaytracingShaderImportPostprocess 0.056ms
+		MonoPostProcessAllAssets: 0.943ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.134ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.087ms
+			AssetPostprocessor.OnPostprocessAllAssets 0.079ms
+	PostAssetChangesProfiler: 0.564ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.181ms
+	PersistCurrentRevisions: 0.103ms
+	Untracked: 2.427ms
+
+Start importing Assets/_Game/Art/Characters/TEX_CH_Player_1.png using Guid(7a010c549be23a74ab37f4cef97b8d05) (TextureImporter) -> (Import Result ID: '2d4d8004c4fa7f76e1ca8bad09fa81df') in 0.137189 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=81155eadc6296502b0f2d5662a933ef4 DependenciesID=c48842a46b0a92ec57588bdfbced1918 StaticDependenciesID=a58308147d012c3f5b6f8b211c25b40e 
+Asset Pipeline Refresh (id=eb6453aa2c01d4645b82f0e683227f6b): Total: 0.151 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Characters/CH_Player_rigged.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:64)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 64)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx using Guid(744ca496d4a08b747b37a972295582a0) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+Keyframe reduction: Ratio: 20.469675%;
+ -> (Import Result ID: 'b7cf1093c395fd986a8e7983a4828c84') in 0.0598634 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=7bc3b4ff2b4728cae4b4451c9ab71466 DependenciesID=ef46e383d1c89b3ff83fb1918ba75baf StaticDependenciesID=1d03c13a7467ee2404741807f7ca2301 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+Asset Pipeline Refresh (id=38665587078cef744a4fdec62e724af4): Total: 0.077 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx using Guid(744ca496d4a08b747b37a972295582a0) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+Keyframe reduction: Ratio: 20.469675%;
+ -> (Import Result ID: 'b7cf1093c395fd986a8e7983a4828c84') in 0.0569983 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=7bc3b4ff2b4728cae4b4451c9ab71466 DependenciesID=ef46e383d1c89b3ff83fb1918ba75baf StaticDependenciesID=1d03c13a7467ee2404741807f7ca2301 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx)
+Asset Pipeline Refresh (id=1add6bc7879fbb04d8d4df17cf0b09a1): Total: 0.074 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_AimFire.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx using Guid(1754641f714d422d944ada370f1c67d9) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+Keyframe reduction: Ratio: 23.775476%;
+ -> (Import Result ID: '6844f6474351bd01374d4e5237d55073') in 0.0546831 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=4bf5bacbd837b063224c42ec7c95752c DependenciesID=0481519eed2b51cb9bb6fe8dd8360575 StaticDependenciesID=a98a0c07fd441bdc2141cd50fced4d0d 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+Asset Pipeline Refresh (id=12289d93be777314c8d6ee12d4d9dfc3): Total: 0.071 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx using Guid(1754641f714d422d944ada370f1c67d9) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+Keyframe reduction: Ratio: 23.775475%;
+ -> (Import Result ID: '6844f6474351bd01374d4e5237d55073') in 0.0548977 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=4bf5bacbd837b063224c42ec7c95752c DependenciesID=0481519eed2b51cb9bb6fe8dd8360575 StaticDependenciesID=a98a0c07fd441bdc2141cd50fced4d0d 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx)
+Asset Pipeline Refresh (id=bf620e17f19a214408087c5a05bd74ca): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_BlockLight.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx using Guid(7ad63403e0ad48aaaff82d7493d7c27d) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+Keyframe reduction: Ratio: 26.466961%;
+ -> (Import Result ID: '117dc2a1b7d18f7e85162f07551a6985') in 0.053389 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=52ae61f38e9a8626c374cc7293198e14 DependenciesID=8b499cefb641de3d9845f36a3164c3b8 StaticDependenciesID=cc46feb191002000def4b9afd9cf5b27 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+Asset Pipeline Refresh (id=2938ba2099683274fb5e847110bcafe8): Total: 0.070 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx using Guid(7ad63403e0ad48aaaff82d7493d7c27d) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+Keyframe reduction: Ratio: 26.466959%;
+ -> (Import Result ID: '117dc2a1b7d18f7e85162f07551a6985') in 0.0518674 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=52ae61f38e9a8626c374cc7293198e14 DependenciesID=8b499cefb641de3d9845f36a3164c3b8 StaticDependenciesID=cc46feb191002000def4b9afd9cf5b27 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx)
+Asset Pipeline Refresh (id=732554c9967847e45b315803348917b7): Total: 0.068 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_DodgeSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx using Guid(72dcaccb9dcf4830bd5472a4d3680612) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+Keyframe reduction: Ratio: 21.079884%;
+ -> (Import Result ID: '17a82d9c743beba4a98cebfaf6cd2ffb') in 0.0554388 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=2b2cae818276e234d43e1cc20a3d789c DependenciesID=d3c3328029553fbc296aab31766df744 StaticDependenciesID=9a83e297a7df49fe43c52b601ccf20ec 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+Asset Pipeline Refresh (id=46a0570e45c94ac409b4b142bfe2f393): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx using Guid(72dcaccb9dcf4830bd5472a4d3680612) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+Keyframe reduction: Ratio: 21.079884%;
+ -> (Import Result ID: '17a82d9c743beba4a98cebfaf6cd2ffb') in 0.0586291 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=2b2cae818276e234d43e1cc20a3d789c DependenciesID=d3c3328029553fbc296aab31766df744 StaticDependenciesID=9a83e297a7df49fe43c52b601ccf20ec 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx)
+Asset Pipeline Refresh (id=da17c9f45a9a813429d4ec57b1cb1e28): Total: 0.075 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_DrawBackupFire.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_Fall.fbx using Guid(b630650598444e3686836b1c686b23eb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+Keyframe reduction: Ratio: 27.679161%;
+ -> (Import Result ID: 'a6c9a2d80135dcdeec6785f794e48352') in 0.0495819 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=e34e12ac6e9ba1307a9b6137ef270ec7 DependenciesID=b027a1756a84f3a503085092f2b52dad StaticDependenciesID=41887570ad27bfb306b2d3bff95d5abd 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+Asset Pipeline Refresh (id=29650b7bd788289449d374547fe0102f): Total: 0.065 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_Fall.fbx using Guid(b630650598444e3686836b1c686b23eb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+Keyframe reduction: Ratio: 27.679159%;
+ -> (Import Result ID: 'a6c9a2d80135dcdeec6785f794e48352') in 0.05676 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=e34e12ac6e9ba1307a9b6137ef270ec7 DependenciesID=b027a1756a84f3a503085092f2b52dad StaticDependenciesID=41887570ad27bfb306b2d3bff95d5abd 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Fall.fbx)
+Asset Pipeline Refresh (id=65b8b79eb4772ee4289c0ab0c75809dd): Total: 0.074 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_Fall.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx using Guid(c776d38cc89a4adcad3deb0e7cf056d3) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+Keyframe reduction: Ratio: 32.179813%;
+ -> (Import Result ID: 'd4b53cefa1d41a32832198c0a787cad9') in 0.0575795 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=dffab536015332b648be0983f13c366d DependenciesID=a2d3b180f51f90851268c352f202678e StaticDependenciesID=9890c0a810f8d9ec1c84345cd35d4eb0 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+Asset Pipeline Refresh (id=f360cfe3092df9446805a915c422c3b4): Total: 0.074 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx using Guid(c776d38cc89a4adcad3deb0e7cf056d3) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+Keyframe reduction: Ratio: 32.179810%;
+ -> (Import Result ID: 'd4b53cefa1d41a32832198c0a787cad9') in 0.0542036 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=dffab536015332b648be0983f13c366d DependenciesID=a2d3b180f51f90851268c352f202678e StaticDependenciesID=9890c0a810f8d9ec1c84345cd35d4eb0 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx)
+Asset Pipeline Refresh (id=6cdb5af40a365714c93a4258e9722698): Total: 0.072 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_KickDoor.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx using Guid(1065ac46fab14c36aac55e0ece3515cd) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+Keyframe reduction: Ratio: 28.114725%;
+ -> (Import Result ID: '9deb57c594bfdc6806f70db2425536b5') in 0.0551265 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=23589418cff63bccca7ba081587ba240 DependenciesID=f3345a90191337ce1f8c51c32d003de8 StaticDependenciesID=7c8d1f86e6b865621ee950d57a9f9cfe 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+Asset Pipeline Refresh (id=1549b0c7d1320974f8a15b33f95b75e3): Total: 0.070 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx using Guid(1065ac46fab14c36aac55e0ece3515cd) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+Keyframe reduction: Ratio: 28.114729%;
+ -> (Import Result ID: '9deb57c594bfdc6806f70db2425536b5') in 0.0523156 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=23589418cff63bccca7ba081587ba240 DependenciesID=f3345a90191337ce1f8c51c32d003de8 StaticDependenciesID=7c8d1f86e6b865621ee950d57a9f9cfe 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx)
+Asset Pipeline Refresh (id=88f17a621e864e24d9b88dbcaf8b9b90): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_Stumble.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Killer_Walk.fbx using Guid(72c0883975abeed4282a2d2224ed01d6) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+Keyframe reduction: Ratio: 29.542650%;
+ -> (Import Result ID: 'de5fa417827aa6a5dcee5b57d424d5cb') in 0.0533849 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=e7742da31f362324400de6820b0c206f DependenciesID=e30005c1cb85de4375d3a1475dc21bea StaticDependenciesID=2de575d6429465ac60b65d1dabcb5702 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+Asset Pipeline Refresh (id=d6e8611eae3fef842a70aa6a0917faf6): Total: 0.069 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Killer_Walk.fbx using Guid(72c0883975abeed4282a2d2224ed01d6) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+Keyframe reduction: Ratio: 29.542654%;
+ -> (Import Result ID: 'de5fa417827aa6a5dcee5b57d424d5cb') in 0.0527475 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=e7742da31f362324400de6820b0c206f DependenciesID=e30005c1cb85de4375d3a1475dc21bea StaticDependenciesID=2de575d6429465ac60b65d1dabcb5702 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Killer_Walk.fbx)
+Asset Pipeline Refresh (id=c4ec051cff228d2409edfecb81d7a118): Total: 0.069 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Killer_Walk.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_HitFall.fbx using Guid(235de565c6ae9c6428bda1350e533085) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+Keyframe reduction: Ratio: 32.314266%;
+ -> (Import Result ID: 'f34167645bfe80e9633e1469582be4eb') in 0.0512661 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=6a8734a8beee9d0803550491681df512 DependenciesID=5339a7ae20f55c0b3802c45cefbe3a52 StaticDependenciesID=3f632eb0611553623ccf29dc46185a3f 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+Asset Pipeline Refresh (id=a6806087e9befd548b98d8edf270afdb): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_HitFall.fbx using Guid(235de565c6ae9c6428bda1350e533085) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+Keyframe reduction: Ratio: 32.314270%;
+ -> (Import Result ID: 'f34167645bfe80e9633e1469582be4eb') in 0.0543406 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=6a8734a8beee9d0803550491681df512 DependenciesID=5339a7ae20f55c0b3802c45cefbe3a52 StaticDependenciesID=3f632eb0611553623ccf29dc46185a3f 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_HitFall.fbx)
+Asset Pipeline Refresh (id=99659e3971080104badf84ce5db4f897): Total: 0.070 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_HitFall.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_Idle.fbx using Guid(0bd496216a8b98d46b09e96f49fa9b8c) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+Keyframe reduction: Ratio: 16.954308%;
+ -> (Import Result ID: 'd7d047de6b5990b81ee41e5d62bb3c21') in 0.0594797 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=2e12bac45a7ca88a47d961ca408dadb8 DependenciesID=837d974b7b12d5dcd89d1f215d77a069 StaticDependenciesID=b8fe5a5536d463dedae87906a41b14d0 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+Asset Pipeline Refresh (id=a8105b895a06eaf4a8869439905aaf3e): Total: 0.080 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_Idle.fbx using Guid(0bd496216a8b98d46b09e96f49fa9b8c) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+Keyframe reduction: Ratio: 16.954306%;
+ -> (Import Result ID: 'd7d047de6b5990b81ee41e5d62bb3c21') in 0.0631932 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=2e12bac45a7ca88a47d961ca408dadb8 DependenciesID=837d974b7b12d5dcd89d1f215d77a069 StaticDependenciesID=b8fe5a5536d463dedae87906a41b14d0 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Idle.fbx)
+Asset Pipeline Refresh (id=c1798f924a29f654c866f5a0c6dc2841): Total: 0.081 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_Idle.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_Pickup.fbx using Guid(e23f8a5c14df404ba59d4de1b254dc83) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+Keyframe reduction: Ratio: 24.807770%;
+ -> (Import Result ID: '576d19eb23ecc9daf63946fdecf08c4e') in 0.0634495 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=f807960b0fe1d8a18343e175fa6ebd00 DependenciesID=a6ae040a3bd4c554c9398bb96cea6790 StaticDependenciesID=6bf69cbb4336355e5e76b01282262b15 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+Asset Pipeline Refresh (id=6c6bfe642f26450469a139ffb168dcb8): Total: 0.080 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_Pickup.fbx using Guid(e23f8a5c14df404ba59d4de1b254dc83) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+Keyframe reduction: Ratio: 24.807774%;
+ -> (Import Result ID: '576d19eb23ecc9daf63946fdecf08c4e') in 0.0555004 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=f807960b0fe1d8a18343e175fa6ebd00 DependenciesID=a6ae040a3bd4c554c9398bb96cea6790 StaticDependenciesID=6bf69cbb4336355e5e76b01282262b15 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Pickup.fbx)
+Asset Pipeline Refresh (id=d5950d7d93b431a43a35a41dfa1acc20): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_Pickup.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_Swing.fbx using Guid(cc19188603313784a883fdbc63591694) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+Keyframe reduction: Ratio: 30.777449%;
+ -> (Import Result ID: '9492ae34c76002828325f938ad51bb95') in 0.05807 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a3baea7d841c9160b45573fe32543e24 DependenciesID=d37c7e0fc15210d49feacad02ac6f1b8 StaticDependenciesID=0e265303dd598e73ec4300033f97af43 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+Asset Pipeline Refresh (id=3449667efd8c1d74daa3abd9f580a3bf): Total: 0.075 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_Swing.fbx using Guid(cc19188603313784a883fdbc63591694) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+Keyframe reduction: Ratio: 30.777449%;
+ -> (Import Result ID: '9492ae34c76002828325f938ad51bb95') in 0.0624153 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a3baea7d841c9160b45573fe32543e24 DependenciesID=d37c7e0fc15210d49feacad02ac6f1b8 StaticDependenciesID=0e265303dd598e73ec4300033f97af43 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Swing.fbx)
+Asset Pipeline Refresh (id=e300e5211919a8a43bec9734ef71468b): Total: 0.081 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_Swing.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_Throw.fbx using Guid(8c4df04809b04b459fc36353359e7fb1) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+Keyframe reduction: Ratio: 26.049244%;
+ -> (Import Result ID: 'ca17490b24f8294259e221be66e371c3') in 0.054369 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=d6a98fe195e3d697c405e470ef2df0d7 DependenciesID=2339dff81602d4e3e3bc8c05dbb05ed8 StaticDependenciesID=02d764d29292cc39ccc74f4d846e0aee 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+Asset Pipeline Refresh (id=464e44083a106ce4fb27d8cd2204c86d): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_Throw.fbx using Guid(8c4df04809b04b459fc36353359e7fb1) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+Keyframe reduction: Ratio: 26.049244%;
+ -> (Import Result ID: 'ca17490b24f8294259e221be66e371c3') in 0.0588958 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=d6a98fe195e3d697c405e470ef2df0d7 DependenciesID=2339dff81602d4e3e3bc8c05dbb05ed8 StaticDependenciesID=02d764d29292cc39ccc74f4d846e0aee 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Throw.fbx)
+Asset Pipeline Refresh (id=bb90702b9cf723c4daa5a5859a98a559): Total: 0.079 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_Throw.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx using Guid(7819260c12820174d9aa16d7c1b13cd2) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+Keyframe reduction: Ratio: 22.959812%;
+ -> (Import Result ID: '6336b4f31cef41c4c74419d43ae8196a') in 0.0638551 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=ee3362df8b433c58d6d69a0a0a115e42 DependenciesID=d19c962053b05720d8cbeee1929f68d2 StaticDependenciesID=3b535884c0abbb29b2673bf8d4204e0b 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+Asset Pipeline Refresh (id=1f64bd0ba8831fd48a510d2e04fde965): Total: 0.083 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx using Guid(7819260c12820174d9aa16d7c1b13cd2) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+Keyframe reduction: Ratio: 22.959814%;
+ -> (Import Result ID: '6336b4f31cef41c4c74419d43ae8196a') in 0.060739 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=ee3362df8b433c58d6d69a0a0a115e42 DependenciesID=d19c962053b05720d8cbeee1929f68d2 StaticDependenciesID=3b535884c0abbb29b2673bf8d4204e0b 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx)
+Asset Pipeline Refresh (id=b35b8060a5dd08b4dbba12a27fbd2d35): Total: 0.077 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_WakeUp.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+Start importing Assets/_Game/Art/Animations/AN_Player_Walk.fbx using Guid(1a2a31ffce43f6643a8995943cb49293) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+Keyframe reduction: Ratio: 34.652370%;
+ -> (Import Result ID: 'ff0d57129d3092c1cb4548a6fcc39d30') in 0.0517197 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=3a5958162565720123c7e8fafca5ba1b DependenciesID=7b56c08767b0392a186f0531750c9200 StaticDependenciesID=c71a116f0b1ecc3cd5935c20c9cdc58c 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+Asset Pipeline Refresh (id=b8ad274c9d862f7458c03bdeeab2ba7d): Total: 0.068 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/AN_Player_Walk.fbx using Guid(1a2a31ffce43f6643a8995943cb49293) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+Keyframe reduction: Ratio: 34.652363%;
+ -> (Import Result ID: 'ff0d57129d3092c1cb4548a6fcc39d30') in 0.0520593 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=3a5958162565720123c7e8fafca5ba1b DependenciesID=7b56c08767b0392a186f0531750c9200 StaticDependenciesID=c71a116f0b1ecc3cd5935c20c9cdc58c 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/AN_Player_Walk.fbx)
+Asset Pipeline Refresh (id=d9e19fa9c1562be43a37d5a33b0147bd): Total: 0.070 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/AN_Player_Walk.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx using Guid(01c16546ea8140b5814b0f12f02267eb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+Keyframe reduction: Ratio: 24.876728%;
+ -> (Import Result ID: 'a960f48ff1b054800ae37153e879512e') in 0.0531026 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=d7f019b1774546a71b338656fa2fef18 DependenciesID=4b0155f36bd8f1f89d689015f0509458 StaticDependenciesID=8105798118e2fb9bd2a5542770096e29 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+Asset Pipeline Refresh (id=8cb265af8911aee49a390f5773c1b84b): Total: 0.069 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx using Guid(01c16546ea8140b5814b0f12f02267eb) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+Keyframe reduction: Ratio: 24.876728%;
+ -> (Import Result ID: 'a960f48ff1b054800ae37153e879512e') in 0.0518103 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=d7f019b1774546a71b338656fa2fef18 DependenciesID=4b0155f36bd8f1f89d689015f0509458 StaticDependenciesID=8105798118e2fb9bd2a5542770096e29 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx)
+Asset Pipeline Refresh (id=39a96c8f2e332a845be99b45e8a6faee): Total: 0.069 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Killer_Kneel.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx using Guid(69f7f0d03dcb4def98c64cb338549aa9) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+Keyframe reduction: Ratio: 17.874752%;
+ -> (Import Result ID: 'caf361be88feb760bc3718ed2d4ed194') in 0.0485722 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=116b664cbf430c49175aa0761d067851 DependenciesID=2ada1c6735683308e27b633199dac8e6 StaticDependenciesID=a5a97d95c38ba647b0f0f48f7fb1db66 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+Asset Pipeline Refresh (id=55ce7db76f175dd4fb4a4254be410f9c): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx using Guid(69f7f0d03dcb4def98c64cb338549aa9) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+Keyframe reduction: Ratio: 17.874752%;
+ -> (Import Result ID: 'caf361be88feb760bc3718ed2d4ed194') in 0.0500436 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=116b664cbf430c49175aa0761d067851 DependenciesID=2ada1c6735683308e27b633199dac8e6 StaticDependenciesID=a5a97d95c38ba647b0f0f48f7fb1db66 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx)
+Asset Pipeline Refresh (id=073797fb697dd8845b5e2840b3d068a3): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Killer_LowReady.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx using Guid(aea2dc5760ae470a8d97369d8e55ef8e) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+Keyframe reduction: Ratio: 19.748518%;
+ -> (Import Result ID: '30fa191185463b68b12b674507f07e9b') in 0.0501226 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=25517a58e6826d8451f262b323d5c540 DependenciesID=73c8e327d867a0956e42e47cea3e8899 StaticDependenciesID=e7680e2ca3a9e1fce3695dcf34db696c 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+Asset Pipeline Refresh (id=330721e5f1237fc44886e4745c7039c2): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx using Guid(aea2dc5760ae470a8d97369d8e55ef8e) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+Keyframe reduction: Ratio: 19.748520%;
+ -> (Import Result ID: '30fa191185463b68b12b674507f07e9b') in 0.0522017 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=25517a58e6826d8451f262b323d5c540 DependenciesID=73c8e327d867a0956e42e47cea3e8899 StaticDependenciesID=e7680e2ca3a9e1fce3695dcf34db696c 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx)
+Asset Pipeline Refresh (id=7f6bf6d6708111943819277834263a6d): Total: 0.070 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_AimPistol.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx using Guid(506239fffb4146c19dc112b1a0b130fe) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+Keyframe reduction: Ratio: 23.076921%;
+ -> (Import Result ID: 'bef3594ba9ca106ed4123c5e9d94c368') in 0.0551437 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a4987909fdd00edeb23a1b2f5890bc45 DependenciesID=b6cc69811fff0b1206e41ed9c142d2c9 StaticDependenciesID=80c10ff26502eb318f8098630ff27374 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+Asset Pipeline Refresh (id=4f567b8f50e4e7548926e7ffe4ff94d1): Total: 0.075 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx using Guid(506239fffb4146c19dc112b1a0b130fe) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+Keyframe reduction: Ratio: 23.076925%;
+ -> (Import Result ID: 'bef3594ba9ca106ed4123c5e9d94c368') in 0.0601517 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a4987909fdd00edeb23a1b2f5890bc45 DependenciesID=b6cc69811fff0b1206e41ed9c142d2c9 StaticDependenciesID=80c10ff26502eb318f8098630ff27374 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx)
+Asset Pipeline Refresh (id=3667e6f14e5f66849a9a75dc8dfc49d4): Total: 0.078 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_CarryLarge.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx using Guid(356a508fd0394abfad616b3b5a2c19e9) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+Keyframe reduction: Ratio: 20.710060%;
+ -> (Import Result ID: '4d287fbb165f5ad59dbaf96a20f9fa5b') in 0.0542316 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=4345567b2f05b9f79f3ef26500b0a2df DependenciesID=d2d87f6274fbde6ed12f61e5888e14ad StaticDependenciesID=dcfaa725013a34c321e340a178cafdfa 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+Asset Pipeline Refresh (id=0d59eecf4417ca4418a785246609e490): Total: 0.071 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx using Guid(356a508fd0394abfad616b3b5a2c19e9) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+Keyframe reduction: Ratio: 20.710060%;
+ -> (Import Result ID: '4d287fbb165f5ad59dbaf96a20f9fa5b') in 0.0575709 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=4345567b2f05b9f79f3ef26500b0a2df DependenciesID=d2d87f6274fbde6ed12f61e5888e14ad StaticDependenciesID=dcfaa725013a34c321e340a178cafdfa 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx)
+Asset Pipeline Refresh (id=71fca1f530e17ad4480b51fe4c078f5e): Total: 0.076 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_CrouchHide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx using Guid(6a48296c88884aa9bedaf198748b747e) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+Keyframe reduction: Ratio: 25.184912%;
+ -> (Import Result ID: 'fdf44231ff21e8059afa5cfc23379e6f') in 0.0613471 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a0700d8fa1d5b59cd521e442d3014fa5 DependenciesID=b669b21b8d8595e8810d7c4ba3bce1c5 StaticDependenciesID=3b6f2288ee8d55d8fcea9c68d5114cd5 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+Asset Pipeline Refresh (id=147f70ecd52364943a52021f2d645c3c): Total: 0.079 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx using Guid(6a48296c88884aa9bedaf198748b747e) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+Keyframe reduction: Ratio: 25.184914%;
+ -> (Import Result ID: 'fdf44231ff21e8059afa5cfc23379e6f') in 0.0670368 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a0700d8fa1d5b59cd521e442d3014fa5 DependenciesID=b669b21b8d8595e8810d7c4ba3bce1c5 StaticDependenciesID=3b6f2288ee8d55d8fcea9c68d5114cd5 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx)
+Asset Pipeline Refresh (id=10cb1411595fbdd4982fcb9a0742832e): Total: 0.085 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_HoldBat.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx using Guid(761803a7aa4245368fc62faea7840a89) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+Keyframe reduction: Ratio: 23.533035%;
+ -> (Import Result ID: '49197b734ca527383949da58105ea190') in 0.0552582 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=3a93ae5e91734431f4c376f7fe3a29bb DependenciesID=3ea347897821750595f252da2f65c39f StaticDependenciesID=175106ca592bff59bcaf38b879b1ea96 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+Asset Pipeline Refresh (id=b8b968535b8a8224da2de94ec97aa0d9): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx using Guid(761803a7aa4245368fc62faea7840a89) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+Keyframe reduction: Ratio: 23.533035%;
+ -> (Import Result ID: '49197b734ca527383949da58105ea190') in 0.0493339 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=3a93ae5e91734431f4c376f7fe3a29bb DependenciesID=3ea347897821750595f252da2f65c39f StaticDependenciesID=175106ca592bff59bcaf38b879b1ea96 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx)
+Asset Pipeline Refresh (id=4fa5f25d8333fdb4fa05d6a01b69d7c9): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_HoldSmall_R.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx using Guid(6961cc984c4a434e81d6055106908785) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+Keyframe reduction: Ratio: 21.905817%;
+ -> (Import Result ID: '88e611ea0c8b58ea0125dec6b51b8be4') in 0.0613259 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=0caa7a5f8ffe4984a5b0d46b4fccdca2 DependenciesID=9bc38895cec677ece9985fb3082ada54 StaticDependenciesID=ca1d9d72da0bcc70a3cceb5bdd1a3fb9 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+Asset Pipeline Refresh (id=3fddd9ef2d09af348be15028b61965a0): Total: 0.081 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx using Guid(6961cc984c4a434e81d6055106908785) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+Keyframe reduction: Ratio: 21.905819%;
+ -> (Import Result ID: '88e611ea0c8b58ea0125dec6b51b8be4') in 0.0604146 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=0caa7a5f8ffe4984a5b0d46b4fccdca2 DependenciesID=9bc38895cec677ece9985fb3082ada54 StaticDependenciesID=ca1d9d72da0bcc70a3cceb5bdd1a3fb9 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx)
+Asset Pipeline Refresh (id=acc53657bf37b224ca39e3dbd2e06728): Total: 0.079 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_KneelHandsUp.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_Prone.fbx using Guid(aaf3d41aa4024fd788c2f9a5e04a94f1) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+Keyframe reduction: Ratio: 23.804241%;
+ -> (Import Result ID: '3c5f55e17587050f9a8f2304dd46228b') in 0.0575561 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=138f4eae72232310effa9bcdabc91774 DependenciesID=9886437be087930a640adb1fc6861a5a StaticDependenciesID=3d9bd2fdaf414640ce6999dbd791d5e6 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+Asset Pipeline Refresh (id=b5735e2e924856c43ae4fcb0decee5d7): Total: 0.076 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_Prone.fbx using Guid(aaf3d41aa4024fd788c2f9a5e04a94f1) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+Keyframe reduction: Ratio: 23.804239%;
+ -> (Import Result ID: '3c5f55e17587050f9a8f2304dd46228b') in 0.0539798 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=138f4eae72232310effa9bcdabc91774 DependenciesID=9886437be087930a640adb1fc6861a5a StaticDependenciesID=3d9bd2fdaf414640ce6999dbd791d5e6 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_Prone.fbx)
+Asset Pipeline Refresh (id=ae84dff2a97ae9248af6a7d8c1b5ad72): Total: 0.072 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_Prone.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+Start importing Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx using Guid(e347c877ebf04e68b8ef64fc50bd694b) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+Keyframe reduction: Ratio: 21.955128%;
+ -> (Import Result ID: '6daa69959fb4e07d2ecc3a492cf35f9f') in 0.0551263 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=47c9567750281c089665063dd800f27d DependenciesID=fdbded9cb1892012a374ea01321d582e StaticDependenciesID=936bdb18d31126d781945626ba73219b 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+Asset Pipeline Refresh (id=3cc9324afe50b08479cd1b11607a9dcf): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx using Guid(e347c877ebf04e68b8ef64fc50bd694b) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+Keyframe reduction: Ratio: 21.955128%;
+ -> (Import Result ID: '6daa69959fb4e07d2ecc3a492cf35f9f') in 0.0575666 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=47c9567750281c089665063dd800f27d DependenciesID=fdbded9cb1892012a374ea01321d582e StaticDependenciesID=936bdb18d31126d781945626ba73219b 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx)
+Asset Pipeline Refresh (id=8d99c42f456b80e41a584846244c9dd1): Total: 0.076 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/POSE_Player_SitChair.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+Start importing Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx using Guid(b89a46592b9245c7a8271769900088fc) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+Keyframe reduction: Ratio: 22.440004%;
+ -> (Import Result ID: '1ccd16f276d2b1b79138abcce65eb14b') in 0.0630389 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=ea4679325bbf4a6fcd5faf555a032fe1 DependenciesID=2702172a618a8f1fe95215d2cd4b805d StaticDependenciesID=f43de84f29b36e22b5e12421c1099cff 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+Asset Pipeline Refresh (id=4de7275ef71ce684cba3497d7902336b): Total: 0.080 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx using Guid(b89a46592b9245c7a8271769900088fc) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+Keyframe reduction: Ratio: 22.440004%;
+ -> (Import Result ID: '1ccd16f276d2b1b79138abcce65eb14b') in 0.0702881 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=ea4679325bbf4a6fcd5faf555a032fe1 DependenciesID=2702172a618a8f1fe95215d2cd4b805d StaticDependenciesID=f43de84f29b36e22b5e12421c1099cff 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx)
+Asset Pipeline Refresh (id=afb4788070faa7047bce45e75a0d8f49): Total: 0.088 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/PAIR_D08_KillerSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+Start importing Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx using Guid(53a0d80264704b019a3ecc05d77928e5) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+Keyframe reduction: Ratio: 28.262657%;
+ -> (Import Result ID: '1b92c268e27acbbcb39e80e1899a81a9') in 0.0579419 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=cee9ef987f53c38979de48ca333eb653 DependenciesID=cf57ba24f853af61b986e1f98e95e913 StaticDependenciesID=f8f4f80f8cc5be72839fe61e907ce1f8 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+Asset Pipeline Refresh (id=89a2eaec45daaa14e8e67e2689394517): Total: 0.076 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx using Guid(53a0d80264704b019a3ecc05d77928e5) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+Keyframe reduction: Ratio: 28.262661%;
+ -> (Import Result ID: '1b92c268e27acbbcb39e80e1899a81a9') in 0.056727 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=cee9ef987f53c38979de48ca333eb653 DependenciesID=cf57ba24f853af61b986e1f98e95e913 StaticDependenciesID=f8f4f80f8cc5be72839fe61e907ce1f8 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx)
+Asset Pipeline Refresh (id=4dba739b9b8846a41945a12bbbdf3ef6): Total: 0.074 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/PAIR_D08_PlayerSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+Start importing Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx using Guid(68dd0362dd604a43b1b6329d1723ef86) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+Keyframe reduction: Ratio: 28.763973%;
+ -> (Import Result ID: '859058142dd59ef198c8698d7b6d006e') in 0.0518457 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a297b7152a21ae5e345e1fa06741b56f DependenciesID=b7501cdb76febf78338093ec70e94976 StaticDependenciesID=821e86ea98855d0487f8e809e1ffc525 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+Asset Pipeline Refresh (id=30a568c3836eba940a122804da244981): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx using Guid(68dd0362dd604a43b1b6329d1723ef86) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+Keyframe reduction: Ratio: 28.763969%;
+ -> (Import Result ID: '859058142dd59ef198c8698d7b6d006e') in 0.0502389 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a297b7152a21ae5e345e1fa06741b56f DependenciesID=b7501cdb76febf78338093ec70e94976 StaticDependenciesID=821e86ea98855d0487f8e809e1ffc525 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx)
+Asset Pipeline Refresh (id=d568f2658b597cf40962c5518d304795): Total: 0.069 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/PAIR_D11_KillerSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+Start importing Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx using Guid(563d5eeced124db0ab62061b6fcc9fdc) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+Keyframe reduction: Ratio: 24.572647%;
+ -> (Import Result ID: '14e4294e41e75e45afcf7798ffb438b6') in 0.0515728 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=2f65797d73e2cb9a6441bcbe4e836725 DependenciesID=7a622adb28619f506abf353e87873177 StaticDependenciesID=daa9200d96ef6c7cb4ee4ac219b4de27 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+Asset Pipeline Refresh (id=57cc3717402f8fb488d74a9e1a5ef61e): Total: 0.067 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx using Guid(563d5eeced124db0ab62061b6fcc9fdc) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+Keyframe reduction: Ratio: 24.572647%;
+ -> (Import Result ID: '14e4294e41e75e45afcf7798ffb438b6') in 0.052648 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=2f65797d73e2cb9a6441bcbe4e836725 DependenciesID=7a622adb28619f506abf353e87873177 StaticDependenciesID=daa9200d96ef6c7cb4ee4ac219b4de27 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx)
+Asset Pipeline Refresh (id=1279ba66165ddfe43986ced812070f72): Total: 0.068 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/PAIR_D11_PlayerSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+Start importing Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx using Guid(6274da4e47ef4bd0afc2320c967508e2) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+Keyframe reduction: Ratio: 24.691811%;
+ -> (Import Result ID: 'a2aee9460865d522f3420a7a6315a241') in 0.0599098 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=be7644be3c2c31be1a02bb5dad3a3d35 DependenciesID=713e3b50ecbc6ba8f512628dd6959ab6 StaticDependenciesID=04707a99fea8ad0a2acda243c7e18643 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+Asset Pipeline Refresh (id=6e62193629b3931498ffb427fdf18019): Total: 0.076 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx using Guid(6274da4e47ef4bd0afc2320c967508e2) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+Keyframe reduction: Ratio: 24.691816%;
+ -> (Import Result ID: 'a2aee9460865d522f3420a7a6315a241') in 0.0605114 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=be7644be3c2c31be1a02bb5dad3a3d35 DependenciesID=713e3b50ecbc6ba8f512628dd6959ab6 StaticDependenciesID=04707a99fea8ad0a2acda243c7e18643 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx)
+Asset Pipeline Refresh (id=c4f7ac1abb36d864a97444ea11802ab1): Total: 0.077 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/PAIR_D21_KillerSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+Start importing Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx using Guid(80951e9f549e41948252ad9b0486f6b3) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+Keyframe reduction: Ratio: 23.462154%;
+ -> (Import Result ID: '4036bb3f49109842d43497d6da9e205e') in 0.0617998 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=e895f527c4f2f0f90e79f6cec6e492af DependenciesID=ef0142dbcbf1718c486556ea1e4344b6 StaticDependenciesID=28cd06904e81d86462ae6de3e0bf7433 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+Asset Pipeline Refresh (id=5c0cac31d2a56444eac3e71d7988f5db): Total: 0.079 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx using Guid(80951e9f549e41948252ad9b0486f6b3) MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+(FBXImporter)MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+Keyframe reduction: Ratio: 23.462156%;
+ -> (Import Result ID: '4036bb3f49109842d43497d6da9e205e') in 0.0612602 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=e895f527c4f2f0f90e79f6cec6e492af DependenciesID=ef0142dbcbf1718c486556ea1e4344b6 StaticDependenciesID=28cd06904e81d86462ae6de3e0bf7433 
+MaterialLocation.External is obsolete. External Material Location is no longer supported. (Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx)
+Asset Pipeline Refresh (id=9180cdb42ba7e5643a02da0c88830e8a): Total: 0.077 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL import Assets/_Game/Art/Animations/PAIR_D21_PlayerSide.fbx humanoid ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:ConfigureModelImports () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:105)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:38)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 105)
+
+Asset Pipeline Refresh (id=161314b8cc0dcc244974a300269dd8b7): Total: 0.031 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/Controllers/AC_Player.controller using Guid(0e7f65217f558ab4292330f986042eb0) (NativeFormatImporter) -> (Import Result ID: '09f038a7faf9ae5795fd2895862cbf6b') in 0.0026212 seconds [static dependencies only]. Details - ImportResultOutputID=081ea2452b235816f1d248f417616e92 DependenciesID=d0ac789ac282ed3ba2cb673ccb2cb822 StaticDependenciesID=19e8939d6a2f7f7a119d383fb3792af9 
+Asset Pipeline Refresh (id=241c8d707056dcd46b8a512ad4a074bd): Total: 0.041 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL controller AC_Player ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:BuildController (string,bool) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:185)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:39)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 185)
+
+Asset Pipeline Refresh (id=debfb584581130c4aa8b1175802934d5): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Art/Animations/Controllers/AC_Killer.controller using Guid(103cff18ace18984582abd07e5b2fd3f) (NativeFormatImporter) -> (Import Result ID: '9cad2b5f46972bb395bce9ca49a0dfa9') in 0.0021619 seconds [static dependencies only]. Details - ImportResultOutputID=b1f1773a22bb1fadcd7084e72801820b DependenciesID=aecb2c1fd4a727bd36f110d4248ba0b7 StaticDependenciesID=e361fe09bd7b3093ce06a38edcb3ba81 
+Asset Pipeline Refresh (id=13cc360936cfd0d47a1394d471b61391): Total: 0.048 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL controller AC_Killer ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:BuildController (string,bool) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:185)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:40)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 185)
+
+Start importing Assets/_Game/Art/Animations/Controllers/AC_Killer.controller using Guid(103cff18ace18984582abd07e5b2fd3f) (NativeFormatImporter) -> (Import Result ID: '0a66b6b546d53cfdedce298a7ee1b4d4') in 0.0027083 seconds [static dependencies only]. Details - ImportResultOutputID=b1f1773a22bb1fadcd7084e72801820b DependenciesID=edb9dea6362466532573c5aa1665627f StaticDependenciesID=77c578dc1233ecfa591086443733e9f1 
+Start importing Assets/_Game/Art/Animations/Controllers/AC_Player.controller using Guid(0e7f65217f558ab4292330f986042eb0) (NativeFormatImporter) -> (Import Result ID: '05050fdb8bded831bd59c48e529e1e7d') in 0.0024677 seconds [static dependencies only]. Details - ImportResultOutputID=081ea2452b235816f1d248f417616e92 DependenciesID=8483c9d514bd87f3058124e039c132d6 StaticDependenciesID=d299bb92fa08be100a78c660b2bdd48c 
+Start importing Assets/_Game/Content/Performances/PERF_D06_Greybox.asset using Guid(50568571ba50d404aa966c96717c3354) (NativeFormatImporter) -> (Import Result ID: '8e518e9c5faef564a27294065eeb1bfe') in 0.0017567 seconds [static dependencies only]. Details - ImportResultOutputID=891a3724cf26b92f01e13c1ce48befab DependenciesID=e85baf40ffb838f59e181033b37b1ee6 StaticDependenciesID=7930c1aef7f454a6fbf6843626e102b1 
+Start importing Assets/_Game/Content/Performances/PERF_D11_Greybox.asset using Guid(d32be312baa3e8642ad9d1404cd335e3) (NativeFormatImporter) -> (Import Result ID: '4ad523281ce352f92e6eccb52aab7e69') in 0.0013939 seconds [static dependencies only]. Details - ImportResultOutputID=d8606914b13389ea3d44df645a236c0a DependenciesID=14778ad66015ff920f935233fe841f33 StaticDependenciesID=74e628dec2860cc077af88fd5b664af9 
+Start importing Assets/_Game/Content/Performances/PERF_D07_Greybox.asset using Guid(5495bed95f50d2e4aa7f2dd4c264c31d) (NativeFormatImporter) -> (Import Result ID: '0dc2e2eec811261604de339ebcfec800') in 0.0021644 seconds [static dependencies only]. Details - ImportResultOutputID=530915d5e2c904e7a3b2f6af2f5a6fde DependenciesID=0b1b5dd8422d0563ccda066a44bbf13e StaticDependenciesID=e7e03667da32a648d4b2e63e9de30c55 
+Start importing Assets/_Game/Content/Performances/PERF_D19_Greybox.asset using Guid(e442d32ccf431a2438c179ce3cd49e4e) (NativeFormatImporter) -> (Import Result ID: 'f127aafe66ec5d21d38108a240f4fce6') in 0.0021065 seconds [static dependencies only]. Details - ImportResultOutputID=c56e896f2af327fd704073f770207db8 DependenciesID=1633f5eca5a68a950a871684efa14d7c StaticDependenciesID=9bfb007ea557cf6d82c4bb590fb6ab12 
+Start importing Assets/_Game/Content/Performances/PERF_D10_Greybox.asset using Guid(158e6ffec18825e499f9a118d87a7800) (NativeFormatImporter) -> (Import Result ID: 'e01deb56f141338e7404095dfbc2bd68') in 0.0016542 seconds [static dependencies only]. Details - ImportResultOutputID=c16760b3d27065ad0b00fcb507685cbd DependenciesID=2c7c2b6cd03cda7c7c17c72157bf9298 StaticDependenciesID=067d7781171fcda3094d463e0c5803d0 
+Start importing Assets/_Game/Content/Performances/PERF_D21_Greybox.asset using Guid(259718deb82f1714bb5a20c83b09895f) (NativeFormatImporter) -> (Import Result ID: '0279d94a700407f89289ceb9051bf5d7') in 0.0012627 seconds [static dependencies only]. Details - ImportResultOutputID=c84a67b42a93e3623e758fadbc7edd54 DependenciesID=7f60a3bc80302a6bdc0774929545b18c StaticDependenciesID=bc187b53c4a8c26bc4a1f27967168d90 
+Start importing Assets/_Game/Content/Performances/PERF_D02_Greybox.asset using Guid(c540f035777e0c843be0886cdff7192a) (NativeFormatImporter) -> (Import Result ID: 'ff42bd2915b0ea3c2067e2288f43352e') in 0.0017795 seconds [static dependencies only]. Details - ImportResultOutputID=318976c66d2d8a7e1ca5d17eb0851068 DependenciesID=8185b0593055d729812caa2c6a01e885 StaticDependenciesID=7ca535a6fe4cc4583b3de1fcbaee4d4b 
+Start importing Assets/_Game/Content/Performances/PERF_D18_Greybox.asset using Guid(86da9c3c5adb949408ae47d15a17986c) (NativeFormatImporter) -> (Import Result ID: '5cfa73febbc53e66cb093a76cee309fe') in 0.0017922 seconds [static dependencies only]. Details - ImportResultOutputID=e21239a4177069e413e0ecbda49e28cd DependenciesID=9ded913056a2c622237c333e70066d57 StaticDependenciesID=b2f3440be4aa12b84967dd1121321b25 
+Start importing Assets/_Game/Content/Performances/PERF_D20_Greybox.asset using Guid(960ad69dd040da94693d6d96e17cb3fc) (NativeFormatImporter) -> (Import Result ID: '60c9a414fb64807a23d1aeb304395024') in 0.0013831 seconds [static dependencies only]. Details - ImportResultOutputID=d56a04d1ccbedf2754e6630df68cf6d5 DependenciesID=f8bf506bf39ede0ca454e27ada16e2fb StaticDependenciesID=b330820a2d8d83e1222b1f6fa27bda6f 
+Start importing Assets/_Game/Content/Performances/PERF_D13_Greybox.asset using Guid(d6a392aacb7b264498618ec676df4d68) (NativeFormatImporter) -> (Import Result ID: '76232f76534498c2372eadee5b761ee5') in 0.0013405 seconds [static dependencies only]. Details - ImportResultOutputID=1fde3cbb4d277a1c7d27c9ada6d080c7 DependenciesID=ac023eff6b5ca01689b40d9ed059a8a6 StaticDependenciesID=aaf9096a32466ce07986847932a9d0c8 
+Start importing Assets/_Game/Content/Performances/PERF_D09_Greybox.asset using Guid(d7e6b25e8b389454b88482a3b156640c) (NativeFormatImporter) -> (Import Result ID: 'bc49e82a002678c389c3d8137f7484e8') in 0.0021983 seconds [static dependencies only]. Details - ImportResultOutputID=edce6399766eca7b8bc68cf0d2b2cc68 DependenciesID=21d287c82bd8562fcb23d0bc83bbc887 StaticDependenciesID=34ed72230b96adf28874a49e19987895 
+Start importing Assets/_Game/Content/Performances/PERF_D05_Greybox.asset using Guid(5877c25925a5760458e901ddf29a18b4) (NativeFormatImporter) -> (Import Result ID: '943558f50d4b72dc3693b1ae1f02f3f8') in 0.0020719 seconds [static dependencies only]. Details - ImportResultOutputID=1152137892a2fa6cb332e9029e386b67 DependenciesID=64f60b80243783ce2fc64855e86bd061 StaticDependenciesID=9a0a7a5922ee209737f06aad0cbf909a 
+Start importing Assets/_Game/Content/Performances/PERF_D16_Greybox.asset using Guid(e9722b2445cc2ae469a5114ca06258f4) (NativeFormatImporter) -> (Import Result ID: '4128cfbff2b30188bbc9ee4d45c1c823') in 0.0014959 seconds [static dependencies only]. Details - ImportResultOutputID=1ce3eee2a56472b2f4afbf9317523808 DependenciesID=f4d8b32287182e15f9660010274eee5c StaticDependenciesID=952ce320ee1c506f5ef68c59be1a36bd 
+Start importing Assets/_Game/Content/Performances/PERF_D03P_Greybox.asset using Guid(6a4da65f5846710488d5482a32319d09) (NativeFormatImporter) -> (Import Result ID: '263776f32884021e9c2e85f0c3d74b26') in 0.0013383 seconds [static dependencies only]. Details - ImportResultOutputID=ac12c24eaf2216bc33d7d51202c33264 DependenciesID=f93c5fddc20bad93f5bf760cd459ea11 StaticDependenciesID=a8f7fa97a6f8be543db420071f134e40 
+Start importing Assets/_Game/Content/Performances/PERF_D17_Greybox.asset using Guid(0b3b2bdb12ba5324dbf1f960c5bf7ed0) (NativeFormatImporter) -> (Import Result ID: '8eb49aebbf20d59e2f5e16865c6074e2') in 0.0013002 seconds [static dependencies only]. Details - ImportResultOutputID=321ac1b18dd3384af8b8d23122c6924f DependenciesID=dc8c41250e493ec70ed72baac2c6c663 StaticDependenciesID=93632ae9c6941586953dbf6ad1b58996 
+Start importing Assets/_Game/Content/Performances/PERF_D22_Greybox.asset using Guid(9b346d9ce4a20af4993c11dc89f3ac85) (NativeFormatImporter) -> (Import Result ID: '85eb82b481b5d3526a8418a97417e899') in 0.0024881 seconds [static dependencies only]. Details - ImportResultOutputID=4715e0c31d6fde9092d39916366db8fc DependenciesID=3bbd2aa2f4a1bb4ccbc9db2fa125b4a6 StaticDependenciesID=11c9b6903052e194d666f9a4184a5dee 
+Start importing Assets/_Game/Content/Performances/PERF_D15_Greybox.asset using Guid(bc92c552fb1744e45a4c30142a299557) (NativeFormatImporter) -> (Import Result ID: '49c9a7d25b4ac8d757e404474cab647d') in 0.0022988 seconds [static dependencies only]. Details - ImportResultOutputID=e799d119c0e10c054bd227b7e2e0e027 DependenciesID=375fb5688766f49949b0a086a1d9350b StaticDependenciesID=0db513b251ba3afc4199bd8d9a6fdb37 
+Start importing Assets/_Game/Content/Performances/PERF_D03_Greybox.asset using Guid(8d9d5a9811096fb41a335d4c350da19b) (NativeFormatImporter) -> (Import Result ID: 'c35f23be426f9380e28b5a0a9b4bf08b') in 0.00256 seconds [static dependencies only]. Details - ImportResultOutputID=fc38625670ccca3bcc9c178fc3cd9a69 DependenciesID=fee45dbc259912a99549b5552a74736e StaticDependenciesID=fb805f399169f60419ee4610a287df0b 
+Start importing Assets/_Game/Content/Performances/PERF_D12_Greybox.asset using Guid(ade9715a2a4137549987ee7046222867) (NativeFormatImporter) -> (Import Result ID: 'c81b15fa420b5a56b916f6a0c2d2fbd4') in 0.0026769 seconds [static dependencies only]. Details - ImportResultOutputID=460757d9272dc4d6c5eeac8d76dd53ab DependenciesID=ad0a106c1c6268ad257a7d7bf1f82db3 StaticDependenciesID=758f31ae0f2ea9b770c2c4bfe3582f6d 
+Start importing Assets/_Game/Content/Performances/PERF_D14_Greybox.asset using Guid(4e2ba6ce34fcdeb41840d77e5fff67f5) (NativeFormatImporter) -> (Import Result ID: '6d451d0f3e1b99f5ec42f5350d7824af') in 0.0019576 seconds [static dependencies only]. Details - ImportResultOutputID=0ab9f383c7fe16d152b036eec4f0d307 DependenciesID=ebaf70d517c1d2ea33aeb148ac750ef3 StaticDependenciesID=8ed33e0cb39c63366c6b06869eccbc25 
+Start importing Assets/_Game/Content/Performances/PERF_D04_Greybox.asset using Guid(fe2ad418f61b72d45a6dfcdcba027037) (NativeFormatImporter) -> (Import Result ID: 'abe117ef292df5e34c2881ec59943505') in 0.0024016 seconds [static dependencies only]. Details - ImportResultOutputID=c414152dd3264d1434762cda0ab57515 DependenciesID=4ce4f341a7e6ee68e33632e76d7afa40 StaticDependenciesID=7eb291f8f70fd2f57290f3a15c11809c 
+Start importing Assets/_Game/Content/Performances/PERF_D08_Greybox.asset using Guid(5f95b1aa487c72849936df1ca51c8bf4) (NativeFormatImporter) -> (Import Result ID: '889c11db6a14eb8dd2909a9b595f8e3e') in 0.0029838 seconds [static dependencies only]. Details - ImportResultOutputID=d903c2ea7f32004379cb4b585f437bad DependenciesID=f4ca54aa45df5494cf071338d1ef7871 StaticDependenciesID=a0f41cac232bf9f1a9ad2db48b46afb2 
+Start importing Assets/_Game/Content/Performances/PERF_D01_Greybox.asset using Guid(ef4928107ca5d6c49a68a7cdc4074b62) (NativeFormatImporter) -> (Import Result ID: 'c99287dd699a90238426c3530caab69b') in 0.0021277 seconds [static dependencies only]. Details - ImportResultOutputID=d0b9e6380e6798bcc6e53a9fdd619d07 DependenciesID=46b0e8c097dcdefefd45190c8877210a StaticDependenciesID=ca1e09b208f61cdac63160cafb18c46f 
+Asset Pipeline Refresh (id=28ea19a0bcfa66141b72bba38d12a092): Total: 0.093 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=eed92096cc9e77040bee351b03d50afa): Total: 0.010 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+[ConGame] Delivered animation assets bound to M1 performances.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameScaffoldBuilder:InstallDeliveredPerformanceAssets () (at Assets/_Game/Editor/ConGameScaffoldBuilder.cs:209)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:41)
+
+(Filename: Assets/_Game/Editor/ConGameScaffoldBuilder.cs Line: 209)
+
+Opening scene 'Assets/_Game/Scenes/Room_M1.unity'
+Unloading 61 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/_Game/Scenes/Room_M1.unity'
+	Deserialize:            37.108 ms
+	Integration:            238.478 ms
+	Integration of assets:  0.154 ms
+	Thread Wait Time:       0.037 ms
+	Total Operation Time:   275.778 ms
+Unloading 4602 unused Assets / (1.1 MB). Loaded Objects now: 7847.
+Memory consumption went from 221.2 MB to 220.2 MB.
+Total: 11.933500 ms (FindLiveObjects: 0.704600 ms CreateObjectMapping: 0.376100 ms MarkObjects: 7.829600 ms  DeleteObjects: 3.021500 ms)
+
+INSTALL character Player <- CH_Player_Model ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:InstallCharacter (string,string,UnityEditor.Animations.AnimatorController,ConGame.Runtime.Flow.GameFlowController,ConGame.Runtime.Facts.GameplayFactService,ConGame.Presentation.Animation.CharacterAnimatorDriver/DriverRole,single,string[]) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:315)
+ConGame.Editor.ConGameCharacterInstaller:WireScene (UnityEditor.Animations.AnimatorController,UnityEditor.Animations.AnimatorController) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:216)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:42)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 315)
+
+INSTALL killer holster and backup pistol mounted
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:InstallKillerEquipment (UnityEngine.Transform) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:383)
+ConGame.Editor.ConGameCharacterInstaller:InstallCharacter (string,string,UnityEditor.Animations.AnimatorController,ConGame.Runtime.Flow.GameFlowController,ConGame.Runtime.Facts.GameplayFactService,ConGame.Presentation.Animation.CharacterAnimatorDriver/DriverRole,single,string[]) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:303)
+ConGame.Editor.ConGameCharacterInstaller:WireScene (UnityEditor.Animations.AnimatorController,UnityEditor.Animations.AnimatorController) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:219)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:42)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 383)
+
+INSTALL character Killer <- CH_Killer_Model ok
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:InstallCharacter (string,string,UnityEditor.Animations.AnimatorController,ConGame.Runtime.Flow.GameFlowController,ConGame.Runtime.Facts.GameplayFactService,ConGame.Presentation.Animation.CharacterAnimatorDriver/DriverRole,single,string[]) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:315)
+ConGame.Editor.ConGameCharacterInstaller:WireScene (UnityEditor.Animations.AnimatorController,UnityEditor.Animations.AnimatorController) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:219)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:42)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 315)
+
+[AudioCueAutoBinder] 绑定 10 个音效槽位,全部命中
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.AudioCueAutoBinder:BindCues () (at Assets/_Game/Editor/AudioCueAutoBinder.cs:88)
+ConGame.Editor.ConGameCharacterInstaller:BindAudio () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:407)
+ConGame.Editor.ConGameCharacterInstaller:WireScene (UnityEditor.Animations.AnimatorController,UnityEditor.Animations.AnimatorController) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:223)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:42)
+
+(Filename: Assets/_Game/Editor/AudioCueAutoBinder.cs Line: 88)
+
+Start importing Assets/_Game/Art/Characters/MAT_CH_Killer.mat using Guid(c356bb20e7aa244459732f5702decffe) (NativeFormatImporter) -> (Import Result ID: '5b65952ae0dfccd6c2677d8d8efde5d9') in 0.0024884 seconds [static dependencies only]. Details - ImportResultOutputID=147caab9a0e5c76bb63d0c545f93c87b DependenciesID=65b8f8e6850a17dcd38544e4a3f15c83 StaticDependenciesID=3514d3b4a219664cd9b247742d6faf0d 
+Start importing Assets/_Game/Art/Characters/MAT_CH_Player.mat using Guid(48ba372ed5c97d540b46ed2cd22ab764) (NativeFormatImporter) -> (Import Result ID: 'f99c3e86d0deb2372a264cfbc1cc6c59') in 0.0015557 seconds [static dependencies only]. Details - ImportResultOutputID=937271f1c896cc6f7bbc7ece6009cec6 DependenciesID=42d0c8c75ad4be84d6a3f8d101a8c0a6 StaticDependenciesID=a80758f35ee33e9be46fa902ad00c8df 
+Asset Pipeline Refresh (id=f223b478405334c44a0204f2eca93aad): Total: 0.042 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Game/Scenes/Room_M1.unity using Guid(40535a03a7e48f949bd7a94781b0b669) (DefaultImporter) -> (Import Result ID: '2e5a842d6f2e2dd58f63d89875ef86c7') in 0.0011775 seconds [static dependencies only]. Details - ImportResultOutputID=be07901c57f50ae9ae6bed49503fa1c1 DependenciesID=d8a0b48c32fa1bc3f94afe73085fdb06 StaticDependenciesID=b43667dbfea75e8706cc82cf80efce0c 
+Asset Pipeline Refresh (id=c38c91daeb5c35042be93a25cc2a94c1): Total: 0.043 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+INSTALL scene saved
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:WireScene (UnityEditor.Animations.AnimatorController,UnityEditor.Animations.AnimatorController) (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:227)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:42)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 227)
+
+INSTALL done
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameCharacterInstaller:Run () (at Assets/_Game/Editor/ConGameCharacterInstaller.cs:43)
+
+(Filename: Assets/_Game/Editor/ConGameCharacterInstaller.cs Line: 43)
+
+Batchmode quit successfully invoked - shutting down!
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-chual-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-chual channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

@@ -46,6 +46,19 @@ namespace ConGame.Runtime.Interaction
                 return false;
             }
 
+            // Trap facts are a single authoritative world state. Do not accept
+            // a different trap into this socket while another trap is armed;
+            // otherwise placement would succeed while its handler remained
+            // unusable because the global fact still names the other trap.
+            if (trapOnPlace != TrapState.None && facts != null)
+            {
+                TrapState currentTrap = facts.CaptureSnapshot().Trap;
+                if (currentTrap != TrapState.None && currentTrap != trapOnPlace)
+                {
+                    return false;
+                }
+            }
+
             return acceptedCategories == ItemCategory.None ||
                    (entity.Categories & acceptedCategories) != ItemCategory.None;
         }
@@ -131,8 +144,12 @@ namespace ConGame.Runtime.Interaction
                 return;
             }
 
-            facts.SetTrap(trapOnPlace);
-            facts.SetTrapPulled(false);
+            FactSnapshot snapshot = facts.CaptureSnapshot();
+            if (snapshot.Trap == TrapState.None || snapshot.Trap == trapOnPlace)
+            {
+                facts.SetTrap(trapOnPlace);
+                facts.SetTrapPulled(false);
+            }
         }
 
         private void ClearTrapFacts()
@@ -142,8 +159,11 @@ namespace ConGame.Runtime.Interaction
                 return;
             }
 
-            facts.SetTrap(TrapState.None);
-            facts.SetTrapPulled(false);
+            if (facts.CaptureSnapshot().Trap == trapOnPlace)
+            {
+                facts.SetTrap(TrapState.None);
+                facts.SetTrapPulled(false);
+            }
         }
 
         private static float ResolveFurnitureBreachExtra(string itemId)

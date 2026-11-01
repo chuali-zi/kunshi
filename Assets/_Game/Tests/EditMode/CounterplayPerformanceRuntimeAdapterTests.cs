@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using ConGame.Domain.Counterplay;
 using ConGame.Domain.Persistence;
@@ -58,6 +58,49 @@ namespace ConGame.Tests.EditMode
             Assert.That(adapter.AccessibilityThresholdScale, Is.EqualTo(0.6f).Within(0.001f));
             Assert.That(loop.Progress.d21Seen, Is.True);
             Assert.That(requestedNext, Is.EqualTo("D22"));
+        }
+
+        [Test]
+        public void BranchResolutionDefersForRegisteredD22LootOwnerAndPreservesD08DisarmRule()
+        {
+            LoopDirector loop = _root.AddComponent<LoopDirector>();
+            CounterplayPerformanceRuntimeAdapter adapter =
+                _root.AddComponent<CounterplayPerformanceRuntimeAdapter>();
+            adapter.Configure(null, loop, null, new GameSettingsStore(_settingsPath));
+
+            PerformanceBranchDefinition d22Branch = new PerformanceBranchDefinition(
+                "single_round_dodged",
+                true,
+                null,
+                false);
+
+            Assert.That(
+                adapter.OnBranchResolved("D22", 1, d22Branch, CounterplayNarrativeOutcome.ScriptedFailure),
+                Is.False,
+                "D22 should finish normally when no loot-window owner is registered");
+
+            adapter.RegisterLootWindowController();
+            Assert.That(
+                adapter.OnBranchResolved("D22", 1, d22Branch, CounterplayNarrativeOutcome.ScriptedFailure),
+                Is.True,
+                "a registered loot-window owner must be allowed to defer D22 completion");
+
+            adapter.UnregisterLootWindowController();
+            Assert.That(
+                adapter.OnBranchResolved("D22", 1, d22Branch, CounterplayNarrativeOutcome.ScriptedFailure),
+                Is.False,
+                "unregistering the owner restores normal D22 completion");
+
+            PerformanceBranchDefinition d08DisarmBranch = new PerformanceBranchDefinition(
+                "disarm_window",
+                true,
+                null,
+                false);
+            adapter.RegisterLootWindowController();
+            Assert.That(
+                adapter.OnBranchResolved("D08", 1, d08DisarmBranch, CounterplayNarrativeOutcome.ScriptedFailure),
+                Is.True,
+                "D08 keeps its existing registered-owner/all-QTE/disarm-window defer condition");
         }
 
         private static void SetPrivateField(object target, string name, object value)

@@ -61,7 +61,10 @@ namespace ConGame.Tests.PlayMode
                 Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.EndingE3));
 
                 elapsed = 0f;
-                while (flow.CurrentPhase != GamePhase.Finished && elapsed < 8f)
+                EndingSequenceSettings settings = EndingSequenceSettings.Default;
+                float finalPassSeconds = settings.E3KillerApproachSeconds + settings.E3SitChairSeconds * 2f +
+                    settings.E3ClockTickSeconds * settings.E3ClockTickCount + settings.E3ShotSilenceSeconds + 2f;
+                while (flow.CurrentPhase != GamePhase.Finished && elapsed < finalPassSeconds)
                 {
                     elapsed += Time.deltaTime;
                     yield return null;

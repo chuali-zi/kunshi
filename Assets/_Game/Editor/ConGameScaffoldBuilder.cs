@@ -18,9 +18,11 @@ using ConGame.Runtime.Lighting;
 using ConGame.Runtime.Loop;
 using ConGame.Runtime.Player;
 using ConGame.Presentation.Audio;
+using ConGame.Presentation.Animation;
 using ConGame.Presentation.Camera;
 using ConGame.Presentation.CRT;
 
+using ConGame.Presentation.Choreography;
 using ConGame.Presentation.M1;
 using ConGame.Presentation.Timeline;
 using Unity.AI.Navigation;
@@ -49,6 +51,7 @@ namespace ConGame.Editor
         private const string NavigationRoot = ContentRoot + "/Navigation";
         private const string NavMeshPath = NavigationRoot + "/NavMesh_Room_M1.asset";
         private const string MaterialRoot = ContentRoot + "/Materials";
+        private const string AnimationRoot = Root + "/Art/Animations";
         private const string PipelinePath = ConfigRoot + "/RP_ConGame.asset";
         private const string RendererPath = ConfigRoot + "/RP_ConGame_Renderer.asset";
 
@@ -72,6 +75,8 @@ namespace ConGame.Editor
             BuildBootstrapScene();
             BuildMenuScene();
             BuildRoomScene(config, counterplays, items, materials);
+            ConGameArtInstaller.InstallIntoCurrentScene();
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene(), RoomScenePath);
             SetBuildScenes();
 
             AssetDatabase.SaveAssets();
@@ -189,11 +194,101 @@ namespace ConGame.Editor
                 M1GreyboxPlayableAsset asset =
                     EnsureAsset<M1GreyboxPlayableAsset>($"{PerformanceRoot}/PERF_{seed.Id}_Greybox.asset");
                 asset.Configure(seed.Id, style, duration, policy, windows, branches);
+                ResolvePerformanceAnimations(seed.Id, out AnimationClip playerAnimation,
+                    out AnimationClip killerAnimation);
+                asset.ConfigureAnimations(playerAnimation, killerAnimation);
                 EditorUtility.SetDirty(asset);
                 result.Add(seed.Id, asset);
             }
 
             return result;
+        }
+
+        public static void InstallDeliveredPerformanceAssets()
+        {
+            EnsureFolders();
+            BuildM1Performances();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("[ConGame] Delivered animation assets bound to M1 performances.");
+        }
+
+        private static void ResolvePerformanceAnimations(
+            string outcomeId,
+            out AnimationClip playerAnimation,
+            out AnimationClip killerAnimation)
+        {
+            playerAnimation = LoadPerformanceClip("AN_Player_HitFall");
+            killerAnimation = LoadPerformanceClip("AN_Killer_AimFire");
+
+            switch (outcomeId)
+            {
+                case "D03P":
+                    playerAnimation = LoadPerformanceClip("POSE_Player_CrouchHide");
+                    killerAnimation = LoadPerformanceClip("AN_Killer_Walk");
+                    break;
+                case "D04":
+                case "D14":
+                    playerAnimation = LoadPerformanceClip("POSE_Player_Prone");
+                    killerAnimation = LoadPerformanceClip("AN_Killer_Walk");
+                    break;
+                case "D06":
+                    playerAnimation = LoadPerformanceClip("POSE_Player_KneelHandsUp");
+                    break;
+                case "D07":
+                    playerAnimation = LoadPerformanceClip("AN_Player_Swing");
+                    break;
+                case "D08":
+                    playerAnimation = LoadPerformanceClip("PAIR_D08_PlayerSide");
+                    killerAnimation = LoadPerformanceClip("PAIR_D08_KillerSide");
+                    break;
+                case "D09":
+                    killerAnimation = LoadPerformanceClip("AN_Killer_KickDoor");
+                    break;
+                case "D10":
+                    playerAnimation = LoadPerformanceClip("AN_Player_Throw");
+                    killerAnimation = LoadPerformanceClip("AN_Killer_DodgeSide");
+                    break;
+                case "D11":
+                    playerAnimation = LoadPerformanceClip("PAIR_D11_PlayerSide");
+                    killerAnimation = LoadPerformanceClip("PAIR_D11_KillerSide");
+                    break;
+                case "D16":
+                    killerAnimation = LoadPerformanceClip("AN_Killer_Stumble");
+                    break;
+                case "D17":
+                    killerAnimation = LoadPerformanceClip("AN_Killer_BlockLight");
+                    break;
+                case "D19":
+                case "D20":
+                    playerAnimation = LoadPerformanceClip("POSE_Player_CrouchHide");
+                    killerAnimation = LoadPerformanceClip("POSE_Killer_LowReady");
+                    break;
+                case "D21":
+                    playerAnimation = LoadPerformanceClip("PAIR_D21_PlayerSide");
+                    killerAnimation = LoadPerformanceClip("PAIR_D21_KillerSide");
+                    break;
+                case "D22":
+                    playerAnimation = LoadPerformanceClip("POSE_Player_AimPistol");
+                    killerAnimation = LoadPerformanceClip("AN_Killer_DrawBackupFire");
+                    break;
+            }
+        }
+
+        private static AnimationClip LoadPerformanceClip(string baseName)
+        {
+            string path = $"{AnimationRoot}/{baseName}.fbx";
+            UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
+            for (int i = 0; i < assets.Length; i++)
+            {
+                if (assets[i] is AnimationClip clip &&
+                    !clip.name.StartsWith("__preview__", StringComparison.Ordinal))
+                {
+                    return clip;
+                }
+            }
+
+            throw new InvalidOperationException($"Performance animation clip missing: {path}");
         }
 
         private static Dictionary<string, Material> BuildMaterials()
@@ -293,6 +388,8 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
 
             GameFlowController flow = systems.AddComponent<GameFlowController>();
             GameplayFactService facts = systems.AddComponent<GameplayFactService>();
+            AmbushFactDriver ambushDriver = systems.AddComponent<AmbushFactDriver>();
+            ambushDriver.Configure(facts);
             GameplayEventHub events = systems.AddComponent<GameplayEventHub>();
             LoopResetRegistry registry = systems.AddComponent<LoopResetRegistry>();
             LoopDirector loop = systems.AddComponent<LoopDirector>();
@@ -332,8 +429,18 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
                                        out GameObject pistolDrop, out GameObject flashlightDrop,
                                        out GameObject backupPistolDrop);
 
-            KillerDirector killer = BuildKiller(roomRoot.transform, playerMotor, interactor, facts, counterplays,
-                                                config, materials["killer"]);
+            KillerDirector killer = BuildKiller(roomRoot.transform, playerMotor, interactor, facts, events,
+                                                 counterplays, config, materials["killer"]);
+            interactor.ConfigureKiller(killer.transform);
+            GameObject tableLamp = GameObject.Find("PRP_TableLamp");
+            KillerLampBrightener brightener = killer.gameObject.AddComponent<KillerLampBrightener>();
+            brightener.Configure(facts, tableLamp == null ? null : tableLamp.GetComponent<BreakableLight>());
+            PairedPerformancePlayer paired = killer.gameObject.AddComponent<PairedPerformancePlayer>();
+            paired.Configure(killer.transform, playerMotor, interactor);
+            paired.ConfigureD01Fallback(killer.GetComponent<M1GreyboxPerformancePlayer>(), null);
+            killer.ConfigurePerformanceLauncher(paired);
+            TipBookcaseUseHandler bookcaseTip = GameObject.Find("FUR_Bookcase")?.GetComponent<TipBookcaseUseHandler>();
+            bookcaseTip?.Configure(facts, events, new Vector3(0f, 0f, 85f), doorHinge, Vector3.right);
             RoomDoorBreachController breach = systems.AddComponent<RoomDoorBreachController>();
             breach.Configure(doorHinge, config.BreachDuration, config.BreachOpenAngle);
 
@@ -415,11 +522,11 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             CreateCube("West Wall", new Vector3(-3.15f, 1.4f, 0f), new Vector3(0.1f, 2.8f, 5.2f), shell.transform,
                        materials["wall"]);
 
-            CreateCube("East Wall Lower", new Vector3(3.15f, 1.4f, -0.6f), new Vector3(0.1f, 2.8f, 3.2f),
+            CreateCube("East Wall Lower", new Vector3(3.15f, 1.4f, -1.25f), new Vector3(0.1f, 2.8f, 2.70f),
                        shell.transform, materials["wall"]);
-            CreateCube("East Wall Upper", new Vector3(3.15f, 1.4f, 2.3f), new Vector3(0.1f, 2.8f, 0.7f),
+            CreateCube("East Wall Upper", new Vector3(3.15f, 1.4f, 1.825f), new Vector3(0.1f, 2.8f, 1.65f),
                        shell.transform, materials["wall"]);
-            CreateCube("Door Lintel", new Vector3(3.15f, 2.48f, 1.45f), new Vector3(0.1f, 0.64f, 1.0f), shell.transform,
+            CreateCube("Door Lintel", new Vector3(3.15f, 2.48f, 0.55f), new Vector3(0.1f, 0.64f, 0.90f), shell.transform,
                        materials["wall"]);
             CreateCube("Ceiling", new Vector3(0f, 2.85f, 0f), new Vector3(6.4f, 0.1f, 5.4f), shell.transform,
                        materials["wall"]);
@@ -427,13 +534,13 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             GameObject hinge = new GameObject("DoorHinge");
             hinge.transform.SetParent(shell.transform);
             hinge.transform.position = new Vector3(3.05f, 0f, 1f);
-            GameObject door = CreateCube("Door", new Vector3(3.05f, 1.025f, 1.45f), new Vector3(0.12f, 2.05f, 0.9f),
+            GameObject door = CreateCube("Door", new Vector3(3.05f, 1.025f, 0.55f), new Vector3(0.12f, 2.05f, 0.9f),
                                          hinge.transform, materials["wood"]);
             doorHinge = hinge.transform;
 
-            CreateCube("Corridor Floor", new Vector3(3.7f, -0.05f, 1.45f), new Vector3(1.2f, 0.1f, 1.2f),
+            CreateCube("Corridor Floor", new Vector3(3.7f, -0.05f, 0.55f), new Vector3(1.2f, 0.1f, 1.2f),
                        shell.transform, materials["floor"]);
-            CreateCube("Black Corridor", new Vector3(4.28f, 1.3f, 1.45f), new Vector3(0.1f, 2.6f, 1.2f),
+            CreateCube("Black Corridor", new Vector3(4.28f, 1.3f, 0.55f), new Vector3(0.1f, 2.6f, 1.2f),
                        shell.transform, materials["killer"]);
         }
 
@@ -503,6 +610,8 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             GameObject hand = new GameObject("HandSocket_R");
             hand.transform.SetParent(player.transform, false);
             hand.transform.localPosition = new Vector3(0.35f, 1.15f, 0.45f);
+            HumanoidHandSocketBinder socketBinder = player.AddComponent<HumanoidHandSocketBinder>();
+            socketBinder.Configure(null, hand.transform, Vector3.zero, Quaternion.identity);
 
             firstPersonRig = new GameObject("CM First Person Camera");
             firstPersonRig.transform.SetParent(player.transform, false);
@@ -566,6 +675,7 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             GameObject dresser = CreateCube("FUR_Dresser", new Vector3(-1.45f, 0.425f, 2.1f),
                                             new Vector3(1.1f, 0.85f, 0.48f), furniture.transform, materials["wood"]);
             WireCarryableFurniture(dresser, items["dresser"], 0.33f, false);
+            WireDresserDrawers(dresser);
 
             GameObject woodChair = CreateCube("FUR_WoodChair", new Vector3(-0.1f, 0.48f, 1.7f),
                                               new Vector3(0.45f, 0.95f, 0.5f), furniture.transform,
@@ -614,6 +724,13 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             underAnchor.transform.localPosition = new Vector3(0f, -0.15f, -0.55f);
             underAnchor.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
             underHide.Configure(underAnchor.transform, PlayerZone.UnderBed);
+
+            GameObject climbStand = new GameObject("ClimbStand_Bed");
+            climbStand.transform.SetParent(bed.transform, false);
+            climbStand.transform.localPosition = new Vector3(0f, 0.52f, -0.05f);
+            climbStand.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            ClimbCapability climb = bed.AddComponent<ClimbCapability>();
+            climb.Configure(climbStand.transform, 0.95f, false);
 
             GameObject underBedZone = new GameObject("Zone_UnderBed");
             underBedZone.transform.SetParent(bed.transform.parent, false);
@@ -672,9 +789,64 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             if (meleeWeapon)
             {
                 furniture.AddComponent<MeleeWeaponCapability>();
+                GameObject climbStand = new GameObject("ClimbStand_Chair");
+                climbStand.transform.SetParent(furniture.transform, false);
+                climbStand.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+                climbStand.transform.localRotation = Quaternion.identity;
+                ClimbCapability climb = furniture.AddComponent<ClimbCapability>();
+                climb.Configure(climbStand.transform, 0.85f, true);
+                BreakableItemBehaviour chairBreak = furniture.AddComponent<BreakableItemBehaviour>();
+                chairBreak.Configure(stateful, null, null);
             }
 
             furniture.AddComponent<RigidbodyResettable>();
+        }
+
+        private static void WireDresserDrawers(GameObject dresser)
+        {
+            CreateScaffoldDrawer(dresser, "Drawer_0", new Vector3(0f, 0.22f, 0.28f), 1, true);
+            CreateScaffoldDrawer(dresser, "Drawer_1", new Vector3(0f, 0f, 0.28f), 1, false);
+            CreateScaffoldDrawer(dresser, "Drawer_2", new Vector3(0f, -0.22f, 0.28f), 2, false);
+        }
+
+        private static void CreateScaffoldDrawer(GameObject dresser, string name, Vector3 localPos, int pulls,
+                                                 bool withClutter)
+        {
+            GameObject drawer = CreateCube(name, dresser.transform.TransformPoint(localPos),
+                                           new Vector3(0.9f, 0.22f, 0.35f), dresser.transform,
+                                           dresser.GetComponent<Renderer>().sharedMaterial);
+            drawer.transform.localPosition = localPos;
+            BoxCollider box = drawer.GetComponent<BoxCollider>();
+            if (box != null)
+            {
+                box.isTrigger = true;
+            }
+
+            InteractableEntity entity = drawer.AddComponent<InteractableEntity>();
+            entity.Configure(null, "dresser_drawer");
+            OpenableDrawer openable = drawer.AddComponent<OpenableDrawer>();
+            GameObject[] contents = null;
+            if (withClutter)
+            {
+                GameObject clutter = CreateCube("PRP_DrawerClutter_Item", Vector3.zero, new Vector3(0.18f, 0.06f, 0.18f),
+                                                drawer.transform, dresser.GetComponent<Renderer>().sharedMaterial);
+                clutter.transform.localPosition = new Vector3(0f, 0.16f, 0f);
+                clutter.SetActive(false);
+                Rigidbody body = clutter.AddComponent<Rigidbody>();
+                body.mass = 0.2f;
+                body.isKinematic = true;
+                InteractableEntity clutterEntity = clutter.AddComponent<InteractableEntity>();
+                clutterEntity.Configure(null, "drawer_clutter");
+                StatefulWorldItem stateful = clutter.AddComponent<StatefulWorldItem>();
+                stateful.Configure(body);
+                clutter.AddComponent<PickupCapability>();
+                contents = new[] { clutter };
+            }
+
+            openable.Configure(pulls, drawer.transform, 0.22f, contents);
+            UseCapability use = drawer.AddComponent<UseCapability>();
+            use.Configure(openable);
+            drawer.AddComponent<InspectCapability>();
         }
 
         private static void BuildBat(Transform parent, ItemDefinitionAsset definition, Material material)
@@ -765,6 +937,29 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             tableUse.Configure(toggle);
             table.AddComponent<InspectCapability>();
             table.AddComponent<RigidbodyResettable>();
+            LampUnplugOnHold unplug = table.AddComponent<LampUnplugOnHold>();
+            unplug.Configure(tableBreakable, tableStateful);
+            GameObject lampSocket = new GameObject("LampDrapeSocket");
+            lampSocket.transform.SetParent(table.transform, false);
+            lampSocket.transform.localPosition = new Vector3(0f, 0.4f, 0f);
+            InteractableEntity socketEntity = lampSocket.AddComponent<InteractableEntity>();
+            socketEntity.Configure(null, "lamp_drape_socket");
+            PlacementSocket drape = lampSocket.AddComponent<PlacementSocket>();
+            drape.Configure("lamp", ItemCategory.TripTrap, lampSocket.transform, facts);
+            PlaceCapability drapePlace = lampSocket.AddComponent<PlaceCapability>();
+            drapePlace.Configure(drape);
+        }
+
+        private static void BuildCorridorResistance(Transform parent)
+        {
+            GameObject corridor = new GameObject("Zone_BlackCorridor");
+            corridor.transform.SetParent(parent, false);
+            corridor.transform.position = new Vector3(3.6f, 0.9f, 0.55f);
+            BoxCollider box = corridor.AddComponent<BoxCollider>();
+            box.isTrigger = true;
+            box.size = new Vector3(1.6f, 2.2f, 1.4f);
+            CorridorResistanceVolume volume = corridor.AddComponent<CorridorResistanceVolume>();
+            volume.Configure(Vector3.right, 0f, 1.6f);
         }
 
         private static void BuildExtendedInteractables(Transform parent, Transform doorHinge,
@@ -779,19 +974,21 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             Material wood = materials["wood"];
 
             BuildDoorInteractable(parent, doorHinge, facts, items["room_door"], wood);
-            BuildDoorTrapSocket(parent, facts, wood);
+            BuildCorridorResistance(parent);
+            BuildDoorTrapSocket(parent, facts, events, wood);
             BuildDoorBlindZone(parent, facts);
-            BuildAmbushPoint(parent, facts, wood);
             BuildBlanket(parent, facts, events, items["blanket"], interactable);
-            BuildRug(parent, facts, items["rug"], materials["floor"]);
+            BuildRug(parent, facts, events, items["rug"], materials["floor"]);
             BuildStrikeWall(parent, facts, items["walls"], materials["wall"]);
             BuildBoardedWindow(parent, facts, items["boarded_window"], materials["wall"]);
             BuildThrowable(parent, items["books"], interactable, "PRP_Books",
-                           new Vector3(-2.45f, 1.55f, 1.55f), new Vector3(0.28f, 0.12f, 0.2f), 0.6f);
+                           new Vector3(-2.45f, 1.55f, 1.55f), new Vector3(0.28f, 0.12f, 0.2f), 0.6f, true);
             BuildThrowable(parent, items["vase"], interactable, "PRP_Vase",
-                           new Vector3(-1.9f, 1.15f, 2.05f), new Vector3(0.18f, 0.35f, 0.18f), 0.9f);
+                           new Vector3(-1.9f, 1.15f, 2.05f), new Vector3(0.18f, 0.35f, 0.18f), 0.9f, false,
+                           events, true, true);
             BuildThrowable(parent, items["wall_clock"], interactable, "PRP_WallClock",
-                           new Vector3(1.55f, 1.85f, -2.45f), new Vector3(0.35f, 0.35f, 0.08f), 0.7f);
+                           new Vector3(1.55f, 1.85f, -2.45f), new Vector3(0.35f, 0.35f, 0.08f), 0.7f, false,
+                           events, false, false, true);
             BuildRemote(parent, television, items["remote"], interactable);
             BuildKillerCoat(parent, items["killer_coat"], materials["killer"]);
 
@@ -866,9 +1063,10 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             return prop;
         }
 
-        private static void BuildDoorTrapSocket(Transform parent, GameplayFactService facts, Material material)
+        private static void BuildDoorTrapSocket(Transform parent, GameplayFactService facts, GameplayEventHub events,
+                                                Material material)
         {
-            GameObject trapSocket = CreateCube("PRP_DoorTrapSocket", new Vector3(2.55f, 0.08f, 1.1f),
+            GameObject trapSocket = CreateCube("PRP_DoorTrapSocket", new Vector3(2.55f, 0.08f, 0.20f),
                                                new Vector3(0.9f, 0.06f, 0.55f), parent, material);
             Collider collider = trapSocket.GetComponent<Collider>();
             if (collider != null)
@@ -885,6 +1083,8 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
                              TrapState.BlanketArmed);
             PlaceCapability place = trapSocket.AddComponent<PlaceCapability>();
             place.Configure(socket);
+            TripTrapController contact = trapSocket.AddComponent<TripTrapController>();
+            contact.Configure(facts, events, TrapState.BlanketArmed, false);
             trapSocket.AddComponent<InspectCapability>();
             trapSocket.AddComponent<TransformResettable>();
         }
@@ -957,6 +1157,17 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             entity.Configure(definition);
             MirrorFlashlightReactive reactive = mirror.AddComponent<MirrorFlashlightReactive>();
             reactive.Configure(facts, events);
+            StatefulWorldItem stateful = mirror.GetComponent<StatefulWorldItem>();
+            if (stateful == null)
+            {
+                Rigidbody body = mirror.AddComponent<Rigidbody>();
+                body.isKinematic = true;
+                stateful = mirror.AddComponent<StatefulWorldItem>();
+                stateful.Configure(body);
+            }
+
+            BreakableItemBehaviour breakage = mirror.AddComponent<BreakableItemBehaviour>();
+            breakage.Configure(stateful, events, null);
             GameplayAffordanceHandler affordance = mirror.AddComponent<GameplayAffordanceHandler>();
             affordance.Configure(GameplayAffordanceKind.ActivateGlare, facts);
             UseCapability use = mirror.AddComponent<UseCapability>();
@@ -968,7 +1179,7 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
         private static void BuildDoorInteractable(Transform parent, Transform doorHinge, GameplayFactService facts,
                                                   ItemDefinitionAsset definition, Material material)
         {
-            GameObject doorProxy = CreateCube("PRP_RoomDoor_Interact", new Vector3(2.7f, 1.05f, 1.45f),
+            GameObject doorProxy = CreateCube("PRP_RoomDoor_Interact", new Vector3(2.7f, 1.05f, 0.55f),
                                               new Vector3(0.35f, 1.9f, 0.85f), parent, material);
             Collider proxyCollider = doorProxy.GetComponent<Collider>();
             if (proxyCollider != null)
@@ -979,6 +1190,10 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             InteractableEntity entity = doorProxy.AddComponent<InteractableEntity>();
             entity.Configure(definition);
             doorProxy.AddComponent<InspectCapability>();
+            RoomDoorUseHandler doorUse = doorProxy.AddComponent<RoomDoorUseHandler>();
+            doorUse.Configure(doorHinge, facts);
+            UseCapability doorUseCapability = doorProxy.AddComponent<UseCapability>();
+            doorUseCapability.Configure(doorUse);
 
             GameObject socketAnchor = new GameObject("DoorBlockAnchor");
             socketAnchor.transform.SetParent(doorProxy.transform, false);
@@ -996,24 +1211,30 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
         {
             GameObject zoneObject = new GameObject("Zone_DoorBlind");
             zoneObject.transform.SetParent(parent);
-            zoneObject.transform.position = new Vector3(2.55f, 0.9f, 1.45f);
+            zoneObject.transform.position = new Vector3(2.55f, 0.9f, 0.55f);
             BoxCollider trigger = zoneObject.AddComponent<BoxCollider>();
             trigger.size = new Vector3(0.7f, 1.8f, 1.0f);
             PlayerZoneTrigger zone = zoneObject.AddComponent<PlayerZoneTrigger>();
             zone.Configure(PlayerZone.DoorBlind, facts);
         }
 
-        private static void BuildRug(Transform parent, GameplayFactService facts, ItemDefinitionAsset definition,
-                                     Material material)
+        private static void BuildRug(Transform parent, GameplayFactService facts, GameplayEventHub events,
+                                     ItemDefinitionAsset definition, Material material)
         {
             GameObject rug = CreateCube("PRP_Rug", new Vector3(0.3f, 0.03f, 0.6f), new Vector3(1.6f, 0.04f, 1.1f),
                                         parent, material);
             InteractableEntity entity = rug.AddComponent<InteractableEntity>();
             entity.Configure(definition);
-            GameplayAffordanceHandler affordance = rug.AddComponent<GameplayAffordanceHandler>();
-            affordance.Configure(GameplayAffordanceKind.PullRugTrap, facts);
+            Collider collider = rug.GetComponent<Collider>();
+            if (collider != null)
+            {
+                collider.isTrigger = true;
+            }
+
+            TripTrapController trap = rug.AddComponent<TripTrapController>();
+            trap.Configure(facts, events, TrapState.RugArmed, true);
             UseCapability use = rug.AddComponent<UseCapability>();
-            use.Configure(affordance);
+            use.Configure(trap);
             rug.AddComponent<InspectCapability>();
             rug.AddComponent<TransformResettable>();
         }
@@ -1026,7 +1247,7 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             InteractableEntity entity = wall.AddComponent<InteractableEntity>();
             entity.Configure(definition);
             StrikeSurfaceHitReceiver hitReceiver = wall.AddComponent<StrikeSurfaceHitReceiver>();
-            hitReceiver.Configure(facts, true);
+            hitReceiver.Configure(facts, true, 3);
             GameplayAffordanceHandler affordance = wall.AddComponent<GameplayAffordanceHandler>();
             affordance.Configure(GameplayAffordanceKind.StrikeWall, facts);
             UseCapability use = wall.AddComponent<UseCapability>();
@@ -1043,7 +1264,11 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             InteractableEntity entity = window.AddComponent<InteractableEntity>();
             entity.Configure(definition);
             StrikeSurfaceHitReceiver hitReceiver = window.AddComponent<StrikeSurfaceHitReceiver>();
-            hitReceiver.Configure(facts, false);
+            GameObject brick = CreateCube("BrickReveal", window.transform.position, new Vector3(1.45f, 1.15f, 0.08f),
+                                          window.transform, material);
+            brick.transform.localPosition = Vector3.zero;
+            brick.SetActive(false);
+            hitReceiver.Configure(facts, false, 5, brick);
             GameplayAffordanceHandler affordance = window.AddComponent<GameplayAffordanceHandler>();
             affordance.Configure(GameplayAffordanceKind.StrikeWindow, facts);
             UseCapability use = window.AddComponent<UseCapability>();
@@ -1053,7 +1278,10 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
         }
 
         private static void BuildThrowable(Transform parent, ItemDefinitionAsset definition, Material material,
-                                           string objectName, Vector3 position, Vector3 scale, float mass)
+                                           string objectName, Vector3 position, Vector3 scale, float mass,
+                                           bool flipBook = false, GameplayEventHub events = null,
+                                           bool shatterOnLanding = false, bool createShardZone = false,
+                                           bool clockTwitch = false)
         {
             GameObject item = CreateCube(objectName, position, scale, parent, material);
             InteractableEntity entity = item.AddComponent<InteractableEntity>();
@@ -1066,15 +1294,40 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             item.AddComponent<PickupCapability>();
             item.AddComponent<InspectCapability>();
             item.AddComponent<RigidbodyResettable>();
+            if (flipBook)
+            {
+                BookFlipUseHandler flip = item.AddComponent<BookFlipUseHandler>();
+                UseCapability use = item.AddComponent<UseCapability>();
+                use.Configure(flip);
+            }
+
+            if (shatterOnLanding || createShardZone || clockTwitch)
+            {
+                BreakableItemBehaviour breakage = item.AddComponent<BreakableItemBehaviour>();
+                breakage.Configure(stateful, events, null, shatterOnLanding, createShardZone, clockTwitch);
+            }
+
+            if (clockTwitch)
+            {
+                GameObject hand = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                hand.name = "SecondHand";
+                hand.transform.SetParent(item.transform, false);
+                hand.transform.localScale = new Vector3(0.04f, 0.45f, 0.04f);
+                hand.transform.localPosition = new Vector3(0f, 0.18f, 0.4f);
+                UnityEngine.Object.DestroyImmediate(hand.GetComponent<Collider>());
+                ClockTwitchBehaviour twitch = item.AddComponent<ClockTwitchBehaviour>();
+                twitch.Configure(hand.transform, stateful);
+            }
         }
 
         private static KillerDirector BuildKiller(Transform parent, PlayerMotor player, PlayerInteractor interactor,
-                                                  GameplayFactService facts, CounterplayCatalogAsset counterplays,
-                                                  GameConfigAsset config, Material material)
+                                                   GameplayFactService facts, GameplayEventHub events,
+                                                   CounterplayCatalogAsset counterplays, GameConfigAsset config,
+                                                   Material material)
         {
             GameObject killer = new GameObject("Killer");
             killer.transform.SetParent(parent);
-            killer.transform.position = new Vector3(3.62f, 0f, 1.45f);
+            killer.transform.position = new Vector3(3.62f, 0f, 0.55f);
 
             GameObject visual = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             visual.name = "CH_Killer_Greybox";
@@ -1088,7 +1341,6 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             hurtbox.radius = 0.42f;
             hurtbox.height = 1.8f;
             KillerHitReceiver hitReceiver = killer.AddComponent<KillerHitReceiver>();
-            hitReceiver.Configure(visual.transform);
 
             NavMeshAgent agent = killer.AddComponent<NavMeshAgent>();
             agent.speed = 2.4f;
@@ -1105,6 +1357,22 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             KillerDirector killerDirector = killer.AddComponent<KillerDirector>();
             killerDirector.Configure(agent, player.transform, facts, counterplays, config, performance);
 
+            GameObject eye = new GameObject("KillerEye");
+            eye.transform.SetParent(killer.transform, false);
+            eye.transform.localPosition = new Vector3(0f, 1.6f, 0.08f);
+            KillerPerceptionSensor perception = killer.AddComponent<KillerPerceptionSensor>();
+            KillerTacticalController tactical = killer.AddComponent<KillerTacticalController>();
+            Transform[] tacticalAnchors = BuildKillerTacticalAnchors(parent);
+            tactical.Configure(agent, player.transform, eye.transform, facts, events, config, tacticalAnchors);
+            killerDirector.ConfigureHunt(tactical);
+            hitReceiver.Configure(visual.transform, tactical);
+
+            GameObject entryInside = new GameObject("KillerEntryInside");
+            entryInside.transform.SetParent(parent, false);
+            entryInside.transform.SetPositionAndRotation(new Vector3(2.2f, 0f, 0.55f),
+                                                         Quaternion.LookRotation(Vector3.left));
+            killerDirector.ConfigureEntry(entryInside.transform, 1.05f);
+
             GameObject lightObject = new GameObject("KillerFlashlight");
             lightObject.transform.SetParent(killer.transform, false);
             lightObject.transform.localPosition = new Vector3(0.2f, 1.35f, 0.35f);
@@ -1119,6 +1387,33 @@ private static void BuildRoomScene(GameConfigAsset config, CounterplayCatalogAss
             KillerFlashlightCone cone = killer.AddComponent<KillerFlashlightCone>();
             cone.Configure(player.transform, facts, killerDirector, spot);
             return killerDirector;
+        }
+
+        private static Transform[] BuildKillerTacticalAnchors(Transform parent)
+        {
+            GameObject root = new GameObject("KillerTacticalAnchors");
+            root.transform.SetParent(parent, false);
+            Vector3[] positions =
+            {
+                new Vector3(2.2f, 0f, 0.55f),
+                new Vector3(1.45f, 0f, -0.55f),
+                new Vector3(0.15f, 0f, -0.45f),
+                new Vector3(-1.15f, 0f, -0.25f),
+                new Vector3(-1.8f, 0f, 1.05f),
+                new Vector3(-0.75f, 0f, 1.55f),
+                new Vector3(0.75f, 0f, 1.35f),
+                new Vector3(2f, 0f, 1.45f)
+            };
+            Transform[] anchors = new Transform[positions.Length];
+            for (int i = 0; i < positions.Length; i++)
+            {
+                GameObject anchor = new GameObject($"TA_{i + 1:00}");
+                anchor.transform.SetParent(root.transform, false);
+                anchor.transform.position = positions[i];
+                anchors[i] = anchor.transform;
+            }
+
+            return anchors;
         }
 
         private static Material EnsureCrtMaterial()

@@ -9,6 +9,7 @@ from ak import *
 ROOT = r'D:\game\con_game\art'
 
 MAT_METAL = lambda: make_mat('MAT_Metal_Dark', (0.04, 0.04, 0.045), metallic=0.8, rough=0.45)
+MAT_OUTER = lambda: make_mat('MAT_MV_LampShadeOuter', (0.30, 0.31, 0.27), rough=0.78)
 MAT_INNER = lambda: make_mat('MAT_LampShade_Inner', (0.80, 0.75, 0.68), rough=0.4)  # 罩内浅色反光面
 MAT_BULB = lambda: make_mat('MAT_Lamp_Emissive', (0.9, 0.85, 0.75), rough=0.3,
                             emission=(1.0, 0.8, 0.5), estr=2.0)
@@ -83,7 +84,7 @@ def build_bulb(name, mat, root, broken=False):
 
 def build_state(state):
     clean_scene()
-    mat_m, mat_i, mat_b = MAT_METAL(), MAT_INNER(), MAT_BULB()
+    mat_m, mat_o, mat_i, mat_b = MAT_METAL(), MAT_OUTER(), MAT_INNER(), MAT_BULB()
     root = empty('PRP_CeilingLamp_' + state, display='CIRCLE', size=0.1)
 
     # 天花安装底座 + 吊杆 (原点=安装点, 向下 -Z)
@@ -99,7 +100,7 @@ def build_state(state):
     bpy.ops.object.join()
     rod.name = 'Lamp_Rod'
 
-    build_shade('Lamp_Shade', mat_m, mat_i, root, broken=(state == 'Broken'))
+    build_shade('Lamp_Shade', mat_o, mat_i, root, broken=(state == 'Broken'))
     build_bulb('Lamp_Bulb', mat_b, root, broken=(state == 'Broken'))
 
     if state == 'Broken':

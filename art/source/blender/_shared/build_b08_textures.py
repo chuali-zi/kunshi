@@ -63,6 +63,28 @@ def bake_mat(name, size, build_nodes, bake_normal=True):
     bpy.data.materials.remove(mat)
 
 
+def mask(name, metallic, rough, ao=1.0, variation=0.08, size=512):
+    """URP mask: R=metallic, G=AO, A=smoothness with broad material variation."""
+    seed = sum(ord(ch) for ch in name)
+    rng = np.random.default_rng(seed)
+    coarse = rng.random((32, 32), dtype=np.float32)
+    coarse = np.repeat(np.repeat(coarse, size // 32, axis=0), size // 32, axis=1)
+    fine = rng.random((size, size), dtype=np.float32)
+    surface = np.clip(rough + (coarse - 0.5) * variation + (fine - 0.5) * variation * 0.2, 0.02, 0.98)
+    cavity = np.clip(ao - np.maximum(0.0, coarse - 0.72) * 0.12, 0.82, 1.0)
+    img = bpy.data.images.new(name + '_Mask', size, size, alpha=True)
+    arr = np.zeros((size * size * 4,), dtype=np.float32)
+    arr[0::4] = metallic
+    arr[1::4] = cavity.reshape(-1)
+    arr[2::4] = 0.0
+    arr[3::4] = (1.0 - surface).reshape(-1)
+    img.pixels.foreach_set(arr)
+    img.colorspace_settings.name = 'Non-Color'
+    img.filepath_raw = os.path.join(TEX, name + '_Mask.png')
+    img.save()
+    bpy.data.images.remove(img)
+
+
 def mra(name, metallic, rough, ao=1.0, size=64):
     img = bpy.data.images.new(name + '_MRA', size, size, alpha=False)
     arr = np.zeros((size * size * 4,), dtype=np.float32)
@@ -178,17 +200,18 @@ def wood(base_dark, base_light, rough):
         wave = nodes.new('ShaderNodeTexWave')
         wave.wave_type = 'BANDS'
         wave.bands_direction = 'X'
-        wave.inputs['Scale'].default_value = 7.0
-        wave.inputs['Distortion'].default_value = 6.0
-        wave.inputs['Detail'].default_value = 5.0
+        wave.inputs['Scale'].default_value = 18.0
+        wave.inputs['Distortion'].default_value = 11.0
+        wave.inputs['Detail'].default_value = 7.0
+        wave.inputs['Detail Scale'].default_value = 2.0
         links.new(tc.outputs['Generated'], wave.inputs['Vector'])
         c = ramp(nodes, [(0.3, base_dark), (0.7, base_light)])
         links.new(wave.outputs['Color'], c.inputs['Fac'])
         links.new(c.outputs['Color'], bsdf.inputs['Base Color'])
         bsdf.inputs['Roughness'].default_value = rough
         bump = nodes.new('ShaderNodeBump')
-        bump.inputs['Strength'].default_value = 0.35
-        bump.inputs['Distance'].default_value = 0.003
+        bump.inputs['Strength'].default_value = 0.16
+        bump.inputs['Distance'].default_value = 0.0012
         links.new(wave.outputs['Color'], bump.inputs['Height'])
         links.new(bump.outputs['Normal'], bsdf.inputs['Normal'])
     return fn
@@ -197,15 +220,16 @@ def wood(base_dark, base_light, rough):
 def leather(nodes, links, bsdf):
     tc = nodes.new('ShaderNodeTexCoord')
     vor = nodes.new('ShaderNodeTexVoronoi')
-    vor.inputs['Scale'].default_value = 55.0
+    vor.distance = 'MANHATTAN'
+    vor.inputs['Scale'].default_value = 145.0
     links.new(tc.outputs['Generated'], vor.inputs['Vector'])
-    c = ramp(nodes, [(0.25, (0.24, 0.05, 0.07)), (0.75, (0.38, 0.10, 0.12))])
+    c = ramp(nodes, [(0.25, (0.16, 0.025, 0.035)), (0.75, (0.24, 0.055, 0.07))])
     links.new(vor.outputs['Distance'], c.inputs['Fac'])
     links.new(c.outputs['Color'], bsdf.inputs['Base Color'])
     bsdf.inputs['Roughness'].default_value = 0.55
     bump = nodes.new('ShaderNodeBump')
-    bump.inputs['Strength'].default_value = 0.4
-    bump.inputs['Distance'].default_value = 0.002
+    bump.inputs['Strength'].default_value = 0.12
+    bump.inputs['Distance'].default_value = 0.0006
     links.new(vor.outputs['Distance'], bump.inputs['Height'])
     links.new(bump.outputs['Normal'], bsdf.inputs['Normal'])
 
@@ -306,19 +330,20 @@ def props_atlas(nodes, links, bsdf):
 
 
 JOBS = [
-    ('TEX_MAT_Wallpaper_FloralAged', 2048, wallpaper, True, (0.0, 0.9)),
-    ('TEX_MAT_Floor_DarkGreen', 1024, floor_green, True, (0.0, 0.95)),
-    ('TEX_MAT_Wood_Walnut', 1024, wood((0.10, 0.06, 0.035), (0.20, 0.13, 0.08), 0.5), True, (0.0, 0.5)),
-    ('TEX_MAT_Wood_Worn', 1024, wood((0.30, 0.20, 0.11), (0.45, 0.33, 0.20), 0.6), True, (0.0, 0.6)),
-    ('TEX_MAT_Leather_Burgundy', 1024, leather, True, (0.0, 0.55)),
-    ('TEX_MAT_Fabric_Bedding', 1024, fabric, True, (0.0, 0.85)),
-    ('TEX_MAT_Metal_Dark', 1024, metal, True, (0.85, 0.45)),
-    ('TEX_MAT_Props_Small_Atlas', 2048, props_atlas, False, (0.0, 0.7)),
+    ('TEX_MAT_Wallpaper_FloralAged', 2048, wallpaper, True, (0.0, 0.9, 0.05)),
+    ('TEX_MAT_Floor_DarkGreen', 1024, floor_green, True, (0.0, 0.95, 0.04)),
+    ('TEX_MAT_Wood_Walnut', 1024, wood((0.105, 0.065, 0.04), (0.155, 0.10, 0.065), 0.62), True, (0.0, 0.62, 0.18)),
+    ('TEX_MAT_Wood_Worn', 1024, wood((0.26, 0.18, 0.105), (0.34, 0.245, 0.15), 0.7), True, (0.0, 0.7, 0.16)),
+    ('TEX_MAT_Leather_Burgundy', 1024, leather, True, (0.0, 0.62, 0.2)),
+    ('TEX_MAT_Fabric_Bedding', 1024, fabric, True, (0.0, 0.88, 0.08)),
+    ('TEX_MAT_Metal_Dark', 1024, metal, True, (0.85, 0.5, 0.14)),
+    ('TEX_MAT_Props_Small_Atlas', 2048, props_atlas, False, (0.0, 0.72, 0.1)),
 ]
 
-for name, size, fn, has_n, (met, rgh) in JOBS:
+for name, size, fn, has_n, (met, rgh, variation) in JOBS:
     bake_mat(name, size, fn, bake_normal=has_n)
     mra(name, met, rgh)
+    mask(name, met, rgh, variation=variation)
     print('BAKED ' + name)
 
 print('B08_TEXTURES_DONE')

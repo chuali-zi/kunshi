@@ -100,6 +100,18 @@ def rebuild_material(mat):
         nm = nt.nodes.new('ShaderNodeNormalMap')
         nt.links.new(tn.outputs['Color'], nm.inputs['Color'])
         nt.links.new(nm.outputs['Normal'], bsdf.inputs['Normal'])
+    mask_path = os.path.join(TEXDIR, tex + '_Mask.png')
+    if os.path.exists(mask_path):
+        tm = nt.nodes.new('ShaderNodeTexImage')
+        tm.image = load_img(tex + '_Mask', False)
+        sep = nt.nodes.new('ShaderNodeSeparateColor')
+        nt.links.new(tm.outputs['Color'], sep.inputs['Color'])
+        nt.links.new(sep.outputs['Red'], bsdf.inputs['Metallic'])
+        inv = nt.nodes.new('ShaderNodeMath')
+        inv.operation = 'SUBTRACT'
+        inv.inputs[0].default_value = 1.0
+        nt.links.new(tm.outputs['Alpha'], inv.inputs[1])
+        nt.links.new(inv.outputs[0], bsdf.inputs['Roughness'])
     bsdf.inputs['Metallic'].default_value = metal
     bsdf.inputs['Roughness'].default_value = rough
     nt.links.new(bsdf.outputs['BSDF'], out.inputs['Surface'])
@@ -126,7 +138,7 @@ def uv_to_cell(obj, cell):
                 d.uv.y * 0.21 + cy * 0.25 + 0.02)
 
 
-for rel, fbx_rel, cube_size, cells in JOBS:
+def apply_job(rel, fbx_rel, cube_size, cells):
     path = os.path.join(ROOT, rel.replace('/', os.sep))
     bpy.ops.wm.open_mainfile(filepath=path)
     # 材质换纹理
@@ -153,4 +165,8 @@ for rel, fbx_rel, cube_size, cells in JOBS:
     export_fbx(os.path.join(ROOT, fbx_rel.replace('/', os.sep)))
     print('APPLIED %s (%d textured mats) -> %s' % (os.path.basename(path), n_tex, fbx_rel))
 
-print('B08_APPLY_DONE')
+
+if __name__ == '__main__':
+    for job in JOBS:
+        apply_job(*job)
+    print('B08_APPLY_DONE')

@@ -31,7 +31,9 @@ namespace ConGame.Bootstrap
 
         public static bool CanContinueProgress(PersistentProgressV1 progress)
         {
-            return progress != null && !progress.endingCompleted && progress.loopIndex > 1;
+            return progress != null && !progress.endingCompleted &&
+                   (progress.loopIndex > 1 || progress.darkAdaptationXp > 0 || progress.d21Seen ||
+                    progress.tvCrackEchoPending);
         }
 
         public void Configure(string roomScene)

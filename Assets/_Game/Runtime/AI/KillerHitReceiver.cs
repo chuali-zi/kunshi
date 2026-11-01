@@ -8,6 +8,7 @@ namespace ConGame.Runtime.AI
     public sealed class KillerHitReceiver : MonoBehaviour, IHitReceiver
     {
         [SerializeField] private Transform feedbackTarget;
+        [SerializeField] private KillerTacticalController tacticalController;
         [SerializeField, Min(0.05f)] private float reactionDuration = 0.28f;
         [SerializeField, Min(0f)] private float recoilDistance = 0.14f;
         [SerializeField, Range(0f, 25f)] private float recoilAngle = 9f;
@@ -19,10 +20,11 @@ namespace ConGame.Runtime.AI
         public bool IsReacting => _reaction != null;
         public string LastHitSourceId { get; private set; } = string.Empty;
 
-        public void Configure(Transform target)
+        public void Configure(Transform target, KillerTacticalController hunt = null)
         {
             RestoreTarget();
             feedbackTarget = target;
+            tacticalController = hunt ?? GetComponentInParent<KillerTacticalController>();
             CaptureTarget();
         }
 
@@ -34,6 +36,7 @@ namespace ConGame.Runtime.AI
                 feedbackTarget = modelAnimator == null ? null : modelAnimator.transform;
             }
 
+            tacticalController ??= GetComponentInParent<KillerTacticalController>();
             CaptureTarget();
         }
 
@@ -45,6 +48,7 @@ namespace ConGame.Runtime.AI
             }
 
             LastHitSourceId = hit.SourceId;
+            tacticalController?.NotifyHit(hit);
             if (_reaction != null)
             {
                 StopCoroutine(_reaction);

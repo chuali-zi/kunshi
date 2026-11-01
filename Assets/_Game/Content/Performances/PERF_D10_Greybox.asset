@@ -18,3 +18,5 @@ MonoBehaviour:
   heldItemPolicy: 0
   qteWindows: []
   resultBranches: []
+  playerAnimation: {fileID: -7163681636452116516, guid: 8c4df04809b04b459fc36353359e7fb1, type: 3}
+  killerAnimation: {fileID: -7163681636452116516, guid: 7ad63403e0ad48aaaff82d7493d7c27d, type: 3}

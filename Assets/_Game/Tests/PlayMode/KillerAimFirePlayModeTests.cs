@@ -3,7 +3,10 @@ using ConGame.Bootstrap;
 using ConGame.Domain.Flow;
 using ConGame.Presentation.Animation;
 using ConGame.Runtime.AI;
+using ConGame.Runtime.Events;
+using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
+using ConGame.Runtime.Input;
 using ConGame.Runtime.Loop;
 using NUnit.Framework;
 using UnityEngine;
@@ -47,6 +50,43 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator AimCancellationReturnsKillerAnimatorToIdle()
+        {
+#if UNITY_EDITOR
+            GameObject go = new GameObject("killer_cancel_driver");
+            try
+            {
+                Animator animator = go.AddComponent<Animator>();
+                animator.runtimeAnimatorController = BuildAimFireController();
+                CharacterAnimatorDriver driver = go.AddComponent<CharacterAnimatorDriver>();
+                driver.Configure(CharacterAnimatorDriver.DriverRole.Killer, animator, null, null, null, null);
+                yield return null;
+
+                driver.PlayAimFire();
+                yield return null;
+                Assert.That(animator.GetCurrentAnimatorStateInfo(0).IsName("AimFire"), Is.True);
+
+                var cancel = typeof(CharacterAnimatorDriver).GetMethod(
+                    "OnKillerAimCancelled",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                Assert.That(cancel, Is.Not.Null);
+                cancel.Invoke(driver, new object[] { 1 });
+                yield return new WaitForSeconds(0.12f);
+
+                Assert.That(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"), Is.True,
+                    "Losing the firing solution must visibly cancel AimFire.");
+            }
+            finally
+            {
+                Object.Destroy(go);
+            }
+#else
+            yield break;
+#endif
+        }
+
+
+        [UnityTest]
         public IEnumerator PlayerRolePlayAimFireIsNoOp()
         {
 #if UNITY_EDITOR
@@ -72,6 +112,100 @@ namespace ConGame.Tests.PlayMode
 #else
             yield break;
 #endif
+        }
+
+        [UnityTest]
+        public IEnumerator InitialAwakeningTriggersPlayerWakeUp()
+        {
+#if UNITY_EDITOR
+            GameObject go = new GameObject("player_wakeup_driver");
+            GameObject systems = new GameObject("flow");
+            try
+            {
+                GameFlowController flow = systems.AddComponent<GameFlowController>();
+                flow.Initialize(GamePhase.Awakening);
+                Animator animator = go.AddComponent<Animator>();
+                animator.runtimeAnimatorController = BuildWakeUpController();
+                CharacterAnimatorDriver driver = go.AddComponent<CharacterAnimatorDriver>();
+                driver.Configure(CharacterAnimatorDriver.DriverRole.Player, animator, null, null, flow, null);
+
+                yield return null;
+
+                Assert.That(animator.GetBool(Animator.StringToHash("WakeUp")), Is.True);
+            }
+            finally
+            {
+                Object.Destroy(go);
+                Object.Destroy(systems);
+            }
+#else
+            yield break;
+#endif
+        }
+
+        [UnityTest]
+        public IEnumerator PlayerAnimatorFollowsSittingAndStandingFacts()
+        {
+#if UNITY_EDITOR
+            GameObject go = new GameObject("player_seated_pose_driver");
+            try
+            {
+                GameplayFactService facts = go.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                facts.SetPlayerPose(ConGame.Domain.Facts.PlayerPose.Sitting);
+
+                Animator animator = go.AddComponent<Animator>();
+                animator.runtimeAnimatorController = BuildSeatedPoseController();
+                CharacterAnimatorDriver driver = go.AddComponent<CharacterAnimatorDriver>();
+                driver.Configure(CharacterAnimatorDriver.DriverRole.Player, animator, null, null, null, facts);
+
+                // CharacterAnimatorDriver cross-fades the pose; allow its authored transition
+                // time to complete before asserting the destination state.
+                yield return new WaitForSeconds(0.1f);
+                Assert.That(animator.GetCurrentAnimatorStateInfo(0).IsName("SitChair"), Is.True,
+                    "Sitting facts should present the authored chair pose.");
+
+                facts.SetPlayerPose(ConGame.Domain.Facts.PlayerPose.Standing);
+                yield return new WaitForSeconds(0.15f);
+                Assert.That(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"), Is.True,
+                    "A standing pose should exit the chair pose.");
+            }
+            finally
+            {
+                Object.Destroy(go);
+            }
+#else
+            yield break;
+#endif
+        }
+
+        [Test]
+        public void FirstMeaningfulActionStandsPlayerWithoutWaitingForAwakeningTimer()
+        {
+            GameObject root = new GameObject("seated_awakening_flow");
+            try
+            {
+                GameFlowController flow = root.AddComponent<GameFlowController>();
+                GameplayFactService facts = root.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                GameplayEventHub events = root.AddComponent<GameplayEventHub>();
+                PlayerInputRouter input = root.AddComponent<PlayerInputRouter>();
+                LoopDirector loop = root.AddComponent<LoopDirector>();
+                loop.Configure(null, flow, null, facts, events, input, null, null);
+                loop.Initialize();
+                facts.SetPlayerPose(ConGame.Domain.Facts.PlayerPose.Sitting);
+
+                Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(ConGame.Domain.Facts.PlayerPose.Sitting));
+                loop.NotifyMeaningfulAction();
+
+                Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(ConGame.Domain.Facts.PlayerPose.Standing));
+                Assert.That(flow.CommitPending(), Is.True);
+                Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.FreeRoam));
+            }
+            finally
+            {
+                Object.DestroyImmediate(root);
+            }
         }
 
         [UnityTest]
@@ -144,6 +278,32 @@ namespace ConGame.Tests.PlayMode
             entry.AddCondition(UnityEditor.Animations.AnimatorConditionMode.If, 0f, "AimFire");
             entry.hasExitTime = false;
             entry.duration = 0f;
+            return controller;
+        }
+
+        private static RuntimeAnimatorController BuildWakeUpController()
+        {
+            var controller = new UnityEditor.Animations.AnimatorController();
+            controller.name = "AC_PlayerWakeUpTest";
+            controller.AddLayer("Base");
+            controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
+            controller.AddParameter("WakeUp", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Swing", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("HitFall", AnimatorControllerParameterType.Trigger);
+            controller.layers[0].stateMachine.defaultState =
+                controller.layers[0].stateMachine.AddState("Idle");
+            return controller;
+        }
+
+        private static RuntimeAnimatorController BuildSeatedPoseController()
+        {
+            var controller = new UnityEditor.Animations.AnimatorController();
+            controller.name = "AC_PlayerSeatedPoseTest";
+            controller.AddLayer("Base");
+            UnityEditor.Animations.AnimatorStateMachine sm = controller.layers[0].stateMachine;
+            UnityEditor.Animations.AnimatorState idle = sm.AddState("Idle");
+            sm.AddState("SitChair");
+            sm.defaultState = idle;
             return controller;
         }
 #endif

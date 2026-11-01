@@ -35,6 +35,7 @@ namespace ConGame.Tests.PlayMode
                 tip.CaptureInitialState();
 
                 Assert.That(tip.Use(default), Is.EqualTo(InteractionResult.Accepted));
+                yield return WaitForTip(tip);
                 Assert.That(tip.IsTipped, Is.True);
                 Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.Bookcase));
                 Assert.That(facts.DoorBlockBreachExtraSeconds, Is.EqualTo(0f));
@@ -74,6 +75,7 @@ namespace ConGame.Tests.PlayMode
 
                 Assert.That(hide.CanExecute(context), Is.False);
                 Assert.That(tip.Use(context), Is.EqualTo(InteractionResult.Accepted));
+                yield return WaitForTip(tip);
                 Assert.That(hide.CanExecute(context), Is.True);
                 yield return null;
             }
@@ -83,6 +85,15 @@ namespace ConGame.Tests.PlayMode
                 Object.Destroy(player);
                 Object.Destroy(bookcase);
                 Object.Destroy(anchor);
+            }
+        }
+
+        private static IEnumerator WaitForTip(TipBookcaseUseHandler tip, float timeoutSeconds = 1f)
+        {
+            float deadline = Time.realtimeSinceStartup + timeoutSeconds;
+            while (!tip.IsTipped && Time.realtimeSinceStartup < deadline)
+            {
+                yield return null;
             }
         }
 

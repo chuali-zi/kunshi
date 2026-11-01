@@ -1,17 +1,24 @@
 using System;
 using System.Collections;
 using ConGame.Domain.Counterplay;
+using ConGame.Presentation.Animation;
 using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Loop;
 using ConGame.Runtime.Player;
+using ConGame.Runtime.Interaction;
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Playables;
 
 namespace ConGame.Presentation.M1
 {
     [DisallowMultipleComponent]
     public sealed class M1GreyboxPerformancePlayer : MonoBehaviour, IPerformancePlayer, ILoopResettable,
-        ICounterplayPerformanceHookTarget
+        ICounterplayPerformanceHookTarget, ID22FinalePresentation
     {
+        private const float D22FinaleDurationSeconds = 2f;
+        private const float D22BackupDrawCueSeconds = 0.7f;
+        private const float D22FinalShotCueSeconds = 1.3f;
         [SerializeField] private Transform killer;
         [SerializeField] private PlayerMotor playerMotor;
         [SerializeField] private PlayerInteractor playerInteractor;
@@ -21,15 +28,28 @@ namespace ConGame.Presentation.M1
         private ICounterplayPerformanceInput _performanceInput;
         private ICounterplayPerformanceProgress _progress;
         private QteSequenceCounter _qteCounter;
+        private M1GreyboxPlayableAsset _activePerformance;
+        private Action _d22FinaleCompleted;
         private string _activeOutcomeId = string.Empty;
         private int _loopEpoch;
         private int _generation;
+        private PlayableGraph _animationGraph;
 
         public int ResetOrder => 25;
         public bool IsPlaying { get; private set; }
         public M1GreyboxDeathStyle ActiveStyle { get; private set; }
         public string ActiveOutcomeId => _activeOutcomeId;
         public int ActiveLoopEpoch => _loopEpoch;
+        public bool HasActiveAnimationGraph => _animationGraph.IsValid();
+        public int ActiveAnimationOutputCount => _animationGraph.IsValid() ? _animationGraph.GetOutputCount() : 0;
+
+        private void OnDisable()
+        {
+            Action finaleCompleted = _d22FinaleCompleted;
+            _d22FinaleCompleted = null;
+            CancelActive(true);
+            finaleCompleted?.Invoke();
+        }
 
         public void Configure(Transform killerTransform, PlayerMotor motor, PlayerInteractor interactor)
         {
@@ -74,6 +94,7 @@ namespace ConGame.Presentation.M1
             _generation++;
             int generation = _generation;
             ActiveStyle = performance.Style;
+            _activePerformance = performance;
             _activeOutcomeId = string.IsNullOrWhiteSpace(performance.OutcomeId)
                 ? definition.OutcomeId
                 : performance.OutcomeId;
@@ -104,6 +125,7 @@ namespace ConGame.Presentation.M1
                 return true;
             }
 
+            StartAnimations(performance, false);
             _routine = StartCoroutine(RunPerformance(performance, generation));
             return true;
         }
@@ -112,10 +134,44 @@ namespace ConGame.Presentation.M1
         {
             if (!IsPlaying || _loopEpoch <= loopEpoch)
             {
-                CancelActive(true);
+                // KillerDirector suspends the active performance when D22's
+                // first pistol shot opens the dodge/loot window. Keep the D22
+                // asset and outcome as the finale host; the shot cancels its
+                // choreography, not the terminal presentation configuration.
+                if (IsPlaying && string.Equals(_activeOutcomeId, "D22", StringComparison.Ordinal) &&
+                    _loopEpoch == loopEpoch)
+                {
+                    CancelD22ForInteractiveWindow();
+                }
+                else
+                {
+                    CancelActive(true);
+                }
             }
 
             _loopEpoch = Math.Max(_loopEpoch, loopEpoch);
+        }
+
+        public bool PlayD22Finale(Action backupDrawCue, Action shotCue, Action completed)
+        {
+            if (!string.Equals(_activeOutcomeId, "D22", StringComparison.Ordinal) ||
+                _activePerformance == null || _activePerformance.KillerAnimation == null || killer == null ||
+                killer.GetComponentInChildren<Animator>(true) == null)
+            {
+                return false;
+            }
+
+            AnimationClip finaleClip = _activePerformance.KillerAnimation;
+            int loopEpoch = _loopEpoch;
+            CancelActive(true);
+            _generation++;
+            int generation = _generation;
+            _activeOutcomeId = "D22Finale";
+            IsPlaying = true;
+            _d22FinaleCompleted = completed;
+            _routine = StartCoroutine(RunD22Finale(
+                finaleClip, backupDrawCue, shotCue, loopEpoch, generation));
+            return true;
         }
 
         public void CaptureInitialState()
@@ -132,6 +188,9 @@ namespace ConGame.Presentation.M1
             IsPlaying = false;
             _activeOutcomeId = string.Empty;
             _qteCounter = null;
+            _activePerformance = null;
+            _completed = null;
+            _d22FinaleCompleted = null;
             _loopEpoch = context.NextEpoch;
         }
 
@@ -181,6 +240,13 @@ namespace ConGame.Presentation.M1
             if (generation != _generation)
             {
                 yield break;
+            }
+
+            // Paired clips start only after both roots share their authored anchor.
+            killer.position = target;
+            if (_animationGraph.IsValid())
+            {
+                _animationGraph.Play();
             }
 
             elapsed = 0f;
@@ -242,6 +308,67 @@ namespace ConGame.Presentation.M1
             callback?.Invoke();
         }
 
+        private IEnumerator RunD22Finale(
+            AnimationClip finaleClip,
+            Action backupDrawCue,
+            Action shotCue,
+            int loopEpoch,
+            int generation)
+        {
+            Animator killerAnimator = killer.GetComponentInChildren<Animator>(true);
+            _animationGraph = PlayableGraph.Create("M1 D22 Backup Pistol Finale");
+            _animationGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
+            CreateAnimationOutput(killerAnimator, finaleClip, "Killer",
+                finaleClip.length / D22FinaleDurationSeconds);
+            _animationGraph.Play();
+
+            float elapsed = 0f;
+            while (elapsed < D22BackupDrawCueSeconds && generation == _generation)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (generation != _generation || _loopEpoch != loopEpoch)
+            {
+                yield break;
+            }
+
+            backupDrawCue?.Invoke();
+            while (elapsed < D22FinalShotCueSeconds && generation == _generation)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (generation != _generation || _loopEpoch != loopEpoch)
+            {
+                yield break;
+            }
+
+            killer.GetComponent<CharacterAnimatorDriver>()?.NotifyScriptedShotPresented();
+            shotCue?.Invoke();
+            while (elapsed < D22FinaleDurationSeconds && generation == _generation)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (generation != _generation || _loopEpoch != loopEpoch)
+            {
+                yield break;
+            }
+
+            _routine = null;
+            StopAnimations();
+            IsPlaying = false;
+            _activeOutcomeId = string.Empty;
+            _activePerformance = null;
+            Action completed = _d22FinaleCompleted;
+            _d22FinaleCompleted = null;
+            completed?.Invoke();
+        }
+
         private void PublishQteProgress(float deltaTime)
         {
             if (_qteCounter == null || _qteCounter.IsComplete)
@@ -300,7 +427,7 @@ namespace ConGame.Presentation.M1
                 case "D19": return new OutcomeBeatProfile(-0.44f, 1.66f, 0.34f, 0.24f, 24f, -40f, -68f, 4f, 0.029f);
                 case "D20": return new OutcomeBeatProfile(0.56f, 1.28f, 0.59f, 0.08f, 64f, 12f, 56f, 10f, 0.023f);
                 case "D21": return new OutcomeBeatProfile(-0.18f, 2.18f, 0.28f, 0.30f, 8f, -8f, -88f, 3f, 0.040f);
-                case "D22": return new OutcomeBeatProfile(0.26f, 2.32f, 0.24f, 0.34f, 2f, 20f, 86f, 14f, 0.045f);
+                case "D22": return new OutcomeBeatProfile(0.26f, 2.32f, 0.24f, 0.34f, 0f, 0f, 0f, 14f, 0.045f);
                 default: return new OutcomeBeatProfile(0f, 1.1f, 0.55f, 0.08f, 70f, 0f, 70f, 6f, 0.02f);
             }
         }
@@ -348,13 +475,90 @@ namespace ConGame.Presentation.M1
                 _routine = null;
             }
 
+            StopAnimations();
+
             IsPlaying = false;
             _completed = null;
             _qteCounter = null;
+            _activePerformance = null;
+            _d22FinaleCompleted = null;
             _activeOutcomeId = string.Empty;
             if (notifyProgress && wasPlaying)
             {
                 _progress?.OnPerformanceCancelled(cancelledOutcomeId, cancelledEpoch);
+            }
+        }
+
+        private void CancelD22ForInteractiveWindow()
+        {
+            string cancelledOutcomeId = _activeOutcomeId;
+            int cancelledEpoch = _loopEpoch;
+            _generation++;
+            if (_routine != null)
+            {
+                StopCoroutine(_routine);
+                _routine = null;
+            }
+
+            StopAnimations();
+            IsPlaying = false;
+            _completed = null;
+            _qteCounter = null;
+            _d22FinaleCompleted = null;
+            _progress?.OnPerformanceCancelled(cancelledOutcomeId, cancelledEpoch);
+        }
+
+        private void StartAnimations(M1GreyboxPlayableAsset performance, bool playImmediately)
+        {
+            StopAnimations();
+            Animator playerAnimator = playerMotor == null ? null : playerMotor.GetComponentInChildren<Animator>(true);
+            Animator killerAnimator = killer == null ? null : killer.GetComponentInChildren<Animator>(true);
+            // D22 waits on the player's live shot and dodge interaction. The
+            // authored backup-fire clip would execute that resolution early.
+            AnimationClip killerAnimation = string.Equals(_activeOutcomeId, "D22", StringComparison.Ordinal)
+                ? null
+                : performance.KillerAnimation;
+            if ((performance.PlayerAnimation == null || playerAnimator == null) &&
+                (killerAnimation == null || killerAnimator == null))
+            {
+                return;
+            }
+
+            _animationGraph = PlayableGraph.Create($"M1 Performance {_activeOutcomeId}");
+            _animationGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
+            CreateAnimationOutput(playerAnimator, performance.PlayerAnimation, "Player");
+            CreateAnimationOutput(killerAnimator, killerAnimation, "Killer");
+            if (playImmediately)
+            {
+                _animationGraph.Play();
+            }
+        }
+
+        private void CreateAnimationOutput(
+            Animator target,
+            AnimationClip clip,
+            string outputName,
+            double speed = 1d)
+        {
+            if (target == null || clip == null)
+            {
+                return;
+            }
+
+            AnimationClipPlayable playable = AnimationClipPlayable.Create(_animationGraph, clip);
+            playable.SetApplyFootIK(true);
+            playable.SetApplyPlayableIK(true);
+            playable.SetSpeed(speed);
+            playable.SetDuration(clip.length);
+            AnimationPlayableOutput output = AnimationPlayableOutput.Create(_animationGraph, outputName, target);
+            output.SetSourcePlayable(playable);
+        }
+
+        private void StopAnimations()
+        {
+            if (_animationGraph.IsValid())
+            {
+                _animationGraph.Destroy();
             }
         }
     }

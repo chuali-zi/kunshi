@@ -26,9 +26,11 @@ MonoBehaviour:
   resultBranches:
   - BranchId: disarm_window
     RequiresAllQteWindows: 1
-    NextOutcomeId: 
+    NextOutcomeId: D22
     MarksD21Seen: 0
   - BranchId: close_shot
     RequiresAllQteWindows: 0
-    NextOutcomeId: 
+    NextOutcomeId: D08
     MarksD21Seen: 0
+  playerAnimation: {fileID: -7163681636452116516, guid: 53a0d80264704b019a3ecc05d77928e5, type: 3}
+  killerAnimation: {fileID: -7163681636452116516, guid: b89a46592b9245c7a8271769900088fc, type: 3}

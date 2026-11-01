@@ -6,6 +6,7 @@ using ConGame.Runtime.Counterplay;
 using ConGame.Runtime.Events;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Interaction;
+using ConGame.Runtime.AI;
 using ConGame.Runtime.Lighting;
 using ConGame.Runtime.Player;
 using NUnit.Framework;
@@ -112,6 +113,8 @@ namespace ConGame.Tests.PlayMode
             GameObject ceilingObject = new GameObject("ceiling");
             GameObject tableObject = new GameObject("table");
             GameObject coordinatorObject = new GameObject("coordinator");
+            GameObject player = new GameObject("player");
+            GameObject killer = new GameObject("killer");
             try
             {
                 GameplayFactService facts = factsObject.AddComponent<GameplayFactService>();
@@ -143,10 +146,29 @@ namespace ConGame.Tests.PlayMode
                 PlacementSocket socket = socketObject.AddComponent<PlacementSocket>();
                 socket.Configure("blanket", ItemCategory.None, null, facts,
                     DoorBlockState.None, TrapState.BlanketArmed);
+                BoxCollider socketTrigger = socketObject.AddComponent<BoxCollider>();
+                socketTrigger.isTrigger = true;
+                socketTrigger.size = Vector3.one * 2f;
+                TripTrapController contact = socketObject.AddComponent<TripTrapController>();
+                contact.Configure(facts, null, TrapState.BlanketArmed, false);
+                contact.ConfigureSocket(socket);
                 Assert.That(socket.TryPlace(blanketEntity, blanketState), Is.True);
                 Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.BlanketArmed));
                 Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
-                Assert.That(trap.Use(default), Is.EqualTo(InteractionResult.Accepted));
+                PlayerInteractor interactor = player.AddComponent<PlayerInteractor>();
+                player.transform.position = socketObject.transform.position - Vector3.forward;
+                InteractionContext context = new InteractionContext(interactor, null);
+                Assert.That(trap.Use(context), Is.EqualTo(InteractionResult.Rejected));
+                Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
+
+                killer.AddComponent<KillerDirector>();
+                Collider killerCollider = killer.AddComponent<BoxCollider>();
+                killer.transform.position = socketObject.transform.position;
+                Physics.SyncTransforms();
+                socketObject.GetComponent<TripTrapController>().SendMessage(
+                    "OnTriggerEnter", killerCollider, SendMessageOptions.DontRequireReceiver);
+                Assert.That(contact.OccupantPresent, Is.True);
+                Assert.That(trap.Use(context), Is.EqualTo(InteractionResult.Accepted));
                 Assert.That(facts.CaptureSnapshot().TrapPulled, Is.True);
 
                 CounterplayRule d21 = new CounterplayRule(
@@ -168,6 +190,8 @@ namespace ConGame.Tests.PlayMode
                 Object.Destroy(ceilingObject);
                 Object.Destroy(tableObject);
                 Object.Destroy(coordinatorObject);
+                Object.Destroy(player);
+                Object.Destroy(killer);
             }
         }
 

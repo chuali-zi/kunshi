@@ -1,0 +1,268 @@
+[
+  {
+    "asset": "ENV_BlackCorridor",
+    "triangles_before": 60,
+    "triangles_after": 60,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\ENV_BlackCorridor_v003.blend"
+  },
+  {
+    "asset": "ENV_BoardedWindow",
+    "triangles_before": 3760,
+    "triangles_after": 3760,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\ENV_BoardedWindow_v003.blend"
+  },
+  {
+    "asset": "ENV_DoorSet",
+    "triangles_before": 2300,
+    "triangles_after": 2300,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\ENV_DoorSet_v003.blend"
+  },
+  {
+    "asset": "ENV_RoomShell",
+    "triangles_before": 168,
+    "triangles_after": 168,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\ENV_RoomShell_v003.blend"
+  },
+  {
+    "asset": "ENV_WallDamageKit",
+    "triangles_before": 141,
+    "triangles_after": 141,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\ENV_WallDamageKit_v003.blend"
+  },
+  {
+    "asset": "FUR_Armchair",
+    "triangles_before": 2500,
+    "triangles_after": 7684,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_Armchair_v003.blend"
+  },
+  {
+    "asset": "FUR_Bed",
+    "triangles_before": 3572,
+    "triangles_after": 3572,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_Bed_v003.blend"
+  },
+  {
+    "asset": "FUR_Bookcase",
+    "triangles_before": 1692,
+    "triangles_after": 3436,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_Bookcase_v003.blend"
+  },
+  {
+    "asset": "FUR_Dresser",
+    "triangles_before": 5020,
+    "triangles_after": 5020,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_Dresser_v003.blend"
+  },
+  {
+    "asset": "FUR_SideTable",
+    "triangles_before": 560,
+    "triangles_after": 560,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_SideTable_v003.blend"
+  },
+  {
+    "asset": "FUR_TVCabinet",
+    "triangles_before": 840,
+    "triangles_after": 840,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_TVCabinet_v003.blend"
+  },
+  {
+    "asset": "FUR_WoodChair_Broken",
+    "triangles_before": 1656,
+    "triangles_after": 1876,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_WoodChair_Broken_v003.blend"
+  },
+  {
+    "asset": "FUR_WoodChair",
+    "triangles_before": 1656,
+    "triangles_after": 1876,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\environment\\FUR_WoodChair_v003.blend"
+  },
+  {
+    "asset": "PRP_BaseballBat",
+    "triangles_before": 768,
+    "triangles_after": 768,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_BaseballBat_v003.blend"
+  },
+  {
+    "asset": "PRP_Blanket_Covered",
+    "triangles_before": 3880,
+    "triangles_after": 3880,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Blanket_Covered_v003.blend"
+  },
+  {
+    "asset": "PRP_Blanket_Crumpled",
+    "triangles_before": 3304,
+    "triangles_after": 3304,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Blanket_Crumpled_v003.blend"
+  },
+  {
+    "asset": "PRP_Blanket_Draped",
+    "triangles_before": 1000,
+    "triangles_after": 1000,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Blanket_Draped_v003.blend"
+  },
+  {
+    "asset": "PRP_Blanket_FlatTrap",
+    "triangles_before": 3792,
+    "triangles_after": 3792,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Blanket_FlatTrap_v003.blend"
+  },
+  {
+    "asset": "PRP_Books_Set",
+    "triangles_before": 2444,
+    "triangles_after": 2444,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Books_Set_v003.blend"
+  },
+  {
+    "asset": "PRP_CeilingLamp_Broken",
+    "triangles_before": 1124,
+    "triangles_after": 1124,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_CeilingLamp_Broken_v003.blend"
+  },
+  {
+    "asset": "PRP_CeilingLamp_Intact",
+    "triangles_before": 1116,
+    "triangles_after": 1116,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_CeilingLamp_Intact_v003.blend"
+  },
+  {
+    "asset": "PRP_CRTTV_Cracked",
+    "triangles_before": 4964,
+    "triangles_after": 4964,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_CRTTV_Cracked_v003.blend"
+  },
+  {
+    "asset": "PRP_CRTTV_Destroyed",
+    "triangles_before": 5516,
+    "triangles_after": 5516,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_CRTTV_Destroyed_v003.blend"
+  },
+  {
+    "asset": "PRP_CRTTV_Intact",
+    "triangles_before": 4964,
+    "triangles_after": 4964,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_CRTTV_Intact_v003.blend"
+  },
+  {
+    "asset": "PRP_DrawerClutter",
+    "triangles_before": 612,
+    "triangles_after": 612,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_DrawerClutter_v003.blend"
+  },
+  {
+    "asset": "PRP_Flashlight",
+    "triangles_before": 492,
+    "triangles_after": 492,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Flashlight_v003.blend"
+  },
+  {
+    "asset": "PRP_Mirror_Broken",
+    "triangles_before": 1364,
+    "triangles_after": 1364,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Mirror_Broken_v003.blend"
+  },
+  {
+    "asset": "PRP_Mirror",
+    "triangles_before": 764,
+    "triangles_after": 764,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Mirror_v003.blend"
+  },
+  {
+    "asset": "PRP_Pistol_Backup",
+    "triangles_before": 1400,
+    "triangles_after": 1400,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Pistol_Backup_v003.blend"
+  },
+  {
+    "asset": "PRP_Pistol_Main",
+    "triangles_before": 1588,
+    "triangles_after": 1588,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Pistol_Main_v003.blend"
+  },
+  {
+    "asset": "PRP_Remote",
+    "triangles_before": 340,
+    "triangles_after": 340,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Remote_v003.blend"
+  },
+  {
+    "asset": "PRP_Rug",
+    "triangles_before": 3448,
+    "triangles_after": 3448,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Rug_v003.blend"
+  },
+  {
+    "asset": "PRP_TableLamp_Broken",
+    "triangles_before": 1144,
+    "triangles_after": 1144,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_TableLamp_Broken_v003.blend"
+  },
+  {
+    "asset": "PRP_TableLamp_Intact",
+    "triangles_before": 1116,
+    "triangles_after": 1116,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_TableLamp_Intact_v003.blend"
+  },
+  {
+    "asset": "PRP_Vase_Broken",
+    "triangles_before": 1700,
+    "triangles_after": 1700,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Vase_Broken_v003.blend"
+  },
+  {
+    "asset": "PRP_Vase",
+    "triangles_before": 1392,
+    "triangles_after": 1392,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_Vase_v003.blend"
+  },
+  {
+    "asset": "PRP_WallClock_Broken",
+    "triangles_before": 1932,
+    "triangles_after": 2904,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_WallClock_Broken_v003.blend"
+  },
+  {
+    "asset": "PRP_WallClock",
+    "triangles_before": 1368,
+    "triangles_after": 2340,
+    "missing_original_objects": [],
+    "source": "art\\source\\blender\\props\\PRP_WallClock_v003.blend"
+  }
+]

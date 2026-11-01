@@ -28,7 +28,16 @@ namespace ConGame.Editor
             ["MAT_Wallpaper_FloralAged"] = ("TEX_MAT_Wallpaper_FloralAged", Color.white, 0f, 0.1f, null),
             ["MAT_Wallpaper_Damage"] = ("TEX_MAT_Wallpaper_FloralAged", new Color(0.8f, 0.75f, 0.68f), 0f, 0.1f, null),
             ["MAT_Floor_DarkGreen"] = ("TEX_MAT_Floor_DarkGreen", Color.white, 0f, 0.05f, null),
-            ["MAT_Floor_DarkGreen_Rug"] = ("TEX_MAT_Floor_DarkGreen", new Color(0.8f, 0.9f, 0.8f), 0f, 0.02f, null),
+            ["MAT_Floor_DarkGreen_Rug"] = ("TEX_MAT_Fabric_Rug", Color.white, 0f, 0.02f, null),
+            ["MAT_MV_Skirting"] = (null, new Color(0.30f, 0.28f, 0.21f), 0f, 0.2f, null),
+            ["MAT_MV_ClockFace"] = (null, new Color(0.89f, 0.88f, 0.83f), 0f, 0.1f, null),
+            ["MAT_MV_Ink"] = (null, new Color(0.12f, 0.12f, 0.10f), 0f, 0.2f, null),
+            ["MAT_MV_EnamelBlack"] = (null, new Color(0.11f, 0.13f, 0.11f), 0f, 0.4f, null),
+            ["MAT_MV_LampShadeOuter"] = (null, new Color(.30f, .31f, .27f), 0f, .25f, null),
+            ["MAT_MV_Book_0"] = (null, new Color(0.39f, 0.48f, 0.44f), 0f, 0.1f, null),
+            ["MAT_MV_Book_1"] = (null, new Color(0.51f, 0.32f, 0.26f), 0f, 0.1f, null),
+            ["MAT_MV_Book_2"] = (null, new Color(0.58f, 0.53f, 0.41f), 0f, 0.1f, null),
+            ["MAT_MV_Book_3"] = (null, new Color(0.35f, 0.40f, 0.46f), 0f, 0.1f, null),
             ["MAT_Wood_Walnut"] = ("TEX_MAT_Wood_Walnut", Color.white, 0f, 0.5f, null),
             ["MAT_Wood_Worn"] = ("TEX_MAT_Wood_Worn", Color.white, 0f, 0.4f, null),
             ["MAT_Leather_Burgundy"] = ("TEX_MAT_Leather_Burgundy", Color.white, 0f, 0.45f, null),
@@ -102,11 +111,33 @@ namespace ConGame.Editor
 
         static void RunInner()
         {
+            PrepareAssets();
+            BuildSceneAndShoot();
+        }
+
+        public static void PrepareAssets()
+        {
+            SyncGeneratedArt();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             ConfigureTextureImporters();
             CreateMaterials();
             RemapAllFbx();
-            BuildSceneAndShoot();
+        }
+
+        static void SyncGeneratedArt()
+        {
+            CopyGeneratedFiles(@"D:\game\con_game\art\exports\textures", TexRoot, "*.png");
+            CopyGeneratedFiles(@"D:\game\con_game\art\exports\environment", ArtRoot + "/Environment", "*.fbx");
+            CopyGeneratedFiles(@"D:\game\con_game\art\exports\props", ArtRoot + "/Props", "*.fbx");
+        }
+
+        static void CopyGeneratedFiles(string sourceDirectory, string assetDirectory, string pattern)
+        {
+            Directory.CreateDirectory(assetDirectory);
+            foreach (string source in Directory.GetFiles(sourceDirectory, pattern))
+            {
+                File.Copy(source, Path.Combine(assetDirectory, Path.GetFileName(source)), true);
+            }
         }
 
         static void ConfigureTextureImporters()
@@ -119,7 +150,7 @@ namespace ConGame.Editor
                 bool dirty = false;
                 if (path.EndsWith("_N.png") && ti.textureType != TextureImporterType.NormalMap)
                 { ti.textureType = TextureImporterType.NormalMap; dirty = true; }
-                if ((path.EndsWith("_MRA.png")) && ti.sRGBTexture)
+                if ((path.EndsWith("_MRA.png") || path.EndsWith("_Mask.png")) && ti.sRGBTexture)
                 { ti.sRGBTexture = false; dirty = true; }
                 if (dirty) ti.SaveAndReimport();
             }
@@ -145,12 +176,20 @@ namespace ConGame.Editor
                 m.SetColor("_BaseColor", v.col);
                 m.SetFloat("_Metallic", v.metal);
                 m.SetFloat("_Smoothness", v.smooth);
+                m.SetFloat("_BumpScale", 0.22f);
                 if (v.tex != null)
                 {
                     var bc = AssetDatabase.LoadAssetAtPath<Texture2D>(TexRoot + "/" + v.tex + "_BC.png");
                     var n = AssetDatabase.LoadAssetAtPath<Texture2D>(TexRoot + "/" + v.tex + "_N.png");
+                    var mask = AssetDatabase.LoadAssetAtPath<Texture2D>(TexRoot + "/" + v.tex + "_Mask.png");
                     if (bc != null) m.SetTexture("_BaseMap", bc);
                     if (n != null) { m.SetTexture("_BumpMap", n); m.EnableKeyword("_NORMALMAP"); }
+                    if (mask != null)
+                    {
+                        m.SetTexture("_MetallicGlossMap", mask);
+                        m.SetTexture("_OcclusionMap", mask);
+                        m.EnableKeyword("_METALLICSPECGLOSSMAP");
+                    }
                 }
                 if (v.emit.HasValue)
                 {
@@ -175,7 +214,7 @@ namespace ConGame.Editor
                 if (mi == null) continue;
                 try
                 {
-                    mi.materialLocation = ModelImporterMaterialLocation.External;
+                    mi.materialLocation = ModelImporterMaterialLocation.InPrefab;
                     foreach (var kv in Mats)
                     {
                         var id = new AssetImporter.SourceAssetIdentifier(typeof(Material), kv.Key);
@@ -220,23 +259,23 @@ namespace ConGame.Editor
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // 灯光: 顶灯硬光 + 环境
+            // 中性材质审查灯，不额外向相机正面补光。
             var sunGo = new GameObject("Sun");
             var sun = sunGo.AddComponent<Light>();
             sun.type = LightType.Directional;
-            sun.intensity = 0.9f;
+            sun.intensity = 0.45f;
             sun.shadows = LightShadows.Soft;
             sunGo.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
             var lampGo = new GameObject("CeilingLight");
             var pl = lampGo.AddComponent<Light>();
             pl.type = LightType.Point;
-            pl.intensity = 1.2f;
+            pl.intensity = 0.8f;
             pl.shadows = LightShadows.Soft;
             pl.range = 8f;
             pl.color = new Color(1f, 0.92f, 0.78f);
             lampGo.transform.position = new Vector3(0, 2.3f, 0);
             RenderSettings.ambientMode = AmbientMode.Flat;
-            RenderSettings.ambientLight = new Color(0.22f, 0.22f, 0.22f);
+            RenderSettings.ambientLight = new Color(0.06f, 0.055f, 0.05f);
 
             // 摆放
             var placed = new Dictionary<string, GameObject>();

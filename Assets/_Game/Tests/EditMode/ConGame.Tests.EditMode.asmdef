@@ -3,7 +3,8 @@
   "rootNamespace": "ConGame.Tests.EditMode",
   "references": [
     "ConGame.Domain",
-    "ConGame.Runtime"
+    "ConGame.Runtime",
+    "ConGame.Presentation"
   ],
   "includePlatforms": [
     "Editor"

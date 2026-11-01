@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Runtime.Ending;
+
+using ConGame.Runtime.Events;
+using ConGame.Runtime.Lighting;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Loop;
 using UnityEngine;
@@ -18,7 +21,10 @@ namespace ConGame.Presentation.Audio
         LoopReset = 4,
         TelevisionCrack = 5,
         TelevisionDestroyed = 6,
-        EndingSilence = 7
+        EndingSilence = 7,
+        BatImpact = 8,
+        GlassShatter = 9,
+        WoodBreak = 10
     }
 
     [Serializable]
@@ -35,20 +41,22 @@ namespace ConGame.Presentation.Audio
     {
         [SerializeField] private GameFlowController flow;
         [SerializeField] private LoopDirector loop;
-        [SerializeField] private TelevisionController television;
+
+        [SerializeField] private GameplayEventHub events;
+[SerializeField] private TelevisionController television;
         [SerializeField] private AudioCueBinding[] bindings;
 
         private readonly Dictionary<AudioCueId, AudioClip> _fallbacks = new Dictionary<AudioCueId, AudioClip>();
         private AudioSource _source;
+        private bool _suppressNextKillImpactGunshot;
 
-        public void Configure(
-            GameFlowController flowController,
-            LoopDirector loopDirector,
-            TelevisionController televisionController)
+public void Configure(GameFlowController flowController, LoopDirector loopDirector,
+                              TelevisionController televisionController, GameplayEventHub gameplayEvents = null)
         {
             flow = flowController;
             loop = loopDirector;
             television = televisionController;
+            events = gameplayEvents;
         }
 
         public void EnsureProceduralBindings()
@@ -57,7 +65,8 @@ namespace ConGame.Presentation.Audio
             {
                 AudioCueId.TelevisionPower, AudioCueId.EntryWarning, AudioCueId.DoorBreach, AudioCueId.Gunshot,
                 AudioCueId.LoopReset, AudioCueId.TelevisionCrack, AudioCueId.TelevisionDestroyed,
-                AudioCueId.EndingSilence
+                AudioCueId.EndingSilence, AudioCueId.BatImpact, AudioCueId.GlassShatter,
+                AudioCueId.WoodBreak
             };
             bindings = new AudioCueBinding[cues.Length];
             for (int i = 0; i < cues.Length; i++)
@@ -78,7 +87,7 @@ namespace ConGame.Presentation.Audio
             _source.spatialBlend = 0f;
         }
 
-        private void OnEnable()
+private void OnEnable()
         {
             if (flow != null)
             {
@@ -96,6 +105,11 @@ namespace ConGame.Presentation.Audio
                 television.DamageChanged += OnTelevisionDamageChanged;
                 television.LightImpactPulse += OnTelevisionLightImpact;
             }
+
+            if (events != null)
+            {
+                events.ImpactResolved += OnImpactResolved;
+            }
         }
 
         private void Start()
@@ -103,7 +117,7 @@ namespace ConGame.Presentation.Audio
             Play(AudioCueId.TelevisionPower);
         }
 
-        private void OnDisable()
+private void OnDisable()
         {
             if (flow != null)
             {
@@ -120,6 +134,11 @@ namespace ConGame.Presentation.Audio
             {
                 television.DamageChanged -= OnTelevisionDamageChanged;
                 television.LightImpactPulse -= OnTelevisionLightImpact;
+            }
+
+            if (events != null)
+            {
+                events.ImpactResolved -= OnImpactResolved;
             }
         }
 
@@ -168,6 +187,25 @@ namespace ConGame.Presentation.Audio
             }
         }
 
+        public void NotifyD22ShotCue(bool terminalShot)
+        {
+            NotifyScriptedGunshot(terminalShot);
+        }
+
+        public void NotifyScriptedGunshot(bool terminalShot)
+        {
+            Play(AudioCueId.Gunshot);
+            if (terminalShot)
+            {
+                _suppressNextKillImpactGunshot = true;
+            }
+        }
+
+        public void OnD22ShotCueRequested(bool terminalShot, Transform source, int loopEpoch)
+        {
+            NotifyD22ShotCue(terminalShot);
+        }
+
         private void OnPhaseChanged(GamePhase previous, GamePhase current, string reason)
         {
             switch (current)
@@ -176,7 +214,14 @@ namespace ConGame.Presentation.Audio
                     Play(AudioCueId.DoorBreach);
                     break;
                 case GamePhase.KillImpact:
-                    Play(AudioCueId.Gunshot);
+                    if (_suppressNextKillImpactGunshot)
+                    {
+                        _suppressNextKillImpactGunshot = false;
+                    }
+                    else
+                    {
+                        Play(AudioCueId.Gunshot);
+                    }
                     break;
                 case GamePhase.EndingE1:
                     Play(AudioCueId.TelevisionDestroyed);
@@ -184,6 +229,11 @@ namespace ConGame.Presentation.Audio
                 case GamePhase.EndingE3:
                     Play(AudioCueId.EndingSilence);
                     break;
+            }
+
+            if (current == GamePhase.LoopReset)
+            {
+                _suppressNextKillImpactGunshot = false;
             }
         }
 
@@ -223,7 +273,11 @@ namespace ConGame.Presentation.Audio
                 AudioCueId.DoorBreach => 70f,
                 AudioCueId.EntryWarning => 165f,
                 AudioCueId.LoopReset => 880f,
-                AudioCueId.TelevisionCrack => 1320f,
+
+                AudioCueId.BatImpact => 105f,
+                AudioCueId.GlassShatter => 1640f,
+                AudioCueId.WoodBreak => 260f,
+AudioCueId.TelevisionCrack => 1320f,
                 AudioCueId.TelevisionDestroyed => 55f,
                 AudioCueId.EndingSilence => 40f,
                 _ => 330f
@@ -246,5 +300,20 @@ namespace ConGame.Presentation.Audio
             _fallbacks.Add(cue, generated);
             return generated;
         }
-    }
+
+
+private void OnImpactResolved(ImpactEvent impact)
+        {
+            if (!string.IsNullOrEmpty(impact.Hit.SourceId) &&
+                impact.Hit.SourceId.IndexOf("bat", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                Play(AudioCueId.BatImpact);
+            }
+
+            if (impact.Receiver is BreakableLight && impact.Result == ConGame.Runtime.Interaction.HitResult.Broke)
+            {
+                Play(AudioCueId.GlassShatter);
+            }
+        }
+}
 }

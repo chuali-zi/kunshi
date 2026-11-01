@@ -17,7 +17,7 @@ namespace ConGame.Bootstrap
         private int _selected;
         private float _previousTimeScale = 1f;
         private bool _previousAudioPause;
-        private bool _gameplayWasEnabled;
+        private GameplayInputMode _previousInputMode = GameplayInputMode.Full;
 
         public bool IsPaused { get; private set; }
         public GameSettingsV1 Settings => _settingsModel?.Settings;
@@ -65,7 +65,7 @@ namespace ConGame.Bootstrap
             _selected = 0;
             _previousTimeScale = Time.timeScale;
             _previousAudioPause = AudioListener.pause;
-            _gameplayWasEnabled = input != null && input.GameplayEnabled;
+            _previousInputMode = input == null ? GameplayInputMode.Disabled : input.InputMode;
             input?.SetGameplayEnabled(false);
             Time.timeScale = 0f;
             AudioListener.pause = true;
@@ -82,7 +82,7 @@ namespace ConGame.Bootstrap
             _showSettings = false;
             Time.timeScale = _previousTimeScale;
             AudioListener.pause = _previousAudioPause;
-            input?.SetGameplayEnabled(_gameplayWasEnabled);
+            input?.SetInputMode(_previousInputMode);
         }
 
         public void ReturnToMainMenu()

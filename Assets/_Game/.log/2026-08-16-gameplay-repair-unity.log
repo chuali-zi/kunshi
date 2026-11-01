@@ -1,0 +1,498 @@
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+.log is not a valid directory name. Please make sure there are no unallowed characters in the name.
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.4/staging' branch; Version is '6000.4.6f1 (0b051c2e5d54) revision 722204'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Channel LicenseClient-chual doesn't exist
+OS: 'Windows 11  (10.0.26200) CoreCountrySpecific' Language: 'zh' Physical Memory: 32278 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-16T07:26:39Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 37092)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual" at "2026-08-16T07:26:40.1381434Z"
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Unity.exe
+-batchmode
+-nographics
+-quit
+-projectPath
+D:\game\con_game
+-executeMethod
+ConGame.Editor.ConGameArtInstaller.RepairGameplayWiring
+-logFile
+D:\game\con_game\Assets\_Game\.log\2026-08-16-gameplay-repair-unity.log
+Successfully changed project path to: D:\game\con_game
+D:/game/con_game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [20448]  Target information:
+
+Player connection [20448]  * "[IP] 192.168.132.1 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448]  * "[IP] 192.168.47.1 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448]  * "[IP] 169.254.25.8 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448]  * "[IP] 172.30.48.1 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448]  * "[IP] 100.123.192.77 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448]  * "[IP] 198.18.0.1 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448]  * "[IP] 192.168.2.5 [Port] 55504 [Flags] 2 [Guid] 230964162 [EditorId] 230964162 [Version] 1048832 [Id] WindowsEditor(7,chuali) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20448] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [20448] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 37092, path: "C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              d1c68d94232f4b62be5b93f67ff928ca
+  Correlation Id:          4dc327f268f5b9f819dfd38b7de94265
+  External correlation Id: 3067436263200911554
+  Machine Id:              fwc+ZXC8gUl3/PnhHFwDpEWQZa8=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-chual" (connect: 0.37s, validation: 0.16s, handshake: 0.06s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-chual-notifications" at "2026-08-16T07:26:40.3642748Z"
+[Licensing::Module] Connected to LicensingClient (PId: 37092, launch time: 0.01, total connection time: 0.60s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 15669700394519-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.65s
+[Package Manager] Connected to IPC stream "Upm-4720" after 0.3 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 9 unused hashed content files
+Initialize engine version: 6000.4.6f1 (0b051c2e5d54)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/game/con_game/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56720
+CodeReloadManager initialized
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.4.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002319 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.443 seconds
+Domain Reload Profiling: 949ms
+	BeginReloadAssembly (160ms)
+		CreateAndSetChildDomain (32ms)
+	RebuildCommonClasses (40ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (67ms)
+	LoadAllAssembliesAndSetupDomain (226ms)
+		LoadAssemblies (126ms)
+		AnalyzeDomain (215ms)
+			TypeCache.Refresh (213ms)
+				TypeCache.ScanAssembly (196ms)
+	FinalizeReload (444ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (60ms)
+			BeforeProcessingInitializeOnLoad (94ms)
+			ProcessInitializeOnLoadAttributes (113ms)
+			ProcessInitializeOnLoadMethodAttributes (99ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 36 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ai.navigation@2.0.12 (location: D:\game\con_game\Library\PackageCache\com.unity.ai.navigation@734c2c4c5591)
+    com.unity.animation.rigging@1.4.1 (location: D:\game\con_game\Library\PackageCache\com.unity.animation.rigging@ae5f251e1ed4)
+    com.unity.cinemachine@2.10.7 (location: D:\game\con_game\Library\PackageCache\com.unity.cinemachine@631385387c5a)
+    com.unity.inputsystem@1.19.0 (location: D:\game\con_game\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.timeline@1.8.12 (location: D:\game\con_game\Library\PackageCache\com.unity.timeline@8cd8509afae5)
+    com.unity.burst@1.8.29 (location: D:\game\con_game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.searcher@4.9.4 (location: D:\game\con_game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.mathematics@1.3.3 (location: D:\game\con_game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.nuget.mono-cecil@1.11.6 (location: D:\game\con_game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework.performance@aa81a99c4a75)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal@0d0659f1368d)
+    com.unity.test-framework@1.6.0 (location: D:\game\con_game\Library\PackageCache\com.unity.test-framework@76560ee600cb)
+    com.unity.modules.audio@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.director@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.animation@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.ext.nunit@2.0.5 (location: D:\game\con_game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.core@630143bbfe2b)
+    com.unity.shadergraph@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.shadergraph@04a6ef07359e)
+    com.unity.render-pipelines.universal-config@17.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.render-pipelines.universal-config@0db4263b9e6b)
+    com.unity.modules.uielements@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.ai@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.physics@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.ugui@2.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.ugui@473409526770)
+    com.unity.collections@6.4.0 (location: D:\game\con_game\Library\PackageCache\com.unity.collections@65f499a3cc26)
+    com.unity.modules.terrain@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\game\con_game\Library\PackageCache\com.unity.modules.hierarchycore)
+  Git packages:
+    com.coplaydev.unity-mcp@https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main (location: D:\game\con_game\Library\PackageCache\com.coplaydev.unity-mcp@a4c2d0a84573)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.01 seconds
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.4.6f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/game/con_game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 6s739ms
+[649/842    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[818/842    1s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Runtime.dll (+2 others)
+Assets\_Game\Runtime\Facts\PlayerZoneTrigger.cs(49,39): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+
+Assets\_Game\Runtime\Facts\PlayerZoneTrigger.cs(60,42): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+[819/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Runtime.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Runtime.dll, with 139 defines and 251 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[820/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Runtime.pdb
+[821/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Runtime.dll
+[822/842    0s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Presentation.dll (+2 others)
+Assets\_Game\Presentation\Animation\CharacterAnimatorDriver.cs(247,34): warning CS0618: 'Object.FindObjectOfType<T>(bool)' is obsolete: 'Object.FindObjectOfType has been deprecated. Use Object.FindFirstObjectByType instead or if finding any instance is acceptable the faster Object.FindAnyObjectByType'
+[823/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Presentation.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Presentation.dll, with 139 defines and 252 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[824/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Presentation.pdb
+[825/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Presentation.dll
+[826/842    0s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Bootstrap.dll (+2 others)
+[827/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Bootstrap.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Bootstrap.dll, with 139 defines and 252 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[828/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Bootstrap.pdb
+[829/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Bootstrap.dll
+[830/842    0s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Tests.PlayMode.dll (+2 others)
+[831/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Tests.PlayMode.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Tests.PlayMode.dll, with 139 defines and 247 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[832/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Tests.PlayMode.pdb
+[833/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Tests.PlayMode.dll
+[834/842    4s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Tests.EditMode.dll (+2 others)
+[835/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Tests.EditMode.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Tests.EditMode.dll, with 137 defines and 274 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[836/842    3s] Csc Library/Bee/artifacts/1900b0aE.dag/ConGame.Editor.dll (+2 others)
+Assets\_Game\Editor\AudioCueAutoBinder.cs(46,46): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\_Game\Editor\ConGameArtInstaller.cs(337,55): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'
+
+Assets\_Game\Editor\ConGameArtInstaller.cs(336,53): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'
+
+Assets\_Game\Editor\ConGameArtInstaller.cs(352,43): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\_Game\Editor\ConGameArtInstaller.cs(354,47): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\_Game\Editor\ArtAcceptance.cs(202,43): warning CS0618: 'ModelImporterMaterialLocation.External' is obsolete: 'External Material Location is no longer supported.'
+
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(214,39): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(215,41): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+[837/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Tests.EditMode.pdb
+[838/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Tests.EditMode.dll
+[839/842    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/ConGame.Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/ConGame.Editor.dll, with 137 defines and 285 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[840/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Editor.pdb
+[841/842    0s] CopyFiles Library/ScriptAssemblies/ConGame.Editor.dll
+*** Tundra build success (6.69 seconds), 25 items updated, 842 evaluated
+Assets\_Game\Runtime\Facts\PlayerZoneTrigger.cs(49,39): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+Assets\_Game\Runtime\Facts\PlayerZoneTrigger.cs(60,42): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+Assets\_Game\Presentation\Animation\CharacterAnimatorDriver.cs(247,34): warning CS0618: 'Object.FindObjectOfType<T>(bool)' is obsolete: 'Object.FindObjectOfType has been deprecated. Use Object.FindFirstObjectByType instead or if finding any instance is acceptable the faster Object.FindAnyObjectByType'
+Assets\_Game\Editor\AudioCueAutoBinder.cs(46,46): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\_Game\Editor\ConGameArtInstaller.cs(337,55): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'
+Assets\_Game\Editor\ConGameArtInstaller.cs(336,53): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'
+Assets\_Game\Editor\ConGameArtInstaller.cs(352,43): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\_Game\Editor\ConGameArtInstaller.cs(354,47): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\_Game\Editor\ArtAcceptance.cs(202,43): warning CS0618: 'ModelImporterMaterialLocation.External' is obsolete: 'External Material Location is no longer supported.'
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(214,39): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\_Game\Editor\ConGameCharacterInstaller.cs(215,41): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+AssetDatabase: script compilation time: 7.278408s
+Begin MonoManager ReloadAssembly
+Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-Editor.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
+Assembly Assembly-CSharp.dll at Library/ScriptAssemblies/Assembly-CSharp.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Editor.Tests.dll at Library/ScriptAssemblies/Cinemachine.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Cinemachine.Runtime.Tests.dll at Library/ScriptAssemblies/Cinemachine.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly DocCodeExamples.dll at Library/ScriptAssemblies/DocCodeExamples.dll not valid. Loading of assembly skipped.
+Assembly TestNewCustomAssembly.dll at Library/ScriptAssemblies/TestNewCustomAssembly.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.BurstCompatibilityGen.dll at Library/ScriptAssemblies/Unity.Collections.BurstCompatibilityGen.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.DocCodeSamples.dll at Library/ScriptAssemblies/Unity.Collections.DocCodeSamples.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.PerformanceTests.dll at Library/ScriptAssemblies/Unity.Collections.PerformanceTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.dll at Library/ScriptAssemblies/Unity.Collections.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Collections.Tests.Playmode.dll at Library/ScriptAssemblies/Unity.Collections.Tests.Playmode.dll not valid. Loading of assembly skipped.
+Assembly Unity.InputSystem.IntegrationTests.dll at Library/ScriptAssemblies/Unity.InputSystem.IntegrationTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Mathematics.Tests.dll at Library/ScriptAssemblies/Unity.Mathematics.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Nuget.Mono-Cecil.dll at Library/ScriptAssemblies/Unity.Nuget.Mono-Cecil.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.PathTracing.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.PathTracing.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Core.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Config.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Config.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Editor.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.RenderPipelines.Universal.Runtime.Tests.dll at Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.Searcher.EditorTests.dll at Library/ScriptAssemblies/Unity.Searcher.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly Unity.ShaderGraph.Editor.Tests.dll at Library/ScriptAssemblies/Unity.ShaderGraph.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Editor.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.TextMeshPro.Tests.dll at Library/ScriptAssemblies/Unity.TextMeshPro.Tests.dll not valid. Loading of assembly skipped.
+Assembly Unity.UnifiedRayTracing.Editor.Tests.dll at Library/ScriptAssemblies/Unity.UnifiedRayTracing.Editor.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.Common.Tests.dll at Library/ScriptAssemblies/UnityEditor.UI.Common.Tests.dll not valid. Loading of assembly skipped.
+Assembly UnityEditor.UI.EditorTests.dll at Library/ScriptAssemblies/UnityEditor.UI.EditorTests.dll not valid. Loading of assembly skipped.
+Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
+Start importing Assets/_Game/Art/docs using Guid(759a31e3b7ff4684e8172c78a72d2220) (DefaultImporter) -> (Import Result ID: '470c598b1d1c647894998a62e8ac7dea') in 0.0492901 seconds [static dependencies only]. Details - ImportResultOutputID=44603aaa53c05d520ded03f3faade564 DependenciesID=1b50c9cc7fcda5f867a11d9948dfd559 StaticDependenciesID=cce7daa1a548cb2110c34f0323057bf9 
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-con_game
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  7.782 seconds
+Domain Reload Profiling: 13335ms
+	BeginReloadAssembly (379ms)
+		DisableScriptedObjects (31ms)
+		CreateAndSetChildDomain (159ms)
+	RebuildCommonClasses (40ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (1536ms)
+	LoadAllAssembliesAndSetupDomain (3582ms)
+		LoadAssemblies (2844ms)
+		AnalyzeDomain (847ms)
+			TypeCache.Refresh (791ms)
+				TypeCache.ScanAssembly (774ms)
+			BuildScriptInfoCaches (39ms)
+			ResolveRequiredComponents (15ms)
+	FinalizeReload (7782ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (30ms)
+			BeforeProcessingInitializeOnLoad (163ms)
+			ProcessInitializeOnLoadAttributes (6987ms)
+			ProcessInitializeOnLoadMethodAttributes (370ms)
+			AfterProcessingInitializeOnLoad (6ms)
+		AwakeInstancesAfterBackupRestoration (22ms)
+Start importing Assets/_Game/Content/Items/ITEM_bed.asset using Guid(605ca22f6c9c3c340b0577fb1906b924) (NativeFormatImporter) -> (Import Result ID: '4ac0baefd0e023834fececf4b6ddb4e4') in 0.0069359 seconds [static dependencies only]. Details - ImportResultOutputID=afc4335504e5cb5245005aa4e0cc1566 DependenciesID=9aaadcb78667bb60d67fa1b0c1c296b3 StaticDependenciesID=348f695f56e5d9bce22b39eb404c0b79 
+Start importing Assets/_Game/Content/Config/CFG_Game.asset using Guid(d32525cb57426b44aa3208debfb685cd) (NativeFormatImporter) -> (Import Result ID: '745c6c9023eb62004959cdce0fb17daa') in 0.0019983 seconds [static dependencies only]. Details - ImportResultOutputID=977333de36b69fa6d0c135635addd9cc DependenciesID=5d3b427f2635952817631e27dff8eabe StaticDependenciesID=24365a5954e480029b82af61b144caf1 
+Start importing Assets/_Game/Art/docs/ART_ASSET_GAP_MANIFEST.md using Guid(d04beeb803d76414296ad473c6665015) (TextScriptImporter) -> (Import Result ID: '6388f23b7ec71740fa661372e2891527') in 0.0317969 seconds [static dependencies only]. Details - ImportResultOutputID=00bdcd36597dbae4dbed01542bed4c27 DependenciesID=bf3a6e9ee09cd2d2cf510fa3dbf165a4 StaticDependenciesID=40bf6b22063f8eb0d65134e075a4542d 
+(Values over 0.050ms)
+Asset Pipeline Refresh (id=816953895a215b44aa689430103969d8): Total: 21.366 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=4 (actual=4, local cache=0, cache server=0)
+		Asset DB Process Time: managed=5 ms, native=8342 ms
+		Asset DB Callback time: managed=124 ms, native=19 ms
+		Scripting: domain reloads=1, domain reload time=5557 ms, compile time=7280 ms, other=37 ms
+		Project Asset Count: scripts=1072, non-scripts=2192
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 17.348ms
+	ApplyChangesToAssetFolders: 0.515ms
+	Scan: 195.131ms
+	OnSourceAssetsModified: 1.060ms
+	CategorizeScriptCompilationAssets: 22.479ms
+	ProcessAssetsWithTransientArtifactChanges: 73.650ms
+	CategorizeAssets: 44.984ms
+	CompileScripts: 7280.010ms
+	ImportOutOfDateAssets: 7887.421ms (7787.659ms without children)
+		ImportManagerImport: 96.037ms (4.603ms without children)
+			UpdateCategorizedAssets: 0.072ms
+		UnloadImportedAssets: 1.437ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.618ms
+		OnDemandSchedulerStart: 1.614ms
+	PostProcessAllAssets: 124.257ms
+		WindowTitlePostprocess 0.179ms
+		XRBuildSystem.XRAssetImported 0.148ms
+		PostProcessCallbackCreateDeferredMaterials 0.061ms
+		MonoPostProcessAllAssets: 122.296ms
+			AssetPostprocessor.OnPostprocessAllAssets 56.870ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 16.255ms
+			UniversalRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 11.663ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 6.677ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 2.539ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 2.118ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 2.038ms
+			AssetChangedListener.OnPostprocessAllAssets 1.457ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 1.247ms
+			SyncVS.PostprocessSyncProject 1.132ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.967ms
+			MaterialPostprocessor.OnPostprocessAllAssets 0.788ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.609ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.580ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.399ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.363ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.358ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.350ms
+			CinemachineSettings.OnPostprocessAllAssets 0.350ms
+			PostProcessor.OnPostprocessAllAssets 0.339ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.294ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.275ms
+			AssetEvents.OnPostprocessAllAssets 0.245ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.186ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.159ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.153ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.141ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.131ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.129ms
+			AudioContainerPostProcessor.OnPostprocessAllAssets 0.073ms
+	PostAssetChangesProfiler: 2.948ms
+	UnloadStreamsBegin: 1.324ms
+	PersistCurrentRevisions: 0.363ms
+	GenerateScriptTypeHashes: 3.137ms
+	GenerateScriptTypeSerializationHashes: 5.705ms
+	Untracked: 5708.522ms
+
+Application.AssetDatabase Initial Refresh End
+Shader Hidden/ChartRasterizerHardware is not supported: GPU does not support conservative rasterization
+Shader Hidden/ChartRasterizerHardware is not supported: GPU does not support conservative rasterization
+Scanning for USB devices : 1.779ms
+Initializing Unity extensions:
+Unloading 74 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4825 unused Assets / (10.2 MB). Loaded Objects now: 5594.
+Memory consumption went from 197.1 MB to 187.0 MB.
+Total: 13.552300 ms (FindLiveObjects: 0.409600 ms CreateObjectMapping: 0.243100 ms MarkObjects: 7.345300 ms  DeleteObjects: 5.351500 ms)
+
+Opening scene 'Assets/_Game/Scenes/Room_M1.unity'
+UnityException: InitializeNavMeshPath is not allowed to be called from a MonoBehaviour constructor (or instance field initializer), call it in Awake or Start instead. Called from MonoBehaviour 'KillerTacticalController'.
+See "Script Serialization" page in the Unity Manual for further details.
+  at (wrapper managed-to-native) UnityEngine.AI.NavMeshPath.InitializeNavMeshPath()
+  at UnityEngine.AI.NavMeshPath..ctor () [0x00006] in <82cb8253f29d43049917e2d5021af18d>:0 
+  at ConGame.Runtime.AI.KillerTacticalController..ctor () [0x00016] in D:\game\con_game\Assets\_Game\Runtime\AI\KillerTacticalController.cs:67 
+
+(Filename: Assets/_Game/Runtime/AI/KillerTacticalController.cs Line: 67)
+
+Unloading 106 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/_Game/Scenes/Room_M1.unity'
+	Deserialize:            68.230 ms
+	Integration:            317.013 ms
+	Integration of assets:  8.192 ms
+	Thread Wait Time:       0.025 ms
+	Total Operation Time:   393.460 ms
+Unloading 2 unused Assets / (3.8 MB). Loaded Objects now: 7835.
+Memory consumption went from 223.8 MB to 220.0 MB.
+Total: 11.362300 ms (FindLiveObjects: 1.109300 ms CreateObjectMapping: 0.690700 ms MarkObjects: 9.506100 ms  DeleteObjects: 0.053700 ms)
+
+Start importing Assets/_Game/Scenes/Room_M1.unity using Guid(40535a03a7e48f949bd7a94781b0b669) (DefaultImporter) -> (Import Result ID: '3f54c6b3062f4768f6a79e5db1e2ac83') in 0.0017982 seconds [static dependencies only]. Details - ImportResultOutputID=be07901c57f50ae9ae6bed49503fa1c1 DependenciesID=2b60e7373d5768ab37ad8253cd3136c6 StaticDependenciesID=8ba8ff2c1be91256da6a7ef7942c2b14 
+Asset Pipeline Refresh (id=7b5e96d1ce5ed85449ac3bee1f051826): Total: 0.089 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+ARTINSTALL gameplay wiring repaired
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ConGame.Editor.ConGameArtInstaller:RepairGameplayWiring () (at Assets/_Game/Editor/ConGameArtInstaller.cs:307)
+
+(Filename: Assets/_Game/Editor/ConGameArtInstaller.cs Line: 307)
+
+Batchmode quit successfully invoked - shutting down!
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-chual-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-chual channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

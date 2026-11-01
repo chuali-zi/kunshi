@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="16" result="Passed" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:48Z" duration="33.404726">
+  <test-suite type="TestSuite" id="1116" name="con_game" fullname="con_game" runstate="Runnable" testcasecount="85" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:48Z" duration="33.404726" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1109" name="ConGame.Tests.PlayMode.dll" fullname="D:/game/con_game/Library/ScriptAssemblies/ConGame.Tests.PlayMode.dll" runstate="Runnable" testcasecount="85" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:48Z" duration="33.392944" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2184" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1110" name="ConGame" fullname="ConGame" runstate="Runnable" testcasecount="85" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:48Z" duration="33.391450" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1111" name="Tests" fullname="ConGame.Tests" runstate="Runnable" testcasecount="85" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:48Z" duration="33.390469" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1112" name="PlayMode" fullname="ConGame.Tests.PlayMode" runstate="Runnable" testcasecount="85" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:48Z" duration="33.389250" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1037" name="DeliveredArtPerformancePlayModeTests" fullname="ConGame.Tests.PlayMode.DeliveredArtPerformancePlayModeTests" classname="ConGame.Tests.PlayMode.DeliveredArtPerformancePlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:14Z" duration="0.070075" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1038" name="PerformanceDrivesBothAnimatorsFromOnePlayableGraphAndCancelsCleanly" fullname="ConGame.Tests.PlayMode.DeliveredArtPerformancePlayModeTests.PerformanceDrivesBothAnimatorsFromOnePlayableGraphAndCancelsCleanly" methodname="PerformanceDrivesBothAnimatorsFromOnePlayableGraphAndCancelsCleanly" classname="ConGame.Tests.PlayMode.DeliveredArtPerformancePlayModeTests" runstate="Runnable" seed="1916821118" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:14Z" duration="0.049861" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1064" name="KillerAimFirePlayModeTests" fullname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" classname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:31Z" duration="16.529179" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1066" name="AimCancellationReturnsKillerAnimatorToIdle" fullname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests.AimCancellationReturnsKillerAnimatorToIdle" methodname="AimCancellationReturnsKillerAnimatorToIdle" classname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" runstate="Runnable" seed="1638362008" result="Passed" start-time="2026-08-12 14:42:14Z" end-time="2026-08-12 14:42:15Z" duration="0.146445" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1069" name="EndingShotPlaysKillerAimFire" fullname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests.EndingShotPlaysKillerAimFire" methodname="EndingShotPlaysKillerAimFire" classname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" runstate="Runnable" seed="1030804172" result="Passed" start-time="2026-08-12 14:42:15Z" end-time="2026-08-12 14:42:31Z" duration="16.355328" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1068" name="InitialAwakeningTriggersPlayerWakeUp" fullname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests.InitialAwakeningTriggersPlayerWakeUp" methodname="InitialAwakeningTriggersPlayerWakeUp" classname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" runstate="Runnable" seed="1114625018" result="Passed" start-time="2026-08-12 14:42:31Z" end-time="2026-08-12 14:42:31Z" duration="0.007334" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1065" name="KillerRoleSetsAimFireTriggerOnPlayAimFire" fullname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests.KillerRoleSetsAimFireTriggerOnPlayAimFire" methodname="KillerRoleSetsAimFireTriggerOnPlayAimFire" classname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" runstate="Runnable" seed="656703784" result="Passed" start-time="2026-08-12 14:42:31Z" end-time="2026-08-12 14:42:31Z" duration="0.006948" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1067" name="PlayerRolePlayAimFireIsNoOp" fullname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests.PlayerRolePlayAimFireIsNoOp" methodname="PlayerRolePlayAimFireIsNoOp" classname="ConGame.Tests.PlayMode.KillerAimFirePlayModeTests" runstate="Runnable" seed="669038554" result="Passed" start-time="2026-08-12 14:42:31Z" end-time="2026-08-12 14:42:31Z" duration="0.006913" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1072" name="KillerHuntPlayModeTests" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-08-12 14:42:31Z" end-time="2026-08-12 14:42:42Z" duration="10.815804" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1080" name="HiddenPlayerIsFoundOnlyAfterCloseAuthoredAnchorSearch" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.HiddenPlayerIsFoundOnlyAfterCloseAuthoredAnchorSearch" methodname="HiddenPlayerIsFoundOnlyAfterCloseAuthoredAnchorSearch" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="104222417" result="Passed" start-time="2026-08-12 14:42:31Z" end-time="2026-08-12 14:42:33Z" duration="2.206142" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1076" name="HiddenPlayerIsNotAcquiredByOrdinaryVision" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.HiddenPlayerIsNotAcquiredByOrdinaryVision" methodname="HiddenPlayerIsNotAcquiredByOrdinaryVision" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="344234293" result="Passed" start-time="2026-08-12 14:42:33Z" end-time="2026-08-12 14:42:34Z" duration="1.252901" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1078" name="LoopResetCancelsAimMemoryAndLateCallbacks" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.LoopResetCancelsAimMemoryAndLateCallbacks" methodname="LoopResetCancelsAimMemoryAndLateCallbacks" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="664667132" result="Passed" start-time="2026-08-12 14:42:34Z" end-time="2026-08-12 14:42:36Z" duration="1.302267" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1079" name="MovementNoiseDoesNotCancelAnEstablishedAim" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.MovementNoiseDoesNotCancelAnEstablishedAim" methodname="MovementNoiseDoesNotCancelAnEstablishedAim" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="362654350" result="Passed" start-time="2026-08-12 14:42:36Z" end-time="2026-08-12 14:42:37Z" duration="1.023434" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1075" name="NoiseBehindOcclusionUpdatesLastKnownPositionWithoutSeeingPlayer" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.NoiseBehindOcclusionUpdatesLastKnownPositionWithoutSeeingPlayer" methodname="NoiseBehindOcclusionUpdatesLastKnownPositionWithoutSeeingPlayer" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="2117182141" result="Passed" start-time="2026-08-12 14:42:37Z" end-time="2026-08-12 14:42:37Z" duration="0.014756" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1077" name="NonLethalHitCancelsAimAndForcesRecovery" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.NonLethalHitCancelsAimAndForcesRecovery" methodname="NonLethalHitCancelsAimAndForcesRecovery" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="411180133" result="Passed" start-time="2026-08-12 14:42:37Z" end-time="2026-08-12 14:42:37Z" duration="0.552667" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1073" name="OcclusionCancelsAimAndPreventsShotCommit" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.OcclusionCancelsAimAndPreventsShotCommit" methodname="OcclusionCancelsAimAndPreventsShotCommit" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="1834938940" result="Passed" start-time="2026-08-12 14:42:37Z" end-time="2026-08-12 14:42:39Z" duration="1.302154" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1081" name="RepeatedBatHitsCannotPermanentlyStunlockTheKiller" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.RepeatedBatHitsCannotPermanentlyStunlockTheKiller" methodname="RepeatedBatHitsCannotPermanentlyStunlockTheKiller" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="259399260" result="Passed" start-time="2026-08-12 14:42:39Z" end-time="2026-08-12 14:42:40Z" duration="1.802749" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1074" name="SustainedClearSightCommitsOnceThenResolvesOnlyAfterConfirmation" fullname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests.SustainedClearSightCommitsOnceThenResolvesOnlyAfterConfirmation" methodname="SustainedClearSightCommitsOnceThenResolvesOnlyAfterConfirmation" classname="ConGame.Tests.PlayMode.KillerHuntPlayModeTests" runstate="Runnable" seed="779899455" result="Passed" start-time="2026-08-12 14:42:40Z" end-time="2026-08-12 14:42:42Z" duration="1.352635" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1084" name="M1RoomIntegrationPlayModeTests" fullname="ConGame.Tests.PlayMode.M1RoomIntegrationPlayModeTests" classname="ConGame.Tests.PlayMode.M1RoomIntegrationPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-12 14:42:42Z" end-time="2026-08-12 14:42:48Z" duration="5.959333" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1085" name="RoomSceneRunsBreachIntoInteractiveHuntWithoutForcedExecution" fullname="ConGame.Tests.PlayMode.M1RoomIntegrationPlayModeTests.RoomSceneRunsBreachIntoInteractiveHuntWithoutForcedExecution" methodname="RoomSceneRunsBreachIntoInteractiveHuntWithoutForcedExecution" classname="ConGame.Tests.PlayMode.M1RoomIntegrationPlayModeTests" runstate="Runnable" seed="580125229" result="Passed" start-time="2026-08-12 14:42:42Z" end-time="2026-08-12 14:42:48Z" duration="5.957524" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="Order" value="1000" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/chual/AppData/LocalLow/DefaultCompany/con_game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

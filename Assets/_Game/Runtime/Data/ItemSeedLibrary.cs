@@ -30,7 +30,7 @@ namespace ConGame.Runtime.Data
         {
             new ItemSeed("sofa_awaken", "苏醒扶手椅", Inspect | InteractionVerb.Hide, ItemCategory.None, ContentStatus.Implemented),
             new ItemSeed("blanket", "被子", Inspect | InteractionVerb.PickUp | InteractionVerb.Use | InteractionVerb.Throw | InteractionVerb.Hide | InteractionVerb.Place, ItemCategory.Small | ItemCategory.Throwable | ItemCategory.TripTrap, ContentStatus.Implemented),
-            new ItemSeed("bed", "床", Inspect | InteractionVerb.Hide, ItemCategory.None, ContentStatus.Implemented),
+            new ItemSeed("bed", "床", Inspect | InteractionVerb.Use | InteractionVerb.Hide, ItemCategory.None, ContentStatus.Implemented),
             new ItemSeed("wood_chair", "木椅", Inspect | InteractionVerb.Carry | InteractionVerb.Throw | InteractionVerb.Swing | InteractionVerb.Use | InteractionVerb.Place, ItemCategory.Heavy | ItemCategory.Throwable | ItemCategory.Weapon | ItemCategory.DoorBlocker | ItemCategory.EndingTool, ContentStatus.Implemented),
             new ItemSeed("bookcase", "书柜", Inspect | InteractionVerb.Use | InteractionVerb.Hide, ItemCategory.Heavy | ItemCategory.DoorBlocker, ContentStatus.Implemented),
             new ItemSeed("baseball_bat", "棒球棍", Inspect | InteractionVerb.PickUp | InteractionVerb.Throw | InteractionVerb.Swing, ItemCategory.Small | ItemCategory.Throwable | ItemCategory.Weapon | ItemCategory.EndingTool, ContentStatus.Implemented),

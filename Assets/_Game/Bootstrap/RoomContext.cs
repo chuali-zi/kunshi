@@ -70,6 +70,7 @@ namespace ConGame.Bootstrap
                 return;
             }
 
+            RoomDesignGapInstaller.Apply(this);
             resetRegistry.CaptureInitialState();
             loopDirector.Initialize();
             _initialized = true;

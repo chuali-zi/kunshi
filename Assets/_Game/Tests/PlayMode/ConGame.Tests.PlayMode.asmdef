@@ -5,7 +5,8 @@
     "ConGame.Domain",
     "ConGame.Runtime",
     "ConGame.Presentation",
-    "ConGame.Bootstrap"
+    "ConGame.Bootstrap",
+    "Unity.InputSystem"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

@@ -4,7 +4,8 @@
   "references": [
     "ConGame.Domain",
     "ConGame.Runtime",
-    "Unity.Timeline"
+    "Unity.Timeline",
+    "Unity.Animation.Rigging"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

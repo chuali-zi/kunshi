@@ -16,5 +16,21 @@ MonoBehaviour:
   sequenceDuration: 12
   outcomeId: D21
   heldItemPolicy: 1
-  qteWindows: []
-  resultBranches: []
+  qteWindows:
+  - DurationSeconds: 1.5
+    RequiredPresses: 5
+  - DurationSeconds: 1.3
+    RequiredPresses: 6
+  - DurationSeconds: 1.2
+    RequiredPresses: 7
+  resultBranches:
+  - BranchId: flashlight_victory
+    RequiresAllQteWindows: 1
+    NextOutcomeId: D21
+    MarksD21Seen: 1
+  - BranchId: backup_pistol
+    RequiresAllQteWindows: 0
+    NextOutcomeId: D21
+    MarksD21Seen: 0
+  playerAnimation: {fileID: -7163681636452116516, guid: 80951e9f549e41948252ad9b0486f6b3, type: 3}
+  killerAnimation: {fileID: -7163681636452116516, guid: 6274da4e47ef4bd0afc2320c967508e2, type: 3}

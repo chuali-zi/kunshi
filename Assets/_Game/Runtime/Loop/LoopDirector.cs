@@ -50,12 +50,16 @@ namespace ConGame.Runtime.Loop
         private PersistentProgressV1 _progress;
         private bool _initialized;
         private bool _resetting;
-        
+        private bool _killImpactPending;
+        private int _killImpactEpoch;
+        private float _killImpactRemaining;
+        private string _pendingKillerAttackOutcome = string.Empty;
+
         private float _awakeningRemaining;
 private int _loopEpoch;
         private Color _baseAmbient = new Color(0.08f, 0.08f, 0.09f);
 
-        
+
         public event Action<bool> AwakeningStarted;
 public event Action EntryWarning;
         public event Action TelevisionCrackEchoRequested;
@@ -74,6 +78,18 @@ public event Action EntryWarning;
             {
                 SetPlayerControl(PlayerControlMode.Counterplay, windows);
             }
+        }
+
+        public void BeginConfirmedPerformance()
+        {
+            if (!_initialized || _resetting || flow == null || flow.CurrentPhase != GamePhase.Breach)
+            {
+                return;
+            }
+
+            _pendingKillerAttackOutcome = string.Empty;
+            if (flow.Request(GamePhase.Counterplay, TransitionPriority.Normal, "Confirmed environment counterplay."))
+                flow.CommitPending();
         }
 
         public void Configure(GameConfigAsset gameConfig, GameFlowController flowController, LoopResetRegistry registry,
@@ -142,7 +158,24 @@ public event Action EntryWarning;
                 return;
             }
 
-            
+            if (_killImpactPending && flow.CurrentPhase == GamePhase.KillImpact)
+            {
+                if (_killImpactEpoch != _loopEpoch)
+                {
+                    _killImpactPending = false;
+                }
+                else
+                {
+                    _killImpactRemaining -= Time.deltaTime;
+                    if (_killImpactRemaining <= 0f)
+                    {
+                        _killImpactPending = false;
+                        PerformReset();
+                        return;
+                    }
+                }
+            }
+
             if (flow.CurrentPhase == GamePhase.Awakening && _awakeningRemaining > 0f)
             {
                 _awakeningRemaining -= Time.deltaTime;
@@ -152,8 +185,7 @@ public event Action EntryWarning;
                 }
             }
 
-            
-GamePhase phase = flow.CurrentPhase;
+            GamePhase phase = flow.CurrentPhase;
             bool clockActive = phase == GamePhase.Awakening || phase == GamePhase.FreeRoam;
             if (clockActive)
             {
@@ -202,9 +234,40 @@ GamePhase phase = flow.CurrentPhase;
             flow.Request(GamePhase.KillImpact, TransitionPriority.Death, LastOutcomeId);
         }
 
+        public bool RequestKillerAttackCommit(string outcomeId)
+        {
+            if (!_initialized || _resetting || flow.CurrentPhase != GamePhase.Breach)
+            {
+                return false;
+            }
+
+            _pendingKillerAttackOutcome = string.IsNullOrWhiteSpace(outcomeId) ? "D01" : outcomeId;
+            if (!flow.Request(
+                    GamePhase.Counterplay,
+                    TransitionPriority.Normal,
+                    "Killer obtained a clear firing solution."))
+            {
+                _pendingKillerAttackOutcome = string.Empty;
+                return false;
+            }
+
+            return true;
+        }
+
+
         public void NotifyMeaningfulAction()
         {
-            if (!_initialized || _entryClock.EntryIssued)
+            if (!_initialized)
+            {
+                return;
+            }
+
+            if (facts != null && facts.CaptureSnapshot().PlayerPose == PlayerPose.Sitting)
+            {
+                facts.SetPlayerPose(PlayerPose.Standing);
+            }
+
+            if (_entryClock.EntryIssued)
             {
                 return;
             }
@@ -283,6 +346,7 @@ public void MarkD21Seen()
             {
                 SetPlayerControl(PlayerControlMode.BreachBlocked);
                 input?.SetGameplayEnabled(false);
+                killer?.PrepareEntry(_loopEpoch, RequestKill, RequestKillerAttackCommit);
 
                 if (breach == null)
                 {
@@ -297,16 +361,22 @@ public void MarkD21Seen()
             }
             else if (current == GamePhase.Counterplay)
             {
-                // Counterplay keeps the action map alive for QTE/grab/attack/throw/use,
-                // while the motor remains locked for the authored performance.
                 input?.SetGameplayEnabled(true);
-                SetPlayerControl(PlayerControlMode.Counterplay, CounterplayInputWindow.All);
+                SetPlayerControl(PlayerControlMode.Counterplay, CounterplayInputWindow.None);
+                if (!string.IsNullOrWhiteSpace(_pendingKillerAttackOutcome))
+                {
+                    string outcomeId = _pendingKillerAttackOutcome;
+                    _pendingKillerAttackOutcome = string.Empty;
+                    killer?.ConfirmAttackCommit(_loopEpoch, outcomeId);
+                }
             }
             else if (current == GamePhase.KillImpact)
             {
                 input?.SetGameplayEnabled(false);
                 SetPlayerControl(PlayerControlMode.Blocked);
-                PerformReset();
+                _killImpactEpoch = _loopEpoch;
+                _killImpactRemaining = config == null ? 0.8f : config.KillImpactHoldSeconds;
+                _killImpactPending = true;
             }
             else if (current == GamePhase.Awakening)
             {
@@ -329,8 +399,9 @@ public void MarkD21Seen()
                 return;
             }
 
-            killer?.BeginEntry(_loopEpoch, RequestKill);
-            flow.Request(GamePhase.Counterplay, TransitionPriority.Normal, "Door breach completed.");
+            killer?.BeginEntry(_loopEpoch, RequestKill, RequestKillerAttackCommit);
+            input?.SetGameplayEnabled(true);
+            SetPlayerControl(PlayerControlMode.Free);
         }
 
         private void PerformReset()
@@ -341,6 +412,8 @@ public void MarkD21Seen()
             }
 
             _resetting = true;
+            _killImpactPending = false;
+            _pendingKillerAttackOutcome = string.Empty;
             playerMotor?.SetInputLocked(true);
             input?.SetGameplayEnabled(false);
 
@@ -383,7 +456,7 @@ public void MarkD21Seen()
             _progress.tvCrackEchoPending = false;
             TrySaveProgress();
         }
-    
+
 
 private void BeginAwakening()
         {

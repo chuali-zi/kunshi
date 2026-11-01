@@ -47,6 +47,192 @@
       "prompt": "a man holding a pistol low raises it with one hand, aims steadily at a target, fires one shot with slight recoil, keeps aiming",
       "duration": 4.0,
       "loop": false
+    },
+    {
+      "name": "AN_Player_Pickup",
+      "prompt": "a person bends down, picks up a small object from the floor with one hand, then stands back up holding it",
+      "duration": 2.5,
+      "loop": false
+    },
+    {
+      "name": "AN_Player_Climb",
+      "prompt": "a person steps up onto a knee-high platform in front of them: raises one foot onto the step, pushes their body up with that leg, brings the other foot up beside it, and finishes standing upright on top",
+      "duration": 2.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Player_Throw",
+      "prompt": "a person throws an object overhand with one hand, full overarm throwing motion with windup and follow through",
+      "duration": 2.5,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_DodgeSide",
+      "prompt": "a man quickly sidesteps to the left to dodge something thrown at him, leaning away, then recovers to a steady upright stance",
+      "duration": 2.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_KickDoor",
+      "prompt": "a man raises his knee and stomps his foot forward at waist height into a door, heavy front push kick, then plants the foot back down",
+      "duration": 2.5,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_Stumble",
+      "prompt": "a man staggers off balance, arms swinging to stabilize, nearly falls, drops toward one knee, then heavily regains his footing",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_Fall",
+      "prompt": "a man trips and falls forward heavily onto the ground, ending lying face down on the floor",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_BlockLight",
+      "prompt": "a standing man raises one forearm in front of his face to shield his eyes from a bright light, recoiling his head and upper body slightly",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_DrawBackupFire",
+      "prompt": "a man reaches his right hand across his chest into his open coat, pulls out a small pistol from an inner holster, extends his arm to aim forward and fires one shot, keeps aiming",
+      "duration": 4.0,
+      "loop": false
+    },
+    {
+      "name": "POSE_Player_SitChair",
+      "prompt": "a person sits slumped and motionless in an armchair, leaning back, arms resting on the armrests",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_CrouchHide",
+      "prompt": "a person crouches low and stays very still, hunched down, hiding behind furniture",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_Prone",
+      "prompt": "a person lies flat face down on the floor, prone, arms forward, motionless",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_KneelHandsUp",
+      "prompt": "a person kneels on both knees with both hands raised high in surrender, staying still",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_HoldSmall_R",
+      "prompt": "a person stands still holding a small object in their right hand at waist level, looking down at it",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_HoldBat",
+      "prompt": "a person stands still in a ready stance holding a baseball bat with both hands beside the shoulder",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_CarryLarge",
+      "prompt": "a person stands still carrying a large heavy object with both arms held in front of the chest",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Player_AimPistol",
+      "prompt": "a person stands still aiming a pistol forward with one arm fully extended, steady aim",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Killer_LowReady",
+      "prompt": "a man stands still and alert holding a pistol in one hand pointed down at his side, low ready stance",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "POSE_Killer_Kneel",
+      "prompt": "a man kneels motionless on one knee, head lowered, one hand resting on the raised knee, recovering",
+      "duration": 2.0,
+      "loop": true
+    },
+    {
+      "name": "PAIR_D08_PlayerSide",
+      "prompt": "a person grabbed from behind in a bear hug struggles violently, twists, is pulled and nearly thrown down, then drives a knee backward to break free",
+      "duration": 6.0,
+      "loop": false
+    },
+    {
+      "name": "PAIR_D08_KillerSide",
+      "prompt": "a man grabs and holds someone tightly from behind in a bear hug, gets shaken and dragged around, then receives a knee strike and releases",
+      "duration": 6.0,
+      "loop": false
+    },
+    {
+      "name": "PAIR_D11_PlayerSide",
+      "prompt": "a person lying face down on the floor has one ankle grabbed from behind and is dragged backward along the floor, kicking and clawing at the ground",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "PAIR_D11_KillerSide",
+      "prompt": "a man crouching low grabs an ankle with both hands and drags a heavy weight toward himself, leaning back and pulling hard",
+      "duration": 3.0,
+      "loop": false
+    },
+    {
+      "name": "PAIR_D21_PlayerSide",
+      "prompt": "a person on the ground wrestles desperately, rolling side to side, kicking, pushing against someone on top of them, grappling on the floor",
+      "duration": 8.0,
+      "loop": false
+    },
+    {
+      "name": "PAIR_D21_KillerSide",
+      "prompt": "a man on the floor grappling on top, wrestling and pinning someone down, struggling to keep control, rolling and shifting weight",
+      "duration": 8.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Player_PutDownLarge",
+      "prompt": "a person carrying a large heavy object with both hands lowers it slowly and steadily, sets it gently onto the floor, then releases their grip and stands back up",
+      "duration": 2.5,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_AimEnter",
+      "prompt": "a man holding a pistol at low ready smoothly raises it with one hand into a steady aiming stance, extending the arm toward a target",
+      "duration": 1.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_AimHold",
+      "prompt": "a man holds a pistol aimed steadily forward with one arm extended, staying almost perfectly still, only subtle breathing and tiny muzzle adjustments, minimal motion so the pose can freeze",
+      "duration": 3.0,
+      "loop": true
+    },
+    {
+      "name": "AN_Killer_Fire",
+      "prompt": "a man aiming a pistol forward fires a single shot, sharp recoil kicks the arm up briefly, then the aim settles back to the original stance",
+      "duration": 1.0,
+      "loop": false
+    },
+    {
+      "name": "AN_Killer_SearchLoop",
+      "prompt": "a man stands alert holding a pistol low ready, cautiously scanning: slowly turning his head and upper body left and right to sweep the area, tense but low-alert, could walk at the same time",
+      "duration": 4.0,
+      "loop": true
+    },
+    {
+      "name": "AN_Killer_Run",
+      "prompt": "a man runs fast while holding a pistol in one hand at his side, urgent determined sprint, strong strides, arms pumping",
+      "duration": 1.2,
+      "loop": true
     }
   ]
 }

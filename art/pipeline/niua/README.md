@@ -21,15 +21,25 @@ python gen_sfx.py             # 全量 18 条,~90¢
 产物:`art/exports/audio/SFX_*.wav`。前 8 条文件名与 `AudioCueId` 一一对应。
 单条不满意:`python gen_sfx.py --only SFX_Gunshot --force --seed 7`(5¢/次)。
 
-### 2) 动画(P0 七条)
+### 2) 动画(P0 七条 + P1/Pose/PAIR 组件)
 
 ```bash
 python gen_animations.py --dry-run
-python gen_animations.py      # ~$1.5
+python gen_animations.py      # P0 七条 ~$1.5; 全量 32 条 ~$6.7
 ```
 
-产物:`art/exports/animations/AN_*.glb`(mixamo 骨架、In-Place)。
-双人配合演出(PAIR_*)API 做不了,按 animation_manifest 用单人片段在 Timeline 拼。
+产物:`art/exports/animations/{AN,POSE,PAIR}_*.glb`(mixamo 骨架、In-Place)。
+双人配合演出(PAIR_*)API 做不了,交付为 `PAIR_Dxx_PlayerSide`/`PAIR_Dxx_KillerSide`
+单边组件,在 Timeline 按锚点对位拼接。贴地类动作(摔倒/俯卧/跪/坐)的 In-Place
+剪辑髋部保持站立高度,Unity 接入时需用根锚点下移贴地(见
+`art/.log/2026-08-06_p1_animation_holster_delivery.md`)。
+
+GLB→FBX 转换后一键入 Unity(含 Humanoid meta 模板生成):
+
+```bash
+blender -b -P convert_all_fbx.py   # 增量: 已转换且未更新的自动跳过
+python import_to_unity.py          # 复制 FBX 到 Assets/_Game/Art 并生成 meta
+```
 
 ### 3) 角色(分阶段,含人工确认闸门)
 

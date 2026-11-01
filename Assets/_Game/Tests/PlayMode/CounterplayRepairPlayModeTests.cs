@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using ConGame.Domain.Choreography;
 using ConGame.Domain.Counterplay;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Interaction;
@@ -72,6 +74,75 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator LiveAttackCommitFreezesOutcomeBeforeReactiveStimuliCanReevaluate()
+        {
+            GameObject root = new GameObject("atomic-live-commit");
+            GameObject player = new GameObject("player");
+            GameObject killerObject = new GameObject("killer");
+            GameObject eye = new GameObject("eye");
+            CounterplayCatalogAsset catalog = ScriptableObject.CreateInstance<CounterplayCatalogAsset>();
+            CounterplayDefinitionAsset d01 = ScriptableObject.CreateInstance<CounterplayDefinitionAsset>();
+            CounterplayDefinitionAsset d22 = ScriptableObject.CreateInstance<CounterplayDefinitionAsset>();
+            try
+            {
+                player.transform.SetParent(root.transform);
+                killerObject.transform.SetParent(root.transform);
+                eye.transform.SetParent(killerObject.transform, false);
+                player.transform.position = new Vector3(0f, 0f, 3f);
+                eye.transform.localPosition = new Vector3(0f, 1.55f, 0.15f);
+                CapsuleCollider target = player.AddComponent<CapsuleCollider>();
+                target.height = 2f;
+                target.center = Vector3.up;
+
+                d01.Configure("D01", 100,
+                    CounterplayTriggerMode.Entry | CounterplayTriggerMode.Continuous,
+                    new FactCondition[0], ContentStatus.Implemented, null);
+                d22.Configure("D22", 1, CounterplayTriggerMode.Reactive,
+                    new FactCondition[0], ContentStatus.Implemented, null);
+                catalog.Configure(new[] { d01, d22 });
+
+                GameplayFactService facts = root.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                GameplayEventHub events = root.AddComponent<GameplayEventHub>();
+                KillerTacticalController hunt = killerObject.AddComponent<KillerTacticalController>();
+                hunt.Configure(null, player.transform, eye.transform, facts, events, null, new Transform[0]);
+                KillerDirector killer = killerObject.AddComponent<KillerDirector>();
+                killer.Configure(null, player.transform, facts, catalog, null);
+                killer.ConfigureHunt(hunt);
+
+                string committedOutcome = null;
+                int shots = 0;
+                killer.ShotFired += (_, __) => shots++;
+                killer.BeginEntry(31, _ => { }, outcome =>
+                {
+                    committedOutcome = outcome;
+                    killer.HandleStimulus(new KillerStimulus(KillerStimulusType.Glare, "same-frame"));
+                    return true;
+                });
+
+                float timeout = Time.time + 4f;
+                while (committedOutcome == null && Time.time < timeout)
+                {
+                    yield return null;
+                }
+
+                Assert.That(committedOutcome, Is.EqualTo("D01"));
+                Assert.That(killer.SelectedOutcomeId, Is.EqualTo("D01"));
+                Assert.That(killer.State, Is.EqualTo(KillerState.PerformanceLocked));
+                Assert.That(killer.ConfirmAttackCommit(31, committedOutcome), Is.True);
+                Assert.That(shots, Is.EqualTo(1));
+            }
+            finally
+            {
+                Object.Destroy(root);
+                Object.Destroy(catalog);
+                Object.Destroy(d01);
+                Object.Destroy(d22);
+            }
+        }
+
+
+        [UnityTest]
         public IEnumerator D08OnlyOpensPistolAfterSuccessAndTimesOutAsD08()
         {
             Fixture fixture = new Fixture();
@@ -132,6 +203,7 @@ namespace ConGame.Tests.PlayMode
             try
             {
                 fixture.Adapter.OnPerformanceStarted("D21", 11, PerformanceHeldItemPolicy.DropAtStart);
+                OpenD21Choice(fixture, 11);
                 Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.D21Choice));
                 Assert.That(fixture.Pistol.activeSelf, Is.True);
                 Assert.That(fixture.Flashlight.activeSelf, Is.True);
@@ -142,6 +214,7 @@ namespace ConGame.Tests.PlayMode
                 fixture.Controller.NotifyKillerIlluminated(
                     new FlashlightHit("flashlight", Vector3.zero, Vector3.forward, 0.25f));
                 Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.Resolved));
+                yield return FinishD21SemanticTail(fixture, 11);
                 Assert.That(fixture.CompletedOutcome, Is.EqualTo("D21"));
                 Assert.That(fixture.Loop.Progress.d21Seen, Is.True);
                 Assert.That(fixture.RequestedNext, Is.Null);
@@ -149,6 +222,7 @@ namespace ConGame.Tests.PlayMode
                 fixture.ResetObservedRoutes();
                 fixture.FlashlightState.MarkPlaced();
                 fixture.Adapter.OnPerformanceStarted("D21", 12, PerformanceHeldItemPolicy.DropAtStart);
+                OpenD21Choice(fixture, 12);
                 Assert.That(fixture.FlashlightState.BeginHeld(hand.transform, null), Is.True);
                 fixture.Events.EmitStimulus(ConGame.Domain.Facts.KillerStimulusType.Glare, "mirror");
                 Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.Resolved));
@@ -157,6 +231,7 @@ namespace ConGame.Tests.PlayMode
                 fixture.ResetObservedRoutes();
                 fixture.PistolState.MarkPlaced();
                 fixture.Adapter.OnPerformanceStarted("D21", 13, PerformanceHeldItemPolicy.DropAtStart);
+                OpenD21Choice(fixture, 13);
                 Assert.That(fixture.PistolState.BeginHeld(hand.transform, null), Is.True);
                 Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.Resolved));
                 Assert.That(fixture.RequestedNext, Is.EqualTo("D22"));
@@ -168,6 +243,84 @@ namespace ConGame.Tests.PlayMode
             }
 
             yield return null;
+        }
+
+        private static IEnumerator FinishD21SemanticTail(Fixture fixture, int loopEpoch)
+        {
+            PairedPerformancePhaseMachine machine = new PairedPerformancePhaseMachine(
+                PairedPerformanceCatalog.CreateD21());
+            List<PairedPerformanceSemanticEvent> semanticEvents =
+                new List<PairedPerformanceSemanticEvent>();
+
+            machine.Start(loopEpoch, semanticEvents);
+            semanticEvents.Clear();
+            Assert.That(machine.TryJumpToStage("block-light", loopEpoch, semanticEvents), Is.True);
+            semanticEvents.Clear();
+
+            machine.Advance(3.01f, false, loopEpoch, semanticEvents);
+            yield return null;
+            machine.Advance(1.61f, false, loopEpoch, semanticEvents);
+            yield return null;
+            machine.Advance(0.51f, false, loopEpoch, semanticEvents);
+            yield return null;
+
+            Assert.That(machine.IsComplete, Is.True);
+            Assert.That(HasSemanticEvent(semanticEvents, "D21.BackupPistol.Draw"), Is.True);
+            Assert.That(HasSemanticEvent(semanticEvents, "D21.BackupPistol.Fire"), Is.True);
+            Assert.That(HasSemanticEvent(semanticEvents, "D21.Completed"), Is.True);
+            fixture.Adapter.RequestOutcomeCompletion("D21", loopEpoch, true);
+            yield return null;
+        }
+
+        private static bool HasSemanticEvent(
+            IReadOnlyList<PairedPerformanceSemanticEvent> events, string eventId)
+        {
+            for (int i = 0; i < events.Count; i++)
+            {
+                if (string.Equals(events[i].EventId, eventId, System.StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void OpenD21Choice(Fixture fixture, int loopEpoch)
+        {
+            fixture.Controller.NotifyPairedSemanticEvent(new PairedPerformanceSemanticEvent(
+                "D21.Pistol.Dropped", "D21", "item-drop",
+                PairedContactState.Separated, loopEpoch));
+            fixture.Controller.NotifyPairedSemanticEvent(new PairedPerformanceSemanticEvent(
+                "D21.Flashlight.Dropped", "D21", "item-drop",
+                PairedContactState.Separated, loopEpoch));
+        }
+
+        [Test]
+        public void OldD21EventsCannotReopenHandInteractionAfterSwitchToD22OrReset()
+        {
+            Fixture fixture = new Fixture();
+            try
+            {
+                fixture.Adapter.OnPerformanceStarted("D21", 17, PerformanceHeldItemPolicy.DropAtStart);
+                OpenD21Choice(fixture, 17);
+                fixture.Adapter.OnPerformanceStarted("D22", 17, PerformanceHeldItemPolicy.LockToPerformance);
+                foreach (string eventId in new[] { "D21.Pair.Begin", "D21.Flashlight.Dislodged",
+                             "D21.Flashlight.Recovery.Open", "D21.Pistol.Dropped", "D21.Flashlight.Dropped" })
+                {
+                    fixture.Controller.NotifyPairedSemanticEvent(new PairedPerformanceSemanticEvent(
+                        eventId, "D21", "detach", PairedContactState.Separated, 17));
+                }
+                Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.D22AwaitMainShot));
+                Assert.That(fixture.Controller.MainFirearm.RoundsRemaining, Is.EqualTo(1));
+
+                fixture.Controller.Restore(new LoopResetContext(17, 18));
+                fixture.Controller.NotifyPairedSemanticEvent(new PairedPerformanceSemanticEvent(
+                    "D21.Flashlight.Recovery.Open", "D21", "detach", PairedContactState.Separated, 18));
+                Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.Inactive));
+                Assert.That(fixture.Flashlight.activeSelf, Is.False);
+            }
+            finally { fixture.Dispose(); }
         }
 
         [UnityTest]
@@ -193,7 +346,8 @@ namespace ConGame.Tests.PlayMode
 
                 yield return new WaitForSeconds(0.08f);
                 Assert.That(fixture.Controller.State, Is.EqualTo(CounterplayLootWindowState.D22AwaitMainDryFire));
-                Assert.That(fixture.Backup.activeSelf, Is.True);
+                Assert.That(fixture.Backup.activeSelf, Is.False,
+                    "The terminal backup pistol stays hidden on the floor; the character visual is drawn at the finale cue.");
                 Assert.That(fixture.BackupState.CurrentState, Is.EqualTo(ItemPhysicalState.Scripted));
 
                 Assert.That(fixture.Controller.MainFirearm.Use(new InteractionContext(player, fixture.PistolEntity)),

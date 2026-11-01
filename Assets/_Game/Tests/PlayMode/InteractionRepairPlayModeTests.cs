@@ -3,6 +3,7 @@ using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Domain.Interaction;
 using ConGame.Runtime.AI;
+using ConGame.Runtime.Config;
 using ConGame.Runtime.Events;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
@@ -14,15 +15,96 @@ using ConGame.Runtime.Player;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.TestTools.Utils;
 
 namespace ConGame.Tests.PlayMode
 {
     public sealed class InteractionRepairPlayModeTests
     {
         [UnityTest]
-        public IEnumerator BreachBlocksGameplayButCounterplayKeepsActionMapAndLocksMovement()
+        public IEnumerator GroundPlaceKeepsCarriedFurnitureStableInsteadOfThrowingIt()
         {
-            GameObject root = new GameObject("counterplay-control");
+            GameObject root = new GameObject("ground-place");
+            GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject chair = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                floor.transform.SetPositionAndRotation(new Vector3(0f, -0.05f, 1.5f), Quaternion.identity);
+                floor.transform.localScale = new Vector3(5f, 0.1f, 5f);
+                Transform socket = new GameObject("hand").transform;
+                socket.SetParent(root.transform, false);
+                GameplayFactService facts = root.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                GameplayEventHub events = root.AddComponent<GameplayEventHub>();
+                PlayerInteractor interactor = root.AddComponent<PlayerInteractor>();
+                interactor.Configure(null, null, socket, null, facts, events, null);
+
+                chair.transform.position = new Vector3(0f, 0.5f, 1f);
+                Rigidbody body = chair.AddComponent<Rigidbody>();
+                body.isKinematic = true;
+                InteractableEntity entity = chair.AddComponent<InteractableEntity>();
+                entity.Configure(null, "wood_chair");
+                StatefulWorldItem stateful = chair.AddComponent<StatefulWorldItem>();
+                stateful.Configure(body);
+                chair.AddComponent<CarryCapability>();
+
+                Assert.That(interactor.TryCarry(entity, body, 0.5f), Is.True);
+                Assert.That(interactor.TryInteract(), Is.True);
+                yield return new WaitForFixedUpdate();
+
+                Assert.That(stateful.CurrentState, Is.EqualTo(ItemPhysicalState.Placed));
+                Assert.That(body.isKinematic, Is.True);
+                Assert.That(body.linearVelocity, Is.EqualTo(Vector3.zero));
+            }
+            finally
+            {
+                Object.Destroy(root);
+                Object.Destroy(floor);
+                Object.Destroy(chair);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator ClimbMovesToStandAnchorThenRestoresFreeMovement()
+        {
+            GameObject root = new GameObject("climb-player");
+            GameObject anchorObject = new GameObject("stand-anchor");
+            GameConfigAsset config = ScriptableObject.CreateInstance<GameConfigAsset>();
+            try
+            {
+                CharacterController controller = root.AddComponent<CharacterController>();
+                PlayerInputRouter input = root.AddComponent<PlayerInputRouter>();
+                GameplayFactService facts = root.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                PlayerMotor motor = root.AddComponent<PlayerMotor>();
+                motor.Configure(controller, input, null, facts, config);
+                PlayerInteractor interactor = root.AddComponent<PlayerInteractor>();
+                interactor.Configure(input, null, root.transform, motor, facts, null, config);
+                anchorObject.transform.SetPositionAndRotation(new Vector3(0f, 0.8f, 0.2f),
+                                                               Quaternion.Euler(0f, 180f, 0f));
+
+                Assert.That(interactor.TryClimb(anchorObject.transform, 0.1f), Is.True);
+                Assert.That(interactor.IsMovementLocked, Is.True);
+                yield return new WaitForSeconds(0.15f);
+
+                // Normal movement resumes after arrival; this fixture has no landing surface,
+                // so allow the small gravity step before this coroutine observes completion.
+                Assert.That(Vector3.Distance(root.transform.position, anchorObject.transform.position), Is.LessThan(.02f));
+                Assert.That(interactor.IsMovementLocked, Is.False);
+                Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            }
+            finally
+            {
+                Object.Destroy(root);
+                Object.Destroy(anchorObject);
+                Object.Destroy(config);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DoorBreachBrieflyBlocksThenLiveHuntRestoresFullPlayerControl()
+        {
+            GameObject root = new GameObject("live-hunt-control");
             try
             {
                 GameplayFactService facts = root.AddComponent<GameplayFactService>();
@@ -43,15 +125,14 @@ namespace ConGame.Tests.PlayMode
 
                 Assert.That(flow.Request(GamePhase.Breach, TransitionPriority.Normal, "test breach"), Is.True);
                 Assert.That(flow.CommitPending(), Is.True);
-                Assert.That(input.GameplayEnabled, Is.False);
-                Assert.That(interactor.ControlMode, Is.EqualTo(PlayerControlMode.BreachBlocked));
 
-                Assert.That(flow.CommitPending(), Is.True);
-                Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Counterplay));
-                Assert.That(input.GameplayEnabled, Is.True);
-                Assert.That(interactor.ControlMode, Is.EqualTo(PlayerControlMode.Counterplay));
-                Assert.That(interactor.IsMovementLocked, Is.True);
-                Assert.That(interactor.CounterplayWindows, Is.EqualTo(CounterplayInputWindow.All));
+                Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Breach));
+                Assert.That(input.GameplayEnabled, Is.True,
+                    "No authored door controller means the breach completes immediately.");
+                Assert.That(interactor.ControlMode, Is.EqualTo(PlayerControlMode.Free));
+                Assert.That(interactor.IsMovementLocked, Is.False);
+                Assert.That(flow.CommitPending(), Is.False,
+                    "Live hunt stays in Breach until the killer earns a firing commit.");
                 yield return null;
             }
             finally

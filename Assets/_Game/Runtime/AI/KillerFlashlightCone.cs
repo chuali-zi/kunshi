@@ -12,6 +12,7 @@ namespace ConGame.Runtime.AI
         [SerializeField] private Transform playerTarget;
         [SerializeField] private GameplayFactService facts;
         [SerializeField] private KillerDirector killer;
+        [SerializeField] private KillerTacticalController tacticalController;
         [SerializeField] private Light spotLight;
         [SerializeField] private float exposeSecondsToKill = 0.8f;
         [SerializeField] private float maxRange = 8f;
@@ -23,13 +24,18 @@ namespace ConGame.Runtime.AI
         public int ResetOrder => 35;
         public float ExposedSeconds => _exposedSeconds;
 
-        public void Configure(Transform target, GameplayFactService factService, KillerDirector killerDirector,
-                              Light light = null)
+        public void Configure(
+            Transform target,
+            GameplayFactService factService,
+            KillerDirector killerDirector,
+            Light light = null,
+            KillerTacticalController hunt = null)
         {
             playerTarget = target;
             facts = factService;
             killer = killerDirector;
             spotLight = light;
+            tacticalController = hunt ?? (killer == null ? null : killer.TacticalController);
         }
 
         private void Awake()
@@ -38,23 +44,27 @@ namespace ConGame.Runtime.AI
             {
                 spotLight = GetComponentInChildren<Light>(true);
             }
+
+            tacticalController ??= killer == null ? GetComponent<KillerTacticalController>() : killer.TacticalController;
         }
 
         private void Update()
         {
             if (killer == null || killer.State == KillerState.Dormant || playerTarget == null || facts == null)
             {
+                _exposedSeconds = 0f;
                 SetLightActive(false);
                 return;
             }
 
             FactSnapshot snapshot = facts.CaptureSnapshot();
-            bool darkAmbush = snapshot.RoomLight == RoomLightState.PersistentBlack &&
-                              (snapshot.IsAmbushing ||
-                               string.Equals(killer.SelectedOutcomeId, "D20", System.StringComparison.Ordinal) ||
-                               string.Equals(killer.SelectedOutcomeId, "D19", System.StringComparison.Ordinal));
-            SetLightActive(darkAmbush);
-            if (!darkAmbush)
+            bool darkHunt = snapshot.RoomLight == RoomLightState.PersistentBlack &&
+                            killer.IsLiveHuntActive &&
+                            (snapshot.IsAmbushing ||
+                             string.Equals(killer.SelectedOutcomeId, "D20", System.StringComparison.Ordinal) ||
+                             string.Equals(killer.SelectedOutcomeId, "D19", System.StringComparison.Ordinal));
+            SetLightActive(darkHunt);
+            if (!darkHunt)
             {
                 _exposedSeconds = 0f;
                 return;
@@ -63,11 +73,9 @@ namespace ConGame.Runtime.AI
             if (IsPlayerInCone())
             {
                 _exposedSeconds += Time.deltaTime;
-                if (_exposedSeconds >= exposeSecondsToKill &&
-                    string.Equals(killer.SelectedOutcomeId, "D20", System.StringComparison.Ordinal))
+                if (_exposedSeconds >= exposeSecondsToKill)
                 {
-                    killer.ForceImmediateKill("D20");
-                    _exposedSeconds = 0f;
+                    tacticalController?.SetFlashlightTargetVisible(0.2f);
                 }
             }
             else

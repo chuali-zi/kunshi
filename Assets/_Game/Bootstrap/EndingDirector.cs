@@ -31,15 +31,6 @@ namespace ConGame.Bootstrap
     {
         private const float E1WhiteNoiseSeconds = 0.2f;
         private const float E1BlackoutSeconds = 1.5f;
-        private const float E2FreeControlSeconds = 4f;
-        private const float E2FightTimeoutSeconds = 8f;
-        private const float E2FallSeconds = 1.2f;
-        private const float E2BlackoutSeconds = 3f;
-        private const float E3WalkSeconds = 1f;
-        private const float E3StandSeconds = 0.35f;
-        private const float E3AimSeconds = 0.35f;
-        private const float E3PreShotSeconds = 0.25f;
-        private const float E3PostShotBlackoutSeconds = 5f;
 
         [SerializeField] private GameFlowController flow;
         [SerializeField] private LoopDirector loop;
@@ -53,6 +44,8 @@ namespace ConGame.Bootstrap
         [SerializeField] private CrtFullscreenPass crtPass;
         [SerializeField] private Transform endingChairAnchor;
         [SerializeField] private Transform endingKillerAnchor;
+        [SerializeField] private EndingSequenceSettingsAsset endingSettingsAsset;
+        [SerializeField] private EndingObserverHandoff observerHandoff;
         [SerializeField] private string menuSceneName = "MainMenu";
 
         private Coroutine _routine;
@@ -61,6 +54,10 @@ namespace ConGame.Bootstrap
         private bool _e2EntryStarted;
         private bool _lookOnlyInputRequested;
         private string _e2OutcomeId;
+        private EndingSequenceSettings _runSettings = EndingSequenceSettings.Default;
+        private Transform _fallenView;
+        private Vector3 _viewRestPosition;
+        private Quaternion _viewRestRotation;
 
         public event Action ClockAdvancedEvent;
         public event Action EndingShotFired;
@@ -73,6 +70,10 @@ namespace ConGame.Bootstrap
         public bool ShotFired { get; private set; }
         public int PassResetCount { get; private set; }
         public EndingKillerStage KillerStage { get; private set; }
+        public bool HasObserverHandoff => observerHandoff != null && observerHandoff.HasObserverClone;
+        public EndingSequenceSettingsAsset SettingsAsset => endingSettingsAsset;
+
+        private EndingSequenceSettings EndingSettings => _runSettings;
 
         public void Configure(
             GameFlowController flowController,
@@ -109,6 +110,30 @@ namespace ConGame.Bootstrap
             }
         }
 
+        public void ConfigurePresentation(
+            EndingSequenceSettingsAsset settingsAsset,
+            Transform screenAnchor,
+            Transform originalActorVisual,
+            Transform exitAnchor)
+        {
+            endingSettingsAsset = settingsAsset;
+            if (observerHandoff == null)
+            {
+                observerHandoff = GetComponent<EndingObserverHandoff>();
+                if (observerHandoff == null)
+                {
+                    observerHandoff = gameObject.AddComponent<EndingObserverHandoff>();
+                }
+            }
+
+            observerHandoff.Configure(
+                player,
+                endingSettingsAsset,
+                screenAnchor,
+                originalActorVisual,
+                exitAnchor);
+        }
+
         private void OnEnable()
         {
             Subscribe();
@@ -123,6 +148,8 @@ namespace ConGame.Bootstrap
                 StopCoroutine(_routine);
                 _routine = null;
             }
+            RestoreViewHeight();
+            observerHandoff?.ResetHandoff();
         }
 
         private void Subscribe()
@@ -174,8 +201,11 @@ namespace ConGame.Bootstrap
 
         private IEnumerator RunEnding()
         {
+            _runSettings = endingSettingsAsset == null
+                ? EndingSequenceSettings.Default : endingSettingsAsset.CreateSettings();
             ResetPublicState();
             LockPlayer();
+            observerHandoff?.CaptureOriginalPose();
             int epoch = loop == null ? 0 : loop.LoopEpoch;
             killer?.SetEndingMode(false);
             killer?.Quiesce(new LoopResetContext(epoch, epoch));
@@ -188,18 +218,26 @@ namespace ConGame.Bootstrap
             crtPass?.SetBlackout(1f);
             yield return new WaitForSeconds(E1BlackoutSeconds);
 
-            Vector3 e2PlayerPosition = player == null ? Vector3.zero : player.transform.position;
-            Quaternion e2PlayerRotation = player == null ? Quaternion.identity : player.transform.rotation;
+            Vector3 previousPlayerPosition = player == null ? Vector3.zero : player.transform.position;
+            Quaternion previousPlayerRotation = player == null ? Quaternion.identity : player.transform.rotation;
             RestoreEndingPass(epoch, false);
             cameraMode?.SwitchToFirstPerson();
             firstPersonLook?.ResetLook();
             firstPersonLook?.ClearYawLimit();
-            if (player != null)
+            bool handedOff = observerHandoff != null && observerHandoff.BeginObserverTakeover();
+            if (!handedOff && player != null)
             {
-                player.Teleport(e2PlayerPosition, e2PlayerRotation);
-                player.SetMovementReference(firstPersonLook == null ? null : firstPersonLook.ViewTransform, true);
+                // Preserve legacy scenes that have no presentation anchors.
+                player.Teleport(previousPlayerPosition, previousPlayerRotation);
             }
-            if (firstPersonLook != null && television != null)
+            player?.SetMovementReference(firstPersonLook == null ? null : firstPersonLook.ViewTransform, true);
+            observerHandoff?.BeginExitMotion();
+            if (handedOff)
+            {
+                firstPersonLook?.LookAt(observerHandoff.CapturedPlayerPosition + Vector3.up * 1.2f);
+                UnityEngine.Object.FindAnyObjectByType<RoomDoorBreachController>()?.Begin(epoch, null, 0.45f);
+            }
+            else if (firstPersonLook != null && television != null)
             {
                 firstPersonLook.LookAt(television.transform.position);
             }
@@ -208,13 +246,15 @@ namespace ConGame.Bootstrap
                 firstPersonLook.LookEnabled = true;
             }
 
+            if (handedOff) yield return new WaitForSeconds(EndingSettings.E2TakeoverSeconds);
             crtPass?.SetBlackout(0f);
             input?.SetGameplayEnabled(true);
             player?.SetInputLocked(false);
             flow?.Request(GamePhase.EndingE2, TransitionPriority.Normal, "Ending pass one completed.");
             flow?.CommitPending();
 
-            yield return new WaitForSeconds(E2FreeControlSeconds);
+            yield return new WaitForSeconds(EndingSettings.E2FreeControlSeconds);
+            observerHandoff?.CompleteHandoff();
             _e2EntryStarted = true;
             killer?.SetEndingMode(true);
             if (killer == null)
@@ -228,7 +268,7 @@ namespace ConGame.Bootstrap
             }
 
             float e2Elapsed = 0f;
-            while (!_e2KillReceived && e2Elapsed < E2FightTimeoutSeconds)
+            while (!_e2KillReceived && e2Elapsed < EndingSettings.E2FightTimeoutSeconds)
             {
                 e2Elapsed += Time.deltaTime;
                 yield return null;
@@ -260,7 +300,8 @@ namespace ConGame.Bootstrap
 
             yield return FallToGround();
             crtPass?.SetBlackout(1f);
-            yield return new WaitForSeconds(E2BlackoutSeconds);
+            yield return new WaitForSeconds(EndingSettings.E2BlackoutSeconds);
+            RestoreViewHeight();
 
             flow?.Request(
                 GamePhase.EndingE3,
@@ -282,17 +323,20 @@ namespace ConGame.Bootstrap
                 {
                     firstPersonLook.LookAt(endingKillerAnchor.position);
                 }
-                firstPersonLook.SetYawLimit(55f);
+                firstPersonLook.SetYawLimit(EndingSettings.E3YawLimitDegrees);
             }
 
             crtPass?.SetBlackout(0f);
             yield return RunFinalKillerBlocking();
 
-            AdvanceClock();
-            yield return new WaitForSeconds(E3PreShotSeconds);
+            for (int tick = 0; tick < EndingSettings.E3ClockTickCount; tick++)
+            {
+                AdvanceClock();
+                yield return new WaitForSeconds(EndingSettings.E3ClockTickSeconds);
+            }
             FireEndingShot();
             crtPass?.SetBlackout(1f);
-            yield return new WaitForSeconds(E3PostShotBlackoutSeconds);
+            yield return new WaitForSeconds(EndingSettings.E3ShotSilenceSeconds);
 
             loop?.MarkEndingCompleted();
             _showTitleCard = true;
@@ -310,13 +354,14 @@ namespace ConGame.Bootstrap
             flow?.Request(GamePhase.Finished, TransitionPriority.Normal, "The clock advanced and the final shot landed.");
             flow?.CommitPending();
 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(EndingSettings.E3TitleHoldSeconds);
             _showTitleCard = false;
             crtPass?.SetTitleAmount(0f);
             crtPass?.SetBlackout(0f);
             Time.timeScale = 1f;
             if (!string.IsNullOrWhiteSpace(menuSceneName))
             {
+                observerHandoff?.CompleteHandoff();
                 SceneManager.LoadScene(menuSceneName, LoadSceneMode.Single);
             }
 
@@ -327,23 +372,56 @@ namespace ConGame.Bootstrap
         {
             if (player == null)
             {
-                yield return new WaitForSeconds(E2FallSeconds);
+                yield return new WaitForSeconds(EndingSettings.E2FallSeconds);
                 yield break;
             }
 
-            Transform target = player.transform;
-            Quaternion start = target.rotation;
-            Quaternion end = start * Quaternion.Euler(78f, 0f, 20f);
+            Transform view = firstPersonLook == null ? null : firstPersonLook.ViewTransform;
+            Vector3 startPosition = view == null ? Vector3.zero : view.localPosition;
+            Quaternion startRotation = view == null ? Quaternion.identity : view.localRotation;
+            _fallenView = view;
+            _viewRestPosition = startPosition;
+            _viewRestRotation = startRotation;
+            EndingSequenceSettings settings = EndingSettings;
             float elapsed = 0f;
-            while (elapsed < E2FallSeconds)
+            while (elapsed < settings.E2FallSeconds)
             {
                 elapsed += Time.deltaTime;
-                target.rotation = Quaternion.Slerp(
-                    start,
-                    end,
-                    Mathf.SmoothStep(0f, 1f, elapsed / E2FallSeconds));
+                float t = Mathf.Clamp01(elapsed / Mathf.Max(0.01f, settings.E2FallSeconds));
+                EndingFallPose pose = EndingFallMotion.Sample(t, settings);
+                if (view != null)
+                {
+                    view.localPosition = startPosition + Vector3.down * pose.HeightDropMeters;
+                    view.localRotation = startRotation * Quaternion.Euler(
+                        pose.PitchDownDegrees, 0f, pose.RollDegrees);
+                }
                 yield return null;
             }
+        }
+
+        private void RestoreViewHeight()
+        {
+            if (_fallenView == null) return;
+            _fallenView.localPosition = _viewRestPosition;
+            _fallenView.localRotation = _viewRestRotation;
+            _fallenView = null;
+        }
+
+        private void OnGUI()
+        {
+            if (!_showTitleCard)
+            {
+                return;
+            }
+
+            GUIStyle style = new GUIStyle(GUI.skin.label)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = Mathf.Clamp(Screen.height / 18, 28, 64),
+                fontStyle = FontStyle.Normal
+            };
+            style.normal.textColor = new Color(0.92f, 0.92f, 0.9f, 1f);
+            GUI.Label(new Rect(0f, 0f, Screen.width, Screen.height), "困室", style);
         }
 
         private IEnumerator RunFinalKillerBlocking()
@@ -361,6 +439,7 @@ namespace ConGame.Bootstrap
             KillerStage = EndingKillerStage.WalkingIn;
             if (killer != null)
             {
+                CharacterAnimatorDriver driver = killer.GetComponent<CharacterAnimatorDriver>();
                 killer.gameObject.SetActive(true);
                 Vector3 startPosition = killer.transform.position;
                 Quaternion startRotation = killer.transform.rotation;
@@ -370,47 +449,51 @@ namespace ConGame.Bootstrap
                 Quaternion targetRotation = endingKillerAnchor == null
                     ? startRotation
                     : endingKillerAnchor.rotation;
+                float approachSeconds = Mathf.Max(0.01f, EndingSettings.E3KillerApproachSeconds);
+                driver?.SetScriptedMotionSpeed(Vector3.Distance(startPosition, targetPosition) / approachSeconds);
                 float elapsed = 0f;
-                while (elapsed < E3WalkSeconds)
+                while (elapsed < approachSeconds)
                 {
                     elapsed += Time.deltaTime;
-                    float t = Mathf.SmoothStep(0f, 1f, elapsed / E3WalkSeconds);
+                    float t = Mathf.SmoothStep(0f, 1f, elapsed / approachSeconds);
                     killer.transform.SetPositionAndRotation(
                         Vector3.Lerp(startPosition, targetPosition, t),
                         Quaternion.Slerp(startRotation, targetRotation, t));
                     yield return null;
                 }
+                driver?.SetScriptedMotionSpeed(0f);
             }
             else
             {
-                yield return new WaitForSeconds(E3WalkSeconds);
+                yield return new WaitForSeconds(EndingSettings.E3KillerApproachSeconds);
             }
 
             KillerStage = EndingKillerStage.Standing;
-            yield return new WaitForSeconds(E3StandSeconds);
+            yield return new WaitForSeconds(EndingSettings.E3SitChairSeconds);
 
             KillerStage = EndingKillerStage.Aiming;
             if (killer != null && player != null)
             {
+                killer.GetComponent<CharacterAnimatorDriver>()?.PlayAimFire();
                 Quaternion startRotation = killer.transform.rotation;
                 Vector3 direction = player.transform.position - killer.transform.position;
                 Quaternion targetRotation = direction.sqrMagnitude < 0.0001f
                     ? startRotation
                     : Quaternion.LookRotation(direction.normalized, Vector3.up);
                 float elapsed = 0f;
-                while (elapsed < E3AimSeconds)
+                while (elapsed < EndingSettings.E3SitChairSeconds)
                 {
                     elapsed += Time.deltaTime;
                     killer.transform.rotation = Quaternion.Slerp(
                         startRotation,
                         targetRotation,
-                        Mathf.SmoothStep(0f, 1f, elapsed / E3AimSeconds));
+                        Mathf.SmoothStep(0f, 1f, elapsed / Mathf.Max(0.01f, EndingSettings.E3SitChairSeconds)));
                     yield return null;
                 }
             }
             else
             {
-                yield return new WaitForSeconds(E3AimSeconds);
+                yield return new WaitForSeconds(EndingSettings.E3SitChairSeconds);
             }
         }
 
@@ -455,11 +538,7 @@ namespace ConGame.Bootstrap
 
         private void AdvanceClock()
         {
-            if (ClockAdvanced)
-            {
-                return;
-            }
-
+            bool firstTick = !ClockAdvanced;
             ClockAdvanced = true;
             Transform wallClock = FindSceneTransform("WallClock") ?? FindSceneTransform("PRP_WallClock");
             Transform secondHand = wallClock == null ? null : FindChild(wallClock, "EndingSecondHand");
@@ -482,13 +561,14 @@ namespace ConGame.Bootstrap
                 secondHand.localRotation *= Quaternion.Euler(0f, 0f, -6f);
             }
 
-            ClockAdvancedEvent?.Invoke();
+            if (firstTick) ClockAdvancedEvent?.Invoke();
         }
 
         private void FireEndingShot()
         {
             ShotFired = true;
             KillerStage = EndingKillerStage.ShotFired;
+            // 已在瞄准阶段进入 AimFire；这里保留枪响事件契约，状态禁止自重入。
             killer?.GetComponent<CharacterAnimatorDriver>()?.PlayAimFire();
             crtPass?.Pulse(1f);
             UnityEngine.Object.FindAnyObjectByType<SemanticAudioDirector>()?.Play(AudioCueId.Gunshot);

@@ -1,6 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ConGame.Presentation.Animation;
+using ConGame.Presentation.Audio;
+using ConGame.Presentation.Interaction;
+using ConGame.Runtime.AI;
+using ConGame.Runtime.Ending;
+using ConGame.Runtime.Events;
+using ConGame.Runtime.Facts;
+using ConGame.Runtime.Interaction;
+using ConGame.Runtime.Player;
 using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -27,18 +36,24 @@ namespace ConGame.Editor
         public static void Run()
         {
             Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            InstallIntoCurrentScene();
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene, ScenePath);
+            Debug.Log("ARTINSTALL done, scene saved");
+        }
+
+        public static void InstallIntoCurrentScene()
+        {
             var visuals = new Dictionary<string, GameObject>();
 
             InstallEnvironment(visuals);
             InstallFurniture(visuals);
             InstallProps(visuals);
+            WireGameplayRepairs();
             MoveAwakeningToWoodChair();
             RebuildNavMesh();
             AudioCueAutoBinder.BindCues();
-
-            EditorSceneManager.MarkSceneDirty(scene);
-            EditorSceneManager.SaveScene(scene, ScenePath);
-            Debug.Log("ARTINSTALL done, scene saved");
+            MvRoomPresentationUpgrade.ApplyToCurrentScene();
         }
 
         // ---- 环境:壳体 / 门组 / 走廊 ----
@@ -57,7 +72,13 @@ namespace ConGame.Editor
                          "East Wall Upper", "Door Lintel", "Ceiling", "Corridor Floor", "Black Corridor"
                      })
             {
-                HideRenderer(Find(n));
+                Transform shell = Find(n);
+                HideRenderer(shell);
+                Collider collider = shell.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    collider.enabled = true;
+                }
             }
 
             // 门洞按成品墙 E 的开口修正(z 0.10~1.00,原灰盒 1.00~1.95)
@@ -73,6 +94,12 @@ namespace ConGame.Editor
             HideRenderer(greyDoor);
 
             // 门组:门框留在静态视觉里,门板+把手挂到铰链下随破门摆动
+            Transform existingPanel = FindDeep(hinge, "Door_Panel");
+            if (existingPanel != null)
+            {
+                UnityEngine.Object.DestroyImmediate(existingPanel.gameObject);
+            }
+
             GameObject doorSet = AddStaticVisual(env, "Environment/ENV_DoorSet", Vector3.zero, 0f, visuals);
             Transform panel = FindDeep(doorSet.transform, "Door_Panel");
             Transform handle = FindDeep(doorSet.transform, "Door_Handle");
@@ -109,15 +136,20 @@ namespace ConGame.Editor
             AddChildVisual("FUR_Bed", "Environment/FUR_Bed", new Vector3(1.3f, 0f, 2.1f), 180f, visuals);
 
             // 木椅:北墙正中(苏醒/结局椅)
-            NormalizeScale(Find("FUR_WoodChair").gameObject);
+            GameObject woodChair = Find("FUR_WoodChair").gameObject;
+            NormalizeScale(woodChair);
             MoveRot("FUR_WoodChair", new Vector3(0f, 0.475f, 2.35f), 180f);
-            AddChildVisual("FUR_WoodChair", "Environment/FUR_WoodChair", new Vector3(0f, 0f, 2.35f), 180f, visuals);
+            GameObject intactChair = AddChildVisual("FUR_WoodChair", "Environment/FUR_WoodChair",
+                                                    new Vector3(0f, 0f, 2.35f), 180f, visuals);
+            GameObject brokenChair = AddChildVisual("FUR_WoodChair", "Environment/FUR_WoodChair_Broken",
+                                                    new Vector3(0f, 0f, 2.35f), 180f, visuals);
+            ConfigureWorldItemVisuals(woodChair, intactChair, brokenChair);
 
             // 扶手椅:向电视和画面右侧靠拢,左后侧保留躲藏入口
             NormalizeScale(Find("FUR_Armchair").gameObject);
-            MoveRot("FUR_Armchair", new Vector3(-1.25f, 0.575f, 1.05f), 160f);
-            AddChildVisual("FUR_Armchair", "Environment/FUR_Armchair", new Vector3(-1.25f, 0f, 1.05f), 160f, visuals);
-            MoveRot("Zone_SofaRear", new Vector3(-1.52f, 0.8f, 1.78f), 160f);
+            MoveRot("FUR_Armchair", new Vector3(-1.8f, 0.575f, 1.5f), 160f);
+            AddChildVisual("FUR_Armchair", "Environment/FUR_Armchair", new Vector3(-1.8f, 0f, 1.5f), 160f, visuals);
+            MoveRot("Zone_SofaRear", new Vector3(-2.07f, 0.8f, 2.23f), 160f);
 
             // 高书柜:西墙北段,规格宽 1.0
             GameObject bookcase = Find("FUR_Bookcase").gameObject;
@@ -144,12 +176,25 @@ namespace ConGame.Editor
 
         static void InstallProps(Dictionary<string, GameObject> visuals)
         {
+            GameplayEventHub events = UnityEngine.Object.FindFirstObjectByType<GameplayEventHub>(
+                FindObjectsInactive.Include);
+            GameplayFactService facts = UnityEngine.Object.FindFirstObjectByType<GameplayFactService>(
+                FindObjectsInactive.Include);
+
             // 电视:留灰盒碰撞与相机锚点,成品屏幕中心须与固定机位重合(±2cm)
             NormalizeScale(Find("PRP_CRTTV").gameObject);
             AddChildVisual("PRP_CRTTV", "Props/PRP_CRTTV_Intact", new Vector3(0f, 0.65f, -2.438f), 0f, visuals);
 
             NormalizeScale(Find("PRP_CeilingLamp").gameObject);
-            AddChildVisual("PRP_CeilingLamp", "Props/PRP_CeilingLamp_Intact", new Vector3(0f, 2.55f, 0f), 0f, visuals);
+
+            SphereCollider ceilingHit = Find("PRP_CeilingLamp").GetComponent<SphereCollider>();
+            if (ceilingHit != null)
+            {
+                ceilingHit.center = new Vector3(0f, -0.43f, 0f);
+                ceilingHit.radius = 0.28f;
+            }
+            AddChildVisual("PRP_CeilingLamp", "Props/PRP_CeilingLamp_Intact",
+                           new Vector3(0f, 2.55f, 0f), 0f, visuals);
 
             // 台灯/遥控器 → 抽屉柜台面 SOCKET
             Vector3 lampTop = SocketWorld(visuals["FUR_Dresser"], "SOCKET_LampTop");
@@ -170,19 +215,35 @@ namespace ConGame.Editor
 
             // 花瓶 → 小圆几
             Vector3 vaseTop = SocketWorld(visuals["FUR_SideTable"], "SOCKET_Vase");
-            NormalizeScale(Find("PRP_Vase").gameObject);
+            GameObject vase = Find("PRP_Vase").gameObject;
+            NormalizeScale(vase);
             MoveRot("PRP_Vase", vaseTop + new Vector3(0f, 0.175f, 0f), 0f);
-            AddChildVisual("PRP_Vase", "Props/PRP_Vase", vaseTop, 0f, visuals);
+            GameObject intactVase = AddChildVisual("PRP_Vase", "Props/PRP_Vase", vaseTop, 0f, visuals);
+            GameObject brokenVase = AddChildVisual("PRP_Vase", "Props/PRP_Vase_Broken", vaseTop, 0f, visuals);
+            ConfigureWorldItemVisuals(vase, intactVase, brokenVase);
 
             // 挂钟 → 北墙床上方
-            NormalizeScale(Find("PRP_WallClock").gameObject);
+            GameObject wallClock = Find("PRP_WallClock").gameObject;
+            NormalizeScale(wallClock);
             MoveRot("PRP_WallClock", new Vector3(1.3f, 1.85f, 2.51f), 180f);
-            AddChildVisual("PRP_WallClock", "Props/PRP_WallClock", new Vector3(1.3f, 1.85f, 2.56f), 180f, visuals);
+            GameObject intactClock = AddChildVisual("PRP_WallClock", "Props/PRP_WallClock",
+                                                    new Vector3(1.3f, 1.85f, 2.56f), 180f, visuals);
+            GameObject brokenClock = AddChildVisual("PRP_WallClock", "Props/PRP_WallClock_Broken",
+                                                    new Vector3(1.3f, 1.85f, 2.56f), 180f, visuals);
+            ConfigureWorldItemVisuals(wallClock, intactClock, brokenClock);
 
             // 镜子 → 东墙南段,向房内偏 12°(镜中收进门+电视)
-            NormalizeScale(Find("PRP_Mirror").gameObject);
+            GameObject mirror = Find("PRP_Mirror").gameObject;
+            NormalizeScale(mirror);
             MoveRot("PRP_Mirror", new Vector3(3.02f, 1.13f, -1.1f), -78f);
-            AddChildVisual("PRP_Mirror", "Props/PRP_Mirror", new Vector3(3.0f, 0.5f, -1.1f), -78f, visuals);
+            GameObject intactMirror = AddChildVisual("PRP_Mirror", "Props/PRP_Mirror",
+                                                     new Vector3(3.0f, 0.5f, -1.1f), -78f, visuals);
+            GameObject brokenMirror = AddChildVisual("PRP_Mirror", "Props/PRP_Mirror_Broken",
+                                                     new Vector3(3.0f, 0.5f, -1.1f), -78f, visuals);
+            StatefulWorldItem mirrorState = mirror.GetComponent<StatefulWorldItem>() ??
+                                            mirror.AddComponent<StatefulWorldItem>();
+            mirrorState.Configure(null);
+            ConfigureWorldItemVisuals(mirror, intactMirror, brokenMirror);
 
             // 球棍:斜靠新书柜东面(成品沿 z 长,子节点转 -90°X 对齐灰盒 y 长胶囊)
             GameObject bat = Find("PRP_BaseballBat").gameObject;
@@ -190,13 +251,34 @@ namespace ConGame.Editor
             bat.transform.position = new Vector3(-2.68f, 0.42f, 1.35f);
             bat.transform.rotation = Quaternion.Euler(0f, 0f, -20f);
             GameObject batVisual = AddChildVisual("PRP_BaseballBat", "Props/PRP_BaseballBat", bat.transform.position, 0f, visuals);
-            batVisual.transform.localPosition = new Vector3(0f, -0.28f, 0f);
+            batVisual.transform.localPosition = Vector3.zero;
+
+            CapsuleCollider batCollider = bat.GetComponent<CapsuleCollider>();
+            if (batCollider != null)
+            {
+                batCollider.direction = 1;
+                batCollider.center = new Vector3(0f, 0.275f, 0f);
+                batCollider.height = 0.85f;
+                batCollider.radius = 0.045f;
+            }
             batVisual.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
 
-            // 毯子:床上皱褶态视觉(状态变体接入 M5 再做)
-            NormalizeScale(Find("PRP_Blanket").gameObject);
+            // 毯子:运行时由隐藏姿态、陷阱插槽和物件状态切换四套预制网格。
+            GameObject blanket = Find("PRP_Blanket").gameObject;
+            NormalizeScale(blanket);
             Move("PRP_Blanket", new Vector3(1.3f, 0.65f, 2.1f));
-            AddChildVisual("PRP_Blanket", "Props/PRP_Blanket_Crumpled", new Vector3(1.3f, 0.525f, 2.1f), 0f, visuals);
+            GameObject crumpledBlanket = AddChildVisual("PRP_Blanket", "Props/PRP_Blanket_Crumpled",
+                                                        new Vector3(1.3f, 0.525f, 2.1f), 0f, visuals);
+            GameObject coveredBlanket = AddChildVisual("PRP_Blanket", "Props/PRP_Blanket_Covered",
+                                                       new Vector3(1.3f, 0.525f, 2.1f), 0f, visuals);
+            GameObject flatBlanket = AddChildVisual("PRP_Blanket", "Props/PRP_Blanket_FlatTrap",
+                                                    blanket.transform.position, 0f, visuals);
+            GameObject drapedBlanket = AddChildVisual("PRP_Blanket", "Props/PRP_Blanket_Draped",
+                                                      blanket.transform.position, 0f, visuals);
+            BlanketVisualPresenter blanketPresenter = blanket.GetComponent<BlanketVisualPresenter>() ??
+                                                       blanket.AddComponent<BlanketVisualPresenter>();
+            blanketPresenter.Configure(blanket.GetComponent<StatefulWorldItem>(), facts, crumpledBlanket,
+                                       coveredBlanket, flatBlanket, drapedBlanket);
 
             // 地毯:3.5×0.9 斜铺,西端对齐扶手椅前脚
             GameObject rug = Find("PRP_Rug").gameObject;
@@ -210,7 +292,14 @@ namespace ConGame.Editor
             Move("PRP_BoardedWindow", new Vector3(-1.2f, 1.47f, 2.55f));
             GameObject window = AddChildVisual("PRP_BoardedWindow", "Environment/ENV_BoardedWindow",
                                                new Vector3(-1.2f, 0.9f, 2.61f), 0f, visuals);
-            DeactivateByPrefix(window, "Window_Board_Broken");
+            ConfigureBoardedWindowVisuals(Find("PRP_BoardedWindow").gameObject, window, events);
+
+            // 砸墙代理保留命中体，正式破损件按每次已解析命中累积至三档。
+            GameObject strikeWall = Find("PRP_StrikeWall").gameObject;
+            NormalizeScale(strikeWall);
+            GameObject wallDamage = AddChildVisual("PRP_StrikeWall", "Environment/ENV_WallDamageKit",
+                                                   new Vector3(-3.08f, 0.4f, 0f), 90f, visuals);
+            ConfigureWallDamageVisuals(strikeWall, wallDamage, events);
 
             // 手电/双枪(初始未激活,入侵段生成)
             NormalizeScale(Find("PRP_Flashlight").gameObject);
@@ -220,9 +309,8 @@ namespace ConGame.Editor
             NormalizeScale(Find("PRP_PistolBackup").gameObject);
             AddChildVisualCentered("PRP_PistolBackup", "Props/PRP_Pistol_Backup", visuals);
 
-            // 无成品资产的占位:大衣换深色皮革材质;纯功能体只留碰撞
-            var coat = Find("PRP_KillerCoat").GetComponent<MeshRenderer>();
-            coat.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(ArtRoot + "/Materials/MAT_Leather_Burgundy.mat");
+            // 大衣视觉由 MV 展示安装器挂接，交互组件与命中体保留。
+            MvRoomPresentationUpgrade.InstallCoat();
             foreach (string n in new[] { "PRP_StrikeWall", "PRP_AmbushPoint", "PRP_DoorTrapSocket", "PRP_RoomDoor_Interact" })
             {
                 HideRenderer(Find(n));
@@ -244,7 +332,7 @@ namespace ConGame.Editor
 
         // ---- NavMesh ----
 
-        static void RebuildNavMesh()
+        internal static void RebuildNavMesh()
         {
             var surface = Find("Navigation").GetComponent<NavMeshSurface>();
             surface.BuildNavMesh();
@@ -253,8 +341,18 @@ namespace ConGame.Editor
                 throw new InvalidOperationException("navmesh bake produced no data");
             }
 
-            AssetDatabase.DeleteAsset(NavMeshAssetPath);
-            AssetDatabase.CreateAsset(surface.navMeshData, NavMeshAssetPath);
+            var existing = AssetDatabase.LoadAssetAtPath<UnityEngine.AI.NavMeshData>(NavMeshAssetPath);
+            if (existing != null)
+            {
+                var baked = surface.navMeshData;
+                EditorUtility.CopySerialized(baked, existing);
+                surface.RemoveData();
+                surface.navMeshData = existing;
+                surface.AddData();
+                EditorUtility.SetDirty(existing);
+                UnityEngine.Object.DestroyImmediate(baked);
+            }
+            else AssetDatabase.CreateAsset(surface.navMeshData, NavMeshAssetPath);
             EditorUtility.SetDirty(surface);
             Debug.Log("ARTINSTALL navmesh rebaked -> " + NavMeshAssetPath);
         }
@@ -266,6 +364,154 @@ namespace ConGame.Editor
             RebuildNavMesh();
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
+        }
+
+        [MenuItem("ConGame/Gameplay/Repair Room Wiring")]
+        public static void RepairGameplayWiring()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            WireGameplayRepairs();
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene, ScenePath);
+            Debug.Log("ARTINSTALL gameplay wiring repaired");
+        }
+
+        static void WireGameplayRepairs()
+        {
+            Transform player = Find("Player");
+            Transform handSocket = FindDeep(player, "HandSocket_R");
+            if (handSocket == null)
+            {
+                handSocket = new GameObject("HandSocket_R").transform;
+                handSocket.SetParent(player, false);
+            }
+
+            PlayerInteractor interactor = player.GetComponent<PlayerInteractor>();
+            if (interactor != null)
+            {
+                SerializedObject serializedInteractor = new SerializedObject(interactor);
+                serializedInteractor.FindProperty("handSocket").objectReferenceValue = handSocket;
+                serializedInteractor.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            Animator playerAnimator = player.GetComponentInChildren<Animator>(true);
+            HumanoidHandSocketBinder binder = player.GetComponent<HumanoidHandSocketBinder>() ??
+                                              player.gameObject.AddComponent<HumanoidHandSocketBinder>();
+            binder.Configure(playerAnimator, handSocket, Vector3.zero, Quaternion.identity);
+
+            EnsureClimb(Find("FUR_WoodChair"), "ClimbStand_Chair", new Vector3(0f, 0.5f, 0f), 0.85f, true);
+            EnsureClimb(Find("FUR_Bed"), "ClimbStand_Bed", new Vector3(0f, 0.52f, -0.05f), 0.95f, false);
+
+            foreach (MeleeWeaponCapability melee in UnityEngine.Object.FindObjectsByType<MeleeWeaponCapability>(
+                         FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                SerializedObject serializedMelee = new SerializedObject(melee);
+                serializedMelee.FindProperty("hitboxHalfHeight").floatValue = 0.75f;
+                serializedMelee.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            KillerTacticalController tactical = Find("Killer").GetComponent<KillerTacticalController>();
+            KillerHitReceiver hitReceiver = Find("Killer").GetComponent<KillerHitReceiver>();
+            if (hitReceiver != null)
+            {
+                Transform feedback = FindDeep(Find("Killer"), "CH_Killer_Model");
+                hitReceiver.Configure(feedback == null ? Find("Killer") : feedback, tactical);
+            }
+
+            SemanticAudioDirector audio = UnityEngine.Object.FindFirstObjectByType<SemanticAudioDirector>(
+                FindObjectsInactive.Include);
+            TelevisionController television = UnityEngine.Object.FindFirstObjectByType<TelevisionController>(
+                FindObjectsInactive.Include);
+            if (audio != null && television != null)
+            {
+                SerializedObject serializedAudio = new SerializedObject(audio);
+                serializedAudio.FindProperty("television").objectReferenceValue = television;
+                serializedAudio.ApplyModifiedPropertiesWithoutUndo();
+            }
+        }
+
+        static void EnsureClimb(Transform host, string anchorName, Vector3 localPosition, float duration,
+                                bool requirePlacedState)
+        {
+            Transform anchor = FindDeep(host, anchorName);
+            if (anchor == null)
+            {
+                anchor = new GameObject(anchorName).transform;
+                anchor.SetParent(host, false);
+            }
+
+            anchor.localPosition = localPosition;
+            anchor.rotation = Quaternion.LookRotation(Vector3.back, Vector3.up);
+            ClimbCapability climb = host.GetComponent<ClimbCapability>() ??
+                                    host.gameObject.AddComponent<ClimbCapability>();
+            climb.Configure(anchor, duration, requirePlacedState);
+            EditorUtility.SetDirty(climb);
+        }
+
+        static void ConfigureWorldItemVisuals(GameObject host, GameObject intact, GameObject broken)
+        {
+            StatefulWorldItem item = host.GetComponent<StatefulWorldItem>();
+            if (item == null)
+            {
+                throw new InvalidOperationException("StatefulWorldItem missing on " + host.name);
+            }
+
+            WorldItemVisualPresenter presenter = host.GetComponent<WorldItemVisualPresenter>() ??
+                                                 host.AddComponent<WorldItemVisualPresenter>();
+            presenter.Configure(item, intact, broken);
+            EditorUtility.SetDirty(presenter);
+        }
+
+        static void ConfigureBoardedWindowVisuals(GameObject host, GameObject visual, GameplayEventHub events)
+        {
+            const int boardCount = 5;
+            var intact = new GameObject[boardCount];
+            var broken = new GameObject[boardCount];
+            for (int i = 0; i < boardCount; i++)
+            {
+                string suffix = (i + 1).ToString("00");
+                intact[i] = RequireVisualChild(visual, "Window_Board_" + suffix).gameObject;
+                broken[i] = RequireVisualChild(visual, "Window_Board_Broken_" + suffix).gameObject;
+            }
+
+            StrikeSurfaceHitReceiver receiver = host.GetComponent<StrikeSurfaceHitReceiver>();
+            ImpactDamageVisualPresenter presenter = host.GetComponent<ImpactDamageVisualPresenter>() ??
+                                                     host.AddComponent<ImpactDamageVisualPresenter>();
+            presenter.Configure(events, receiver, boardCount, intact, broken);
+            EditorUtility.SetDirty(presenter);
+        }
+
+        static void ConfigureWallDamageVisuals(GameObject host, GameObject visual, GameplayEventHub events)
+        {
+            GameObject[] damageVisuals =
+            {
+                RequireVisualChild(visual, "WallDamage_Decal_1").gameObject,
+                RequireVisualChild(visual, "WallDamage_Decal_2").gameObject,
+                RequireVisualChild(visual, "WallDamage_Decal_3").gameObject,
+                RequireVisualChild(visual, "WallDamage_Flake_01").gameObject,
+                RequireVisualChild(visual, "WallDamage_Flake_02").gameObject,
+                RequireVisualChild(visual, "WallDamage_Flake_03").gameObject,
+                RequireVisualChild(visual, "WallDamage_Flake_04").gameObject,
+                RequireVisualChild(visual, "WallDamage_Flake_05").gameObject
+            };
+            int[] thresholds = { 1, 2, 3, 1, 2, 2, 3, 3 };
+            StrikeSurfaceHitReceiver receiver = host.GetComponent<StrikeSurfaceHitReceiver>();
+            ImpactDamageVisualPresenter presenter = host.GetComponent<ImpactDamageVisualPresenter>() ??
+                                                     host.AddComponent<ImpactDamageVisualPresenter>();
+            presenter.Configure(events, receiver, 3, stagedDamage: damageVisuals,
+                                stagedThresholds: thresholds);
+            EditorUtility.SetDirty(presenter);
+        }
+
+        static Transform RequireVisualChild(GameObject root, string name)
+        {
+            Transform child = FindDeep(root.transform, name);
+            if (child == null)
+            {
+                throw new InvalidOperationException(name + " missing in " + root.name);
+            }
+
+            return child;
         }
 
         // ---- 通用工具 ----
@@ -386,9 +632,31 @@ namespace ConGame.Editor
                 throw new InvalidOperationException("fbx missing: " + fbxRelPath);
             }
 
+            string instanceName = Path.GetFileName(fbxRelPath) + "_Visual";
+            DestroySceneObjectsNamed(instanceName);
             var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-            instance.name = Path.GetFileName(fbxRelPath) + "_Visual";
+            instance.name = instanceName;
             return instance;
+        }
+
+        static void DestroySceneObjectsNamed(string objectName)
+        {
+            var matches = new List<GameObject>();
+            foreach (GameObject root in SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                foreach (Transform candidate in root.GetComponentsInChildren<Transform>(true))
+                {
+                    if (candidate.name == objectName)
+                    {
+                        matches.Add(candidate.gameObject);
+                    }
+                }
+            }
+
+            for (int i = 0; i < matches.Count; i++)
+            {
+                UnityEngine.Object.DestroyImmediate(matches[i]);
+            }
         }
 
         static GameObject AddStaticVisual(Transform parent, string fbxRelPath, Vector3 pos, float rotY,
@@ -482,11 +750,6 @@ namespace ConGame.Editor
             }
 
             cam.nearClipPlane = 0.03f;
-            // 补光:正式灯光偏暗,验收图需要读清摆位
-            var fill = go.AddComponent<Light>();
-            fill.type = LightType.Point;
-            fill.range = 14f;
-            fill.intensity = 1.8f;
             var rt = new RenderTexture(960, 540, 24);
             cam.targetTexture = rt;
             cam.Render();

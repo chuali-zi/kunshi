@@ -1,5 +1,7 @@
 # 《困室》美术、动画与表现缺口交付规格
 
+> 历史快照：本文保留 2026-08-06 的审计基线，其中部分“未接入”项已经完成。当前剩余交付以 `remaining_art_deliverables_2026-08-16.md` 为准；非美术缺口以 `docs/non_art_runtime_gaps_2026-08-16.md` 为准。
+
 > 日期：2026-08-06  
 > 来源：完整性审计、`asset_manifest.md`、`animation_manifest.md`、Room_M1 场景与运行时代码。  
 > 目的：区分“资产没做”“资产已有但没接”“运行时系统没做”，避免重复生产模型，也避免把未接入资产误报为完成。
@@ -35,33 +37,33 @@
 
 ### 2.2 缺失的 P1 动画资产
 
-下列内容在 `animation_manifest.md` 中均为“未开始”，仓库中没有对应 FBX/clip：
+> **2026-08-06 更新**：除 `CAM_E2_FirstPersonFall`（Unity Timeline 工作，非美术资产）外，下表全部条目已由 NIUA text2motion 补齐 FBX（mixamo 骨架、In-Place、24fps 帧数校验通过、Humanoid meta 已配并复制到 `Assets/_Game/Art/Animations/`），状态转为 **待验收/待接入**。PAIR 三组交付为 `PAIR_Dxx_PlayerSide`/`PAIR_Dxx_KillerSide` 单边组件片段（API 不支持双人同步），需在 Timeline 按锚点对位拼接。棍图预览在 `art/previews/animations/`；动画事件标记（HitStart/Attach/Detach/Fire 等）仍需在 Unity 剪辑上手动添加后才算完成接入。
 
-| 优先顺序 | ID | 服务路线 | 交付要求 |
-|---:|---|---|---|
-| 1 | PAIR_D08_AmbushGrapple | D08 | 玩家/神秘人同步双轨；偷袭命中→拉扯/翻滚→膝顶脱身；提供双方起点、朝向、距离标记 |
-| 2 | PAIR_D11_BedDrag | D11 | 抓脚踝后 2–3 秒同步拖拽；床边/床底锚点与手脚接触标记 |
-| 3 | PAIR_D21_GroundStruggle | D21 | 8–12 秒同步动作，可循环中段；摔倒终点必须无缝接入，提供枪/灯 Detach 标记 |
-| 4 | AN_Killer_DrawBackupFire | D21/D22/E3 | 风衣内拔备用枪→瞄准→开火；Attach、Muzzle、Fire 三标记 |
-| 5 | AN_Killer_DodgeSide | D10/D22 | 一侧动作可镜像；需要明确起止位移和无敌/判定窗口 |
-| 6 | AN_Killer_Fall | D21 | 向前摔倒，结束 Pose 对齐 PAIR_D21 |
-| 7 | AN_Killer_Stumble | D08/D16 | 同一动作提供轻/重播放区段，D16 结束为单膝恢复 |
-| 8 | AN_Killer_BlockLight | D17/D21 | 上半身蒙太奇；可叠加站立/单膝；挡光开始与硬直结束标记 |
-| 9 | AN_Killer_KickDoor | D09 | 单脚踹击；接触帧对齐门板 Timeline |
-| 10 | AN_Player_Pickup | 通用互动 | 正放拾取、倒放放下；Attach/Detach 标记和手部 IK |
-| 11 | AN_Player_Throw | D10/通用互动 | 通用单手过肩投掷；Detach 帧必须驱动真实刚体 |
-| 12 | CAM_E2_FirstPersonFall | E2 | Unity Timeline 相机曲线；约 1.2 秒倒向地面，不做晕动式旋转 |
+| 优先顺序 | ID | 服务路线 | 交付要求 | 状态 |
+|---:|---|---|---|---|
+| 1 | PAIR_D08_AmbushGrapple | D08 | 玩家/神秘人同步双轨；偷袭命中→拉扯/翻滚→膝顶脱身；提供双方起点、朝向、距离标记 | 待验收（单边组件×2） |
+| 2 | PAIR_D11_BedDrag | D11 | 抓脚踝后 2–3 秒同步拖拽；床边/床底锚点与手脚接触标记 | 待验收（单边组件×2） |
+| 3 | PAIR_D21_GroundStruggle | D21 | 8–12 秒同步动作，可循环中段；摔倒终点必须无缝接入，提供枪/灯 Detach 标记 | 待验收（单边组件×2） |
+| 4 | AN_Killer_DrawBackupFire | D21/D22/E3 | 风衣内拔备用枪→瞄准→开火；Attach、Muzzle、Fire 三标记 | 待验收 |
+| 5 | AN_Killer_DodgeSide | D10/D22 | 一侧动作可镜像；需要明确起止位移和无敌/判定窗口 | 待验收 |
+| 6 | AN_Killer_Fall | D21 | 向前摔倒，结束 Pose 对齐 PAIR_D21 | 待验收 |
+| 7 | AN_Killer_Stumble | D08/D16 | 同一动作提供轻/重播放区段，D16 结束为单膝恢复 | 待验收 |
+| 8 | AN_Killer_BlockLight | D17/D21 | 上半身蒙太奇；可叠加站立/单膝；挡光开始与硬直结束标记 | 待验收 |
+| 9 | AN_Killer_KickDoor | D09 | 单脚踹击；接触帧对齐门板 Timeline | 待验收 |
+| 10 | AN_Player_Pickup | 通用互动 | 正放拾取、倒放放下；Attach/Detach 标记和手部 IK | 待验收 |
+| 11 | AN_Player_Throw | D10/通用互动 | 通用单手过肩投掷；Detach 帧必须驱动真实刚体 | 待验收 |
+| 12 | CAM_E2_FirstPersonFall | E2 | Unity Timeline 相机曲线；约 1.2 秒倒向地面，不做晕动式旋转 | 未开始（Unity 工作） |
 
 `AN_Player_CrouchMove` 继续保持“待评估”：先完成程序化蹲姿和 IK 试玩，只有轮廓或滑步不可接受时再生产。
 
 ### 2.3 缺失的 Pose、Rig 和 Ragdoll 层
 
-仓库没有可验收的独立 Pose/Rig 交付记录。至少需要：
+> **2026-08-06 更新**：10 个静态 Pose 已产出为 2 秒循环静姿剪辑（`POSE_*.fbx`，mixamo 骨架，Humanoid meta 已配，已入 `Assets/_Game/Art/Animations/`），状态 **待验收**。Rig 层（Avatar Mask、Look IK、持物 IK、Aim Rig、脚底约束）与 Ragdoll 仍是 Unity 侧缺系统工作，不变。
 
-- 玩家：SitChair、CrouchHide、Prone、KneelHandsUp、HoldSmall_R、HoldBat、CarryLarge、AimPistol。
-- 神秘人：LowReady、Kneel。
-- 通用：玩家/神秘人 Humanoid Avatar Mask；头/胸 Look IK；双手持物 IK；枪口 Aim Rig；脚底约束。
-- 玩家 Ragdoll：头/胸/背三种命中只改目标与初始力，避免制作 22 条倒地动画。
+- 玩家：SitChair、CrouchHide、Prone、KneelHandsUp、HoldSmall_R、HoldBat、CarryLarge、AimPistol。（已产出，待验收）
+- 神秘人：LowReady、Kneel。（已产出，待验收）
+- 通用：玩家/神秘人 Humanoid Avatar Mask；头/胸 Look IK；双手持物 IK；枪口 Aim Rig；脚底约束。（缺系统）
+- 玩家 Ragdoll：头/胸/背三种命中只改目标与初始力，避免制作 22 条倒地动画。（缺系统）
 
 验收必须在 Unity 的固定机位、全黑和 E2 第一人称三种条件下进行，不能只看 DCC 预览。
 
@@ -69,10 +71,10 @@
 
 | ID | 状态 | 缺口 | 验收标准 |
 |---|---|---|---|
-| CH_Killer_Coat | 缺资产 | 当前风衣烘进 CH_Killer；独立 `PRP_KillerCoat` 只是深色材质代理 | 独立蒙皮件、下摆 4–6 辅助骨、内侧枪套；D21/D22/E3 拉开衣襟和拔枪时不穿插 |
-| InnerHolster | 缺资产/可并入 Coat | 主/备用枪没有可见枪套关系 | 固定机位可读出备用枪来源；提供 `SOCKET_BackupPistol` |
+| CH_Killer_Coat | ~~缺资产~~ → 已取消 | 2026-08-06 决策：采用低成本方案，风衣保持并入 CH_Killer，删除独立风衣可交互承诺 | — |
+| InnerHolster → `PRP_KillerHolster` | 已产出，待验收 | 主/备用枪没有可见枪套关系 | `PRP_KillerHolster.fbx`（含 `SOCKET_BackupPistol`）已交付：射线贴合风衣胸前，Unity 中 bone-parent 到 `mixamorig:Spine1`；验收：固定机位可读出备用枪来源、拔枪动画与 socket 对位 |
 
-如果决定继续使用“风衣并入角色”的低成本方案，应正式删除独立风衣的可交互承诺，并为备用枪制作角色网格内的枪套/socket；不要同时保留两个互相矛盾的表现方案。
+~~如果决定继续使用“风衣并入角色”的低成本方案……~~ 已按低成本方案收敛：独立风衣承诺正式删除（`asset_manifest.md` §3 已标记），枪套/socket 资产已补齐。
 
 ## 4. 已有模型变体但没有接入
 

@@ -44,6 +44,8 @@ namespace ConGame.Runtime.Input
         public Vector2 Move => _move == null ? Vector2.zero : _move.ReadValue<Vector2>();
         public Vector2 Look => _look == null ? Vector2.zero : _settings.ApplyLookSettings(_look.ReadValue<Vector2>());
         public bool SprintHeld => _sprint != null && _sprint.IsPressed();
+        public bool InteractHeld => _interact != null && _interact.IsPressed();
+        public bool StanceHeld => _stance != null && _stance.IsPressed();
         public bool GameplayEnabled => _gameplay != null && _gameplay.enabled;
         public bool SystemInputEnabled => _system != null && _system.enabled;
         public GameplayInputMode InputMode => _inputMode;
@@ -79,23 +81,22 @@ namespace ConGame.Runtime.Input
 
         public void SetGameplayEnabled(bool enabled)
         {
-            if (_gameplay == null)
-            {
-                BuildActions();
-            }
-
-            _inputMode = enabled ? GameplayInputMode.Full : GameplayInputMode.Disabled;
-            ApplyInputMode();
+            SetInputMode(enabled ? GameplayInputMode.Full : GameplayInputMode.Disabled);
         }
 
         public void SetLookOnlyEnabled(bool enabled)
+        {
+            SetInputMode(enabled ? GameplayInputMode.LookOnly : GameplayInputMode.Disabled);
+        }
+
+        public void SetInputMode(GameplayInputMode mode)
         {
             if (_gameplay == null)
             {
                 BuildActions();
             }
 
-            _inputMode = enabled ? GameplayInputMode.LookOnly : GameplayInputMode.Disabled;
+            _inputMode = mode;
             ApplyInputMode();
         }
 

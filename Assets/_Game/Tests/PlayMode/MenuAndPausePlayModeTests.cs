@@ -43,6 +43,26 @@ namespace ConGame.Tests.PlayMode
             yield return null;
         }
 
+        [UnityTest]
+        public IEnumerator PauseRestoresLookOnlyModeWithoutEnablingGameplayActions()
+        {
+            GameObject root = new GameObject("Look Only Pause Test");
+            PlayerInputRouter input = root.AddComponent<PlayerInputRouter>();
+            PauseMenuController pause = root.AddComponent<PauseMenuController>();
+            pause.Configure(input);
+
+            yield return null;
+            input.SetLookOnlyEnabled(true);
+            pause.Pause();
+            pause.Resume();
+
+            Assert.That(input.InputMode, Is.EqualTo(GameplayInputMode.LookOnly));
+            Assert.That(input.GameplayEnabled, Is.True);
+
+            Object.Destroy(root);
+            yield return null;
+        }
+
         [Test]
         public void ExistingOrFinishedProgressRequiresExplicitNewGameConfirmation()
         {

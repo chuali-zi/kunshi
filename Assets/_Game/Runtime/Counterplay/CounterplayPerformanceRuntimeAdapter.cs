@@ -22,6 +22,7 @@ namespace ConGame.Runtime.Counterplay
         private GameSettingsV1 _settings;
         private bool _interactPulse;
         private bool _subscribed;
+        private bool _explicitHooksConfigured;
         private int _lootWindowControllerCount;
 
         public event Action<string, int, QteSequenceSnapshot> QteProgressed;
@@ -62,6 +63,14 @@ namespace ConGame.Runtime.Counterplay
             }
         }
 
+        public void ConfigurePerformanceHooks(ICounterplayPerformanceHookTarget target)
+        {
+            _explicitHooksConfigured = target != null;
+            _performancePlayer = target;
+            target?.ConfigureHooks(this, this);
+            target?.PrepareLoopEpoch(loop == null ? 0 : loop.LoopEpoch);
+        }
+
         public void ReloadSettings()
         {
             _settingsStore ??= new GameSettingsStore();
@@ -92,6 +101,7 @@ namespace ConGame.Runtime.Counterplay
             PerformanceHeldItemPolicy heldItemPolicy)
         {
             _interactPulse = false;
+            loop?.BeginConfirmedPerformance();
             loop?.SetCounterplayInputWindows(ResolvePerformanceWindows(outcomeId));
             PerformanceStarted?.Invoke(outcomeId, loopEpoch, heldItemPolicy);
         }
@@ -120,10 +130,16 @@ namespace ConGame.Runtime.Counterplay
                 NextOutcomeRequested?.Invoke(outcomeId, loopEpoch, branch.NextOutcomeId);
             }
 
-            return _lootWindowControllerCount > 0 &&
-                   string.Equals(outcomeId, "D08", StringComparison.Ordinal) &&
-                   branch.RequiresAllQteWindows &&
-                   string.Equals(branch.BranchId, "disarm_window", StringComparison.Ordinal);
+            if (_lootWindowControllerCount <= 0 || !branch.RequiresAllQteWindows)
+            {
+                return false;
+            }
+
+            bool d08LootWindow = string.Equals(outcomeId, "D08", StringComparison.Ordinal) &&
+                                 string.Equals(branch.BranchId, "disarm_window", StringComparison.Ordinal);
+            bool d22LootWindow = string.Equals(outcomeId, "D22", StringComparison.Ordinal) &&
+                                 string.Equals(branch.BranchId, "single_round_dodged", StringComparison.Ordinal);
+            return d08LootWindow || d22LootWindow;
         }
 
         public void RegisterLootWindowController()
@@ -186,6 +202,11 @@ namespace ConGame.Runtime.Counterplay
 
         private void ResolveAndInjectPlayer()
         {
+            if (_explicitHooksConfigured)
+            {
+                return;
+            }
+
             _performancePlayer = performancePlayerBehaviour as ICounterplayPerformanceHookTarget;
             if (_performancePlayer == null)
             {
@@ -236,7 +257,7 @@ namespace ConGame.Runtime.Counterplay
             _subscribed = false;
         }
 
-        private static CounterplayInputWindow ResolvePerformanceWindows(string outcomeId)
+        private CounterplayInputWindow ResolvePerformanceWindows(string outcomeId)
         {
             if (string.Equals(outcomeId, "D08", StringComparison.Ordinal))
             {
@@ -245,7 +266,12 @@ namespace ConGame.Runtime.Counterplay
 
             if (string.Equals(outcomeId, "D21", StringComparison.Ordinal))
             {
-                return CounterplayInputWindow.Grab;
+                // Direct legacy callers still receive the historical grab window.
+                // Production paired playback explicitly owns the timing and starts
+                // with no input window until its drop semantic event.
+                return _performancePlayer == null
+                    ? CounterplayInputWindow.Grab
+                    : CounterplayInputWindow.None;
             }
 
             if (string.Equals(outcomeId, "D22", StringComparison.Ordinal))
