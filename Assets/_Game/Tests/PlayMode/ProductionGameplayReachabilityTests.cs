@@ -23,7 +23,7 @@ using UnityEngine.TestTools;
 
 namespace ConGame.Tests.PlayMode
 {
-    public sealed class ProductionGameplayReachabilityTests
+    public sealed class ProductionGameplayReachabilityTests : ProductionInputTestFixture
     {
         private Scene _loadedRoom;
         private bool _loadedByTest;
@@ -203,8 +203,8 @@ namespace ConGame.Tests.PlayMode
 
             GameObject pistol = GetPrivateField<GameObject>(loot, "pistolDrop");
             Assert.That(pistol, Is.Not.Null);
-            FaceAndMove(motor, player.transform, pistol.transform.position + Vector3.left * 0.65f,
-                pistol.transform.position);
+            yield return new WaitForSeconds(.65f);
+            ProductionPickupTestDriver.Approach(motor, pistol.GetComponent<InteractableEntity>());
             Physics.SyncTransforms();
             yield return PressInteract(player, 0.1f);
             yield return new WaitForSeconds(0.3f);

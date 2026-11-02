@@ -9,18 +9,38 @@ using UnityEngine.TestTools;
 
 namespace ConGame.Tests.PlayMode
 {
-    public sealed class RoomFloorCollisionPlayModeTests
+    public sealed class RoomFloorCollisionPlayModeTests : ProductionInputTestFixture
     {
+        private Scene _room;
+        private bool _loadedByTest;
+        private Keyboard _keyboard;
+
+        [UnityTearDown]
+        public IEnumerator Cleanup()
+        {
+            if (_keyboard != null)
+            {
+                InputSystem.RemoveDevice(_keyboard);
+                _keyboard = null;
+            }
+            if (_loadedByTest && _room.IsValid() && _room.isLoaded)
+                yield return SceneManager.UnloadSceneAsync(_room);
+            _room = default;
+            _loadedByTest = false;
+        }
+
         [UnityTest]
         public IEnumerator RoomFloorSupportsPlayerMovementFromSpawn()
         {
             Scene room = SceneManager.GetSceneByName("Room_M1");
             bool loadedByTest = !room.IsValid() || !room.isLoaded;
+            _loadedByTest = loadedByTest;
             if (loadedByTest)
             {
                 yield return SceneManager.LoadSceneAsync("Room_M1", LoadSceneMode.Additive);
                 room = SceneManager.GetSceneByName("Room_M1");
             }
+            _room = room;
 
             yield return null;
 
@@ -46,7 +66,7 @@ namespace ConGame.Tests.PlayMode
             Assert.That(groundedAtSpawn, Is.True, "Player spawn must have solid floor below it.");
             Assert.That(hit.collider, Is.EqualTo(floorCollider));
 
-            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Keyboard keyboard = _keyboard = InputSystem.AddDevice<Keyboard>();
             Assert.That(controller.enabled, Is.False,
                 "The production opener keeps the CharacterController disabled while seated.");
             InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.E));
@@ -71,12 +91,6 @@ namespace ConGame.Tests.PlayMode
             Assert.That(motor.transform.position.y, Is.GreaterThanOrEqualTo(-0.01f),
                 "Moving away from the spawn rug must not let the player fall through the room floor.");
 
-            InputSystem.RemoveDevice(keyboard);
-
-            if (loadedByTest)
-            {
-                yield return SceneManager.UnloadSceneAsync(room);
-            }
         }
     }
 }

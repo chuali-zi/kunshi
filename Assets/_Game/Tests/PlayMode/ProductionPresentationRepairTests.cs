@@ -112,7 +112,8 @@ namespace ConGame.Tests.PlayMode
                     Assert.That(killerAnimator.GetBoneTransform(HumanBodyBones.Hips).position.y,
                         Is.LessThan(killer.transform.position.y + 0.7f), "The fallen visual must reach the floor.");
                 GameObject pistol = GetPrivateField<GameObject>(loot, "pistolDrop");
-                player.Teleport(pistol.transform.position + Vector3.left * 0.65f, Quaternion.Euler(0f, 90f, 0f));
+                yield return new WaitForSeconds(.65f);
+                ProductionPickupTestDriver.Approach(player, pistol.GetComponent<InteractableEntity>());
                 Physics.SyncTransforms();
                 Assert.That(player.GetComponent<PlayerInteractor>().TryInteract(), Is.True,
                     "Grab-only input must select the dropped pistol even with a usable door nearby.");
@@ -204,11 +205,17 @@ namespace ConGame.Tests.PlayMode
             return null;
         }
 
-        private static void PlaceAtTrapContactPose(KillerDirector killer, PlayerMotor player)
+        private void PlaceAtTrapContactPose(KillerDirector killer, PlayerMotor player)
         {
             killer.gameObject.SetActive(true);
-            Vector3 playerPosition = player.transform.position;
-            killer.transform.position = playerPosition + Vector3.forward * 1f;
+            var socket = System.Array.Find(FindGameplayRoot(_loadedRoom).GetComponentsInChildren<PlacementSocket>(true),
+                candidate => candidate.name == "PRP_DoorTrapSocket");
+            Assert.That(socket, Is.Not.Null);
+            Vector3 killerPosition = socket.transform.position;
+            killerPosition.y = .08f;
+            Vector3 playerPosition = killerPosition - Vector3.forward * .7f;
+            player.Teleport(playerPosition, Quaternion.identity);
+            killer.transform.position = killerPosition;
             killer.transform.rotation = Quaternion.LookRotation(
                 playerPosition - killer.transform.position, Vector3.up);
             player.transform.rotation = Quaternion.LookRotation(

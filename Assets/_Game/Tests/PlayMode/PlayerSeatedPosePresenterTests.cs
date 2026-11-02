@@ -8,6 +8,8 @@ using ConGame.Presentation.Camera;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Input;
+using ConGame.Runtime.Interaction;
+using ConGame.Runtime.Lighting;
 using ConGame.Runtime.Loop;
 using ConGame.Runtime.Persistence;
 using ConGame.Runtime.Player;
@@ -20,7 +22,7 @@ using UnityEngine.TestTools;
 
 namespace ConGame.Tests.PlayMode
 {
-    public sealed class PlayerSeatedPosePresenterTests
+    public sealed class PlayerSeatedPosePresenterTests : ProductionInputTestFixture
     {
         private const string RoomScenePath = "Assets/_Game/Scenes/Room_M1.unity";
 
@@ -117,6 +119,121 @@ namespace ConGame.Tests.PlayMode
                 Object.Destroy(mesh);
                 Assert.That(soleY, Is.InRange(-.02f, .03f), "The actual shoe soles must meet the carpet.");
             }
+        }
+
+        [UnityTest]
+        public IEnumerator KeyboardWalksFromSeatedStartToBlanketAndLampThenRunsNaturalDeathAndReset()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var presenter = FindInRoom<PlayerSeatedPosePresenter>();
+            var facts = FindInRoom<GameplayFactService>();
+            Assert.That(presenter.IsAwakeningSeated, Is.True);
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+
+            // The first movement key must both stand the player and move them.
+            Vector3 stand = presenter.StandingPosition;
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(presenter.IsAwakeningSeated, Is.False);
+            Assert.That(facts.CaptureSnapshot().HasMeaningfulInput, Is.True);
+            Assert.That(motor.transform.position.z, Is.LessThan(stand.z - .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, .2f));
+            yield return WalkTo(motor, new Vector3(1.05f, 0, .2f));
+            yield return WalkTo(motor, new Vector3(1.05f, 0, .65f));
+            yield return HoldKeys(.5f, Key.E);
+            Assert.That(player.HeldEntity, Is.Not.Null, "Walking to the bed must expose the real blanket.");
+            Assert.That(player.HeldEntity.ItemId, Is.EqualTo("blanket"));
+
+            // Put it down normally, then walk across the clear foreground to the lamp.
+            yield return HoldKeys(.5f, Key.E);
+            Assert.That(player.HeldEntity, Is.Null);
+            yield return WalkTo(motor, new Vector3(1.05f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.34f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.34f, 0, .8f));
+            var lamp = FindInRoomTransform("PRP_TableLamp").GetComponent<BreakableLight>();
+            Assert.That(lamp.IsSwitchOn, Is.True);
+            yield return HoldKeys(.1f, Key.E);
+            Assert.That(lamp.IsSwitchOn, Is.False, "A short E press must use the lamp after walking to it.");
+            Assert.That(player.HeldEntity, Is.Null, "A short lamp use must not pick it up.");
+            // The loose bat can support the capsule by the lamp. Return to clear
+            // floor before checking floor height, using movement and normal gravity.
+            yield return WalkTo(motor, new Vector3(-2.34f, 0, .1f));
+            yield return new WaitForSeconds(.4f);
+            Assert.That(motor.transform.position.y, Is.InRange(-.01f, .1f));
+
+            // Stay exposed and let the real 30-second entry clock, live hunt,
+            // committed shot and reset run without phase/fact/kill shortcuts.
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            var flow = FindInRoom<GameFlowController>();
+            var loop = FindInRoom<LoopDirector>();
+            var camera = FindInRoom<Camera>();
+            Vector3 cameraPosition = camera.transform.position;
+            Quaternion cameraRotation = camera.transform.rotation;
+            int epoch = loop.LoopEpoch;
+            var sceneHandle = _room.handle;
+            bool sawBreach = false, sawCounterplay = false, sawImpact = false, sawReset = false;
+            float impactAt = -1f;
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase == GamePhase.Breach) sawBreach = true;
+                if (phase == GamePhase.Counterplay) sawCounterplay = true;
+                if (phase == GamePhase.KillImpact) { sawImpact = true; impactAt = Time.time; }
+                if (phase == GamePhase.LoopReset) sawReset = true;
+            };
+            float timeout = Time.time + 45f;
+            while (loop.LoopEpoch == epoch && Time.time < timeout) yield return null;
+            Assert.That(loop.LoopEpoch, Is.EqualTo(epoch + 1), "Natural entry and live hunt must finish the loop.");
+            Assert.That(sawBreach && sawCounterplay && sawImpact && sawReset, Is.True);
+            Assert.That(Time.time - impactAt, Is.GreaterThanOrEqualTo(.75f), "The shot impact must remain readable.");
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Awakening));
+            Assert.That(_room.isLoaded, Is.True);
+            Assert.That(_room.handle, Is.EqualTo(sceneHandle), "Death must reset the existing room without reloading.");
+            Assert.That(motor.gameObject.scene.handle, Is.EqualTo(sceneHandle));
+            AssertSeatedAtChair(facts, motor, presenter, FindInRoomTransform("FUR_WoodChair"));
+            Assert.That(motor.GetComponent<CharacterController>().enabled, Is.False);
+            Assert.That(lamp.IsSwitchOn, Is.True);
+            Assert.That(player.HeldEntity, Is.Null);
+            Assert.That(camera.transform.position, Is.EqualTo(cameraPosition));
+            Assert.That(Quaternion.Angle(camera.transform.rotation, cameraRotation), Is.LessThan(.01f));
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(presenter.IsAwakeningSeated, Is.False, "The next loop must accept the same keyboard again.");
+            Assert.That(motor.transform.position.z, Is.LessThan(presenter.StandingPosition.z - .1f));
+        }
+
+        private IEnumerator HoldKeys(float seconds, params Key[] keys)
+        {
+            InputSystem.QueueStateEvent(_keyboard, new KeyboardState(keys));
+            yield return new WaitForSeconds(seconds);
+            InputSystem.QueueStateEvent(_keyboard, new KeyboardState());
+            yield return null;
+            yield return null;
+        }
+
+        private IEnumerator WalkTo(PlayerMotor motor, Vector3 target)
+        {
+            float elapsed = 0f;
+            while (elapsed < 3f)
+            {
+                Vector3 delta = target - motor.transform.position;
+                delta.y = 0;
+                if (delta.magnitude < .09f) break;
+                Key key = Mathf.Abs(delta.x) > Mathf.Abs(delta.z)
+                    ? (delta.x > 0 ? Key.D : Key.A)
+                    : (delta.z > 0 ? Key.W : Key.S);
+                InputSystem.QueueStateEvent(_keyboard, new KeyboardState(key));
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            InputSystem.QueueStateEvent(_keyboard, new KeyboardState());
+            yield return null;
+            Vector3 remaining = target - motor.transform.position;
+            remaining.y = 0;
+            Assert.That(remaining.magnitude, Is.LessThan(.12f),
+                $"Keyboard movement should reach {target}; stopped at {motor.transform.position}.");
         }
 
         [UnityTest]

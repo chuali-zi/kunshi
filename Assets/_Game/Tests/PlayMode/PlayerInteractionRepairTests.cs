@@ -245,6 +245,45 @@ namespace ConGame.Tests.PlayMode
         }
 
         [Test]
+        public void ScannerRanksNearbyFloorLootBeforeFartherTabletopItemWithoutExtendingRange()
+        {
+            var playerObject = new GameObject("player");
+            var loot = new GameObject("floor loot");
+            var tabletop = new GameObject("tabletop item");
+            try
+            {
+                playerObject.transform.position = new Vector3(100f, .08f, 0f);
+                var player = playerObject.AddComponent<PlayerInteractor>();
+                var scanner = playerObject.AddComponent<InteractionScanner>();
+                scanner.Configure(player, 1.2f, ~0);
+                loot.transform.position = new Vector3(100f, .14f, .65f);
+                tabletop.transform.position = new Vector3(100f, 1.08f, .85f);
+                foreach (var target in new[] { loot, tabletop })
+                {
+                    target.AddComponent<BoxCollider>().size = Vector3.one * .06f;
+                    target.AddComponent<Rigidbody>().isKinematic = true;
+                    target.AddComponent<InteractableEntity>();
+                    target.AddComponent<PickupCapability>();
+                }
+                Physics.SyncTransforms();
+                Assert.That(scanner.RefreshForVerb(InteractionVerb.PickUp),
+                    Is.SameAs(loot.GetComponent<InteractableEntity>()));
+
+                // Planar ranking must not make floor objects outside the chest sphere reachable.
+                loot.transform.position += Vector3.forward * .65f;
+                Physics.SyncTransforms();
+                Assert.That(scanner.RefreshForVerb(InteractionVerb.PickUp),
+                    Is.SameAs(tabletop.GetComponent<InteractableEntity>()));
+            }
+            finally
+            {
+                Object.DestroyImmediate(tabletop);
+                Object.DestroyImmediate(loot);
+                Object.DestroyImmediate(playerObject);
+            }
+        }
+
+        [Test]
         public void ScannerFiltersCandidatesWithNoExecutableCapability()
         {
             GameObject playerObject = new GameObject("player");

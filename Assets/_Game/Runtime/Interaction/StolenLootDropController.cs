@@ -647,12 +647,18 @@ namespace ConGame.Runtime.Interaction
             Quaternion launchRotation = authoredOrigin != null
                 ? authoredOrigin.rotation
                 : killer.transform.rotation;
-            Vector3 direction = ResolveD21TossDirection();
+            Vector3 direction = ResolveD21TossDirection(launchPosition);
             launchPosition += direction * 0.25f;
             // Fall clips can put a hand below the floor. Release the prop clear
             // of the room floor instead of spawning a dynamic collider through it.
             launchPosition.y = Mathf.Max(launchPosition.y, killer.transform.position.y + 0.18f);
-            Vector3 velocity = direction * 1.05f + Vector3.up * 1.5f;
+            // The confirmed pull can happen from either side of the killer.
+            // Spill into the player's approach, not the killer's stale entry
+            // heading (which can throw both props into the bed/nightstand gap).
+            // Distinct lateral impulses keep the two deliberate choices apart
+            // even when their weapon-mounted release sockets almost coincide.
+            Vector3 lateral = Vector3.Cross(Vector3.up, direction) * fallbackLateralOffset;
+            Vector3 velocity = direction * 1.05f + lateral + Vector3.up * 1.5f;
             Vector3 angularVelocity = killer.transform.right * angularSpeed + Vector3.up * (angularSpeed * 0.35f);
 
             if (stateful.TossIntoWorld(launchPosition, launchRotation, velocity, angularVelocity,
@@ -669,7 +675,14 @@ namespace ConGame.Runtime.Interaction
 
         private Vector3 ResolveD21TossDirection()
         {
-            Vector3 direction = killer == null ? Vector3.forward : killer.transform.forward;
+            return ResolveD21TossDirection(killer == null ? transform.position : killer.transform.position);
+        }
+
+        private Vector3 ResolveD21TossDirection(Vector3 origin)
+        {
+            Vector3 direction = _playerInteractor == null
+                ? (killer == null ? Vector3.forward : killer.transform.forward)
+                : _playerInteractor.transform.position - origin;
             direction.y = 0f;
             return direction.sqrMagnitude > 0.001f ? direction.normalized : Vector3.forward;
         }

@@ -107,9 +107,14 @@ namespace ConGame.Runtime.Interaction
             }
 
             Vector3 toTarget = hit.bounds.center - center;
-            float distance = toTarget.magnitude;
             Vector3 horizontalTarget = toTarget;
             horizontalTarget.y = 0f;
+            // A grab query ranks reachable props on the floor plane so a nearby
+            // dropped item does not lose to a farther tabletop item just because
+            // it is below the chest. Mixed furniture/use scans retain their 3D
+            // ranking (e.g. the blanket on top of the climbable bed).
+            // Both queries still use the same chest sphere for range.
+            float distance = verb == InteractionVerb.PickUp ? horizontalTarget.magnitude : toTarget.magnitude;
             Vector3 horizontalForward = transform.forward;
             horizontalForward.y = 0f;
             horizontalForward = horizontalForward.sqrMagnitude < 0.001f

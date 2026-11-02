@@ -23,7 +23,7 @@ using UnityEngine.TestTools;
 
 namespace ConGame.Tests.PlayMode
 {
-    public sealed class ProductionD21FlashlightTests
+    public sealed class ProductionD21FlashlightTests : ProductionInputTestFixture
     {
         private Scene _room;
         private bool _loadedByTest;
@@ -191,7 +191,7 @@ namespace ConGame.Tests.PlayMode
             yield return new WaitForSeconds(0.65f);
             InteractableEntity flashlightEntity = flashlight.GetComponent<InteractableEntity>();
             Assert.That(flashlightEntity, Is.Not.Null);
-            MoveBesideAndFace(motor, flashlight.transform);
+            ProductionPickupTestDriver.Approach(motor, flashlightEntity);
             Physics.SyncTransforms();
             yield return new WaitForFixedUpdate();
             Assert.That(player.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.PickUp),
@@ -227,8 +227,8 @@ namespace ConGame.Tests.PlayMode
                 "The detach beat must not automatically give the flashlight to the player.");
             Assert.That(flashlightEntity.IsHeld, Is.False);
 
-            yield return new WaitForFixedUpdate();
-            MoveBesideAndFace(motor, flashlight.transform);
+            yield return new WaitForSeconds(.65f);
+            ProductionPickupTestDriver.Approach(motor, flashlightEntity);
             Physics.SyncTransforms();
             yield return new WaitForFixedUpdate();
             Assert.That(player.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.PickUp),
@@ -352,17 +352,6 @@ namespace ConGame.Tests.PlayMode
             direction.y = 0f;
             if (direction.sqrMagnitude < 0.001f) direction = Vector3.forward;
             motor.Teleport(position, Quaternion.LookRotation(direction.normalized, Vector3.up));
-        }
-
-        private void MoveBesideAndFace(PlayerMotor motor, Transform target)
-        {
-            Vector3 direction = target.position - motor.transform.position;
-            direction.y = 0f;
-            if (direction.sqrMagnitude < 0.001f) direction = Vector3.forward;
-            direction.Normalize();
-            Vector3 position = target.position - direction * 0.65f;
-            position.y = 0.08f;
-            motor.Teleport(position, Quaternion.LookRotation(direction, Vector3.up));
         }
 
         private IEnumerator PressInteract(float holdSeconds)

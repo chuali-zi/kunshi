@@ -1,5 +1,9 @@
 using System.Collections;
 using ConGame.Domain.Interaction;
+using ConGame.Domain.Choreography;
+using ConGame.Domain.Counterplay;
+using ConGame.Runtime.AI;
+using ConGame.Runtime.Counterplay;
 using ConGame.Presentation.Props;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Events;
@@ -14,6 +18,62 @@ namespace ConGame.Tests.PlayMode
 {
     public sealed class D21DropMotionPlayModeTests
     {
+        [TestCase(0f)]
+        [TestCase(180f)]
+        public void WeaponSocketDropsTravelTowardPlayerWithSeparateChoices(float killerYaw)
+        {
+            var root = new GameObject("D21DirectionTest");
+            var pistol = new GameObject("pistol");
+            var flashlight = new GameObject("flashlight");
+            try
+            {
+                var playerObject = new GameObject("player");
+                playerObject.transform.SetParent(root.transform);
+                playerObject.transform.position = Vector3.forward * 2f;
+                var player = playerObject.AddComponent<PlayerInteractor>();
+                var killerObject = new GameObject("killer");
+                killerObject.transform.SetParent(root.transform);
+                killerObject.transform.rotation = Quaternion.Euler(0, killerYaw, 0);
+                var killer = killerObject.AddComponent<KillerDirector>();
+                var socket = new GameObject("weapon socket").transform;
+                socket.SetParent(root.transform);
+                socket.position = Vector3.up * .6f;
+                foreach (var prop in new[] { pistol, flashlight })
+                {
+                    prop.transform.SetParent(root.transform);
+                    prop.AddComponent<BoxCollider>().size = Vector3.one * .08f;
+                    var body = prop.AddComponent<Rigidbody>();
+                    body.isKinematic = true;
+                    prop.AddComponent<StatefulWorldItem>().Configure(body);
+                }
+                var adapter = root.AddComponent<CounterplayPerformanceRuntimeAdapter>();
+                var loot = root.AddComponent<StolenLootDropController>();
+                loot.Configure(pistol, flashlight, adapter, null, null, killer);
+                loot.ConfigureD21PairedPerformance(null, player);
+                loot.ConfigureD21DropOrigins(socket, socket);
+                adapter.OnPerformanceStarted("D21", 3, PerformanceHeldItemPolicy.Preserve);
+                loot.NotifyPairedSemanticEvent(new PairedPerformanceSemanticEvent(
+                    "D21.Pistol.Dropped", "D21", "item-drop", default, 3));
+                loot.NotifyPairedSemanticEvent(new PairedPerformanceSemanticEvent(
+                    "D21.Flashlight.Dropped", "D21", "item-drop", default, 3));
+
+                Assert.That(loot.State, Is.EqualTo(CounterplayLootWindowState.D21Choice));
+                var pistolBody = pistol.GetComponent<Rigidbody>();
+                var flashlightBody = flashlight.GetComponent<Rigidbody>();
+                Assert.That(pistolBody.linearVelocity.z, Is.GreaterThan(0f));
+                Assert.That(flashlightBody.linearVelocity.z, Is.GreaterThan(0f));
+                Assert.That(pistolBody.linearVelocity.x * flashlightBody.linearVelocity.x, Is.LessThan(0f),
+                    "Coincident weapon sockets must still spill the two choices apart.");
+                Assert.That(player.HeldEntity, Is.Null, "The choice must remain manual.");
+            }
+            finally
+            {
+                Object.DestroyImmediate(pistol);
+                Object.DestroyImmediate(flashlight);
+                Object.DestroyImmediate(root);
+            }
+        }
+
         [UnityTest]
         public IEnumerator ScriptedDropCannotDamageAReceiverButAPlayerThrowCan()
         {
