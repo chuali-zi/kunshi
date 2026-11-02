@@ -97,11 +97,11 @@ namespace ConGame.Editor
             else EditorApplication.ExitPlaymode();
         }
 
-        static void RenderMainCamera()
+        internal static void RenderMainCamera(string outputPath = null)
         {
             var camera = Camera.main;
             if (camera == null) throw new InvalidOperationException("Room has no Main Camera.");
-            string output = Argument("-mvScreenshot") ?? "/workspace/ref/progress.png";
+            string output = outputPath ?? Argument("-mvScreenshot") ?? "/workspace/ref/progress.png";
             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output)));
             var previous = RenderTexture.active;
             var previousTarget = camera.targetTexture;

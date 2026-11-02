@@ -59,8 +59,8 @@ namespace ConGame.Presentation.CRT
 
         private void OnAwakeningStarted(bool firstLaunch)
         {
-            int loopIndex = loop == null || loop.Progress == null ? 1 : loop.Progress.loopIndex;
-            _blackRemaining = firstLaunch ? 2f : Mathf.Clamp(0.35f - (loopIndex - 2) * 0.05f, 0f, 0.35f);
+            // Ordinary loops cut directly back to the chair; the death title lives inside KillImpact.
+            _blackRemaining = firstLaunch ? 2f : 0f;
             if (loop != null && loop.Progress != null && loop.Progress.d21Seen)
             {
                 crtPass?.TriggerReverseShot(0.1f);

@@ -48,6 +48,10 @@ namespace ConGame.Presentation.Vfx
         private readonly Dictionary<string, VfxCueId> _performanceCues =
             new Dictionary<string, VfxCueId>(StringComparer.OrdinalIgnoreCase);
 
+        public event Action<Vector3> ShotPresented;
+
+        public void ConfigureMuzzle(Transform muzzle) => muzzleAnchor = muzzle;
+
         public void Configure(
             GameplayEventHub gameplayEvents,
             KillerDirector killerDirector,
@@ -56,6 +60,7 @@ namespace ConGame.Presentation.Vfx
             Transform muzzle,
             Transform performance)
         {
+            UnsubscribeAll();
             events = gameplayEvents;
             killer = killerDirector;
             television = televisionController;
@@ -64,7 +69,6 @@ namespace ConGame.Presentation.Vfx
             performanceAnchor = performance;
             if (isActiveAndEnabled)
             {
-                UnsubscribeAll();
                 SubscribeAll();
             }
         }
@@ -146,6 +150,7 @@ namespace ConGame.Presentation.Vfx
             if (muzzleAnchor != null)
             {
                 PlayCueAt(VfxCueId.MuzzleFlash, muzzleAnchor.position, muzzleAnchor.forward);
+                ShotPresented?.Invoke(muzzleAnchor.position);
             }
         }
 
@@ -155,10 +160,12 @@ namespace ConGame.Presentation.Vfx
             if (muzzle != null)
             {
                 PlayCueAt(VfxCueId.MuzzleFlash, muzzle.position, muzzle.forward);
+                ShotPresented?.Invoke(muzzle.position);
             }
             else if (weaponOrMuzzle != null)
             {
                 PlayCueAt(VfxCueId.MuzzleFlash, weaponOrMuzzle.position, weaponOrMuzzle.forward);
+                ShotPresented?.Invoke(weaponOrMuzzle.position);
             }
             else
             {

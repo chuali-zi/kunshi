@@ -61,3 +61,5 @@ Round 2：相机后移至 `(0, 1.55, -5.2)`，垂直 FOV `36°`，俯角 `3°`�
 截图现在使用 `RenderPipeline.StandardRequest` 更新 Volume 后捕获，避免 `SingleCameraRequest` 跳过 Volume 更新造成 PNG 缺失调色、暗角和颗粒。可在上述运行捕获命令末尾加 `-mvStanding true -mvScreenshot /workspace/ref/round2_standing.png`，直接触发坐姿 presenter 的起身方法并检查站姿接地；这不代替真实设备输入测试。
 
 Round 2 验证：Unity `6000.4.6f1` 编译零错误，导航重烘焙后全部战术锚点可达。所选 PlayMode `8/10`：新增的无输入坐姿保持、坐/站实际鞋底接地、固定镜头构图与第一人称剖面恢复测试通过，主场景 smoke、导航、灯光跟随、结局接管测试通过。剩余两项仍是 Round 1 已复现的键盘注入起身/地板移动失败，本轮没有修改输入系统。最终场景再次运行主场景 smoke、坐/站与镜头、导航三项，`3/3` 通过。日志与 XML：`/workspace/ref/mv_round2_playmode_verified.*`、`/workspace/ref/mv_round2_final_smoke.*`；最终游戏相机图：`/workspace/ref/progress.png`。
+
+Round 3：加入灯灭后的灰蓝近单色调色、随既有神秘人灯光启闭的可见光锥、实际照亮房间的枪口点光；死亡的 0.8 秒保留内叠加白色「困室」标题，重置直接切回坐姿。D12 镜头盲区枪击与 E2 观看者中枪可触发屏幕玻璃裂纹；首次重击电视触发短漫画领悟插画，期间玩法照常推进。所有暂态表现参与循环重置，不增加存档字段。完整接线、素材来源、批处理入口和验证记录见 [Round 3 说明](docs/mv_signature_beats_round3_2026-11-01.md)。

@@ -68,6 +68,33 @@ namespace ConGame.Bootstrap
             WireInspectFocus(scanner);
             WireRoomView();
             WireEndingObserver(root);
+            WireSignatureBeats(room, facts, events, killer);
+        }
+
+        private static void WireSignatureBeats(RoomContext room, GameplayFactService facts,
+            GameplayEventHub events, KillerDirector killer)
+        {
+            var settings = Resources.Load<ConGame.Presentation.CRT.MvSignatureSettings>("MvSignatureSettings");
+            var vfx = Object.FindAnyObjectByType<SemanticVfxDirector>();
+            if (killer != null)
+            {
+                Transform pistol = FindNamedChild(killer.transform, "PRP_PistolMain_EquippedVisual");
+                Transform muzzle = pistol == null ? null : FindNamedChild(pistol, "SOCKET_Muzzle");
+                if (muzzle != null) vfx?.ConfigureMuzzle(muzzle);
+                if (settings != null && settings.FlashlightAir != null)
+                    foreach (Light light in killer.GetComponentsInChildren<Light>(true))
+                        if (light.name == "KillerFlashlight")
+                        {
+                            light.shadows = LightShadows.Soft;
+                            EnsureComponent<ConGame.Presentation.Lighting.MvFlashlightBeam>(light.gameObject)
+                                .Configure(light, settings.FlashlightAir);
+                        }
+            }
+            EnsureComponent<ConGame.Presentation.CRT.MvSignaturePresenter>(room.gameObject).Configure(
+                settings, Object.FindAnyObjectByType<ConGame.Runtime.Flow.GameFlowController>(),
+                Object.FindAnyObjectByType<LoopDirector>(), facts, events, killer,
+                Object.FindAnyObjectByType<ConGame.Runtime.Ending.TelevisionController>(), vfx,
+                Object.FindAnyObjectByType<ConGame.Presentation.CRT.CrtFullscreenPass>());
         }
 
         private static void WireDresser(GameplayFactService facts)

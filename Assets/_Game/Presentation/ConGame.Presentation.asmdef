@@ -5,7 +5,9 @@
     "ConGame.Domain",
     "ConGame.Runtime",
     "Unity.Timeline",
-    "Unity.Animation.Rigging"
+    "Unity.Animation.Rigging",
+    "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

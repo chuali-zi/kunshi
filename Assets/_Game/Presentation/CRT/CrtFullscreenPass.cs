@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace ConGame.Presentation.CRT
 {
@@ -21,10 +21,43 @@ namespace ConGame.Presentation.CRT
         private float _titleAmount;
         private float _reverseShot;
         private float _forcedPulse;
+        private Material _ownedMaterial;
+        private static readonly HashSet<CrtFullscreenPass> Active = new HashSet<CrtFullscreenPass>();
 
         public Material Material => material;
         public float Blackout => _blackout;
         public float TitleAmount => _titleAmount;
+
+        private void Awake()
+        {
+            if (Application.isPlaying && material != null)
+            {
+                _ownedMaterial = new Material(material);
+                material = _ownedMaterial;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_ownedMaterial != null) Destroy(_ownedMaterial);
+        }
+
+        public void ConfigureSignatureArt(Texture title, Texture cutIn, Texture glass)
+        {
+            if (material == null) return;
+            material.SetTexture("_TitleTex", title);
+            material.SetTexture("_CutInTex", cutIn);
+            material.SetTexture("_GlassTex", glass);
+        }
+
+        public void SetSignatureState(float dark, float title, float glass, float cutIn)
+        {
+            if (material == null) return;
+            material.SetFloat("_DarkAmount", Mathf.Clamp01(dark));
+            material.SetFloat("_DeathTitle", Mathf.Clamp01(title));
+            material.SetFloat("_ScreenCrack", Mathf.Clamp01(glass));
+            material.SetFloat("_CutInAmount", Mathf.Clamp01(cutIn));
+        }
 
         public void Configure(CrtSignalController signalController, Material overlayMaterial,
                               UnityEngine.Camera camera = null)
@@ -32,6 +65,7 @@ namespace ConGame.Presentation.CRT
             signal = signalController;
             material = overlayMaterial;
             targetCamera = camera;
+            if (isActiveAndEnabled) Active.Add(this);
         }
 
         public void SetBlackout(float amount)
@@ -58,12 +92,12 @@ namespace ConGame.Presentation.CRT
 
         private void OnEnable()
         {
-            RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+            Active.Add(this);
         }
 
         private void OnDisable()
         {
-            RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+            Active.Remove(this);
         }
 
         private void LateUpdate()
@@ -91,27 +125,12 @@ namespace ConGame.Presentation.CRT
             _forcedPulse = Mathf.MoveTowards(_forcedPulse, 0f, Time.deltaTime * 8f);
         }
 
-        private void OnEndCameraRendering(ScriptableRenderContext context, UnityEngine.Camera camera)
+        internal static Material ForCamera(UnityEngine.Camera camera)
         {
-            if (material == null)
-            {
-                return;
-            }
-
-            if (targetCamera != null && camera != targetCamera)
-            {
-                return;
-            }
-
-            if (camera.cameraType != UnityEngine.CameraType.Game)
-            {
-                return;
-            }
-
-            var cmd = new CommandBuffer { name = "ConGameCRT" };
-            cmd.Blit(BuiltinRenderTextureType.CurrentActive, BuiltinRenderTextureType.CurrentActive, material);
-            context.ExecuteCommandBuffer(cmd);
-            cmd.Release();
+            foreach (var pass in Active)
+                if (pass != null && pass.isActiveAndEnabled && pass.material != null &&
+                    (pass.targetCamera == null || pass.targetCamera == camera)) return pass.material;
+            return null;
         }
 
         private void ClearReverseShot()

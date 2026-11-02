@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523f1b26b73d7e647b299e08ced369ef, type: 3}
+  m_Name: MvSignatureSettings
+  m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.CRT.MvSignatureSettings
+  Title: {fileID: 2800000, guid: 8893aaa1be61cfa068283205b9f95e89, type: 3}
+  Realisation: {fileID: 2800000, guid: c48f441ab4d6133a388b8bf8ac88f7d3, type: 3}
+  Glass: {fileID: 2800000, guid: 764377f51ce9acbaca0bfc3a6a4e5eda, type: 3}
+  FlashlightAir: {fileID: 2100000, guid: 17764a563b6b010e68ecdff32e2e66ab, type: 2}
+  DeathTitleDelay: 0.22
+  TitleFadeSeconds: 0.1
+  RealisationSeconds: 0.65
+  MuzzleLightSeconds: 0.085
+  MuzzleLightIntensity: 9
+  MuzzleLightRange: 8
+  DarkGrade: 1
