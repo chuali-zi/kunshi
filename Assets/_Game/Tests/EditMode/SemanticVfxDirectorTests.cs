@@ -25,8 +25,10 @@ namespace ConGame.Tests.EditMode
             _directorObject = Track(new GameObject("VfxDirector"));
             _directorObject.SetActive(false);
             _director = _directorObject.AddComponent<SemanticVfxDirector>();
-            _director.Configure(_hub, null, null, null, null, null);
             _directorObject.SetActive(true);
+            // EditMode does not invoke this runtime component's OnEnable. Configure
+            // the active director explicitly, as the room's composition root does.
+            _director.Configure(_hub, null, null, null, null, null);
         }
 
         [TearDown]
@@ -108,6 +110,26 @@ namespace ConGame.Tests.EditMode
             _director.NotifyShotFired();
 
             Assert.That(muzzle.ActiveCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ReconfigureMovesSubscriptionsWithoutDuplicatingBreakableHandlers()
+        {
+            VfxPool sparks = CreatePool(VfxCueId.ImpactSpark);
+            VfxPool wood = CreatePool(VfxCueId.WoodDebris);
+            var chair = Track(new GameObject("chair")).AddComponent<StatefulWorldItem>();
+            _director.RegisterBreakableItem(chair, VfxCueId.WoodDebris);
+            var replacementHub = Track(new GameObject("ReplacementHub")).AddComponent<GameplayEventHub>();
+            _director.Configure(replacementHub, null, null, null, null, null);
+            _director.Configure(replacementHub, null, null, null, null, null);
+            var hit = new HitInfo(ImpactKind.Bullet, "pistol_main", Vector3.zero, Vector3.forward, 10f);
+
+            _hub.EmitImpact(hit, HitResult.Accepted, null);
+            Assert.That(sparks.ActiveCount, Is.Zero, "The old hub must be unsubscribed.");
+            replacementHub.EmitImpact(hit, HitResult.Accepted, null);
+            chair.MarkBroken();
+            Assert.That(sparks.ActiveCount, Is.EqualTo(1));
+            Assert.That(wood.ActiveCount, Is.EqualTo(1));
         }
 
         [Test]

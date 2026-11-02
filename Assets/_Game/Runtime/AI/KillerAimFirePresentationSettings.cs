@@ -22,7 +22,7 @@ namespace ConGame.Runtime.AI
         /// <summary>
         /// AimEnter 段无动画/无标记时的确定性时长回退;超过该时长进入 AimHold 语义。
         /// </summary>
-        [Min(0f)] public float AimEnterFallbackSeconds;
+        [Min(0.01f)] public float AimEnterFallbackSeconds;
 
         public static KillerAimFirePresentationSettings Default
         {
@@ -48,7 +48,8 @@ namespace ConGame.Runtime.AI
                 ? fallback.AimHoldClipKey
                 : AimHoldClipKey;
             FireClipKey = string.IsNullOrWhiteSpace(FireClipKey) ? fallback.FireClipKey : FireClipKey;
-            AimEnterFallbackSeconds = AimEnterFallbackSeconds < 0f
+            AimEnterFallbackSeconds = AimEnterFallbackSeconds <= 0f ||
+                                      float.IsNaN(AimEnterFallbackSeconds) || float.IsInfinity(AimEnterFallbackSeconds)
                 ? fallback.AimEnterFallbackSeconds
                 : AimEnterFallbackSeconds;
             return this;

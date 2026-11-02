@@ -100,6 +100,24 @@ namespace ConGame.Tests.EditMode
             Assert.That(settings.AimEnterFallbackSeconds, Is.GreaterThan(0f));
         }
 
+        [TestCase(-1f)]
+        [TestCase(0f)]
+        [TestCase(float.NaN)]
+        [TestCase(float.PositiveInfinity)]
+        public void InvalidAimEnterDurationUsesFiniteDefault(float duration)
+        {
+            var settings = new KillerAimFirePresentationSettings { AimEnterFallbackSeconds = duration }.Validated();
+            Assert.That(settings.AimEnterFallbackSeconds,
+                Is.EqualTo(KillerAimFirePresentationSettings.Default.AimEnterFallbackSeconds));
+        }
+
+        [Test]
+        public void ValidAimEnterDurationIsPreserved()
+        {
+            var settings = new KillerAimFirePresentationSettings { AimEnterFallbackSeconds = 0.12f }.Validated();
+            Assert.That(settings.AimEnterFallbackSeconds, Is.EqualTo(0.12f));
+        }
+
         [Test]
         public void BreachKickTimingSettingsValidatedFillsDefaults()
         {
