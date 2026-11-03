@@ -5,6 +5,7 @@ using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Presentation.Animation;
 using ConGame.Presentation.Camera;
+using ConGame.Runtime.Ending;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Input;
@@ -28,6 +29,7 @@ namespace ConGame.Tests.PlayMode
 
         private Scene _room;
         private Keyboard _keyboard;
+        private Mouse _mouse;
         private string[] _savePaths;
         private byte[][] _savedFileContents;
 
@@ -39,6 +41,12 @@ namespace ConGame.Tests.PlayMode
             {
                 InputSystem.RemoveDevice(_keyboard);
                 _keyboard = null;
+            }
+
+            if (_mouse != null)
+            {
+                InputSystem.RemoveDevice(_mouse);
+                _mouse = null;
             }
 
             if (_room.IsValid() && _room.isLoaded)
@@ -202,6 +210,92 @@ namespace ConGame.Tests.PlayMode
             yield return HoldKeys(.25f, Key.S);
             Assert.That(presenter.IsAwakeningSeated, Is.False, "The next loop must accept the same keyboard again.");
             Assert.That(motor.transform.position.z, Is.LessThan(presenter.StandingPosition.z - .1f));
+        }
+
+        [UnityTest]
+        public IEnumerator KeyboardAndMouseReachTelevisionEndingFromSeatedStart()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var television = FindInRoom<TelevisionController>();
+            var flow = FindInRoom<GameFlowController>();
+            var loop = FindInRoom<LoopDirector>();
+            var ending = FindInRoom<EndingDirector>();
+            var cameraMode = FindInRoom<CameraModeController>();
+            var input = FindInRoom<PlayerInputRouter>();
+            var clockHand = FindInRoomTransform("PRP_WallClock").Find("SecondHand");
+            Assert.That(clockHand, Is.Not.Null);
+            Quaternion clockMark = clockHand.localRotation;
+            int epoch = loop.LoopEpoch;
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            _mouse = InputSystem.AddDevice<Mouse>();
+
+            // Every approach, pickup and hit uses ordinary production input.
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .65f));
+            yield return HoldKeys(.5f, Key.E);
+            yield return new WaitForSeconds(.4f);
+            Assert.That(player.HeldEntity, Is.Not.Null, "The room's bat must be reachable on foot.");
+            Assert.That(player.HeldEntity.ItemId, Is.EqualTo("baseball_bat"));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, -1.3f));
+            yield return ClickAttack();
+            yield return new WaitForSeconds(.9f);
+            Assert.That(television.DamageState, Is.EqualTo(TelevisionDamageState.Cracked));
+            Assert.That(cameraMode.IsFirstPerson, Is.False);
+            yield return ClickAttack();
+
+            float until = Time.time + 4f;
+            while (flow.CurrentPhase != GamePhase.EndingE2 && Time.time < until) yield return null;
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.EndingE2));
+            Assert.That(television.DamageState, Is.EqualTo(TelevisionDamageState.Destroyed));
+            Assert.That(cameraMode.IsFirstPerson, Is.True);
+            Assert.That(ending.HasObserverHandoff, Is.True);
+            Assert.That(ending.E2EntryStarted, Is.False);
+            Assert.That(input.GameplayEnabled, Is.True);
+            Vector3 observerStart = motor.transform.position;
+            yield return HoldKeys(.2f, Key.W);
+            Assert.That(Vector3.Distance(observerStart, motor.transform.position), Is.GreaterThan(.1f),
+                "The observer must gain real movement control after the breakout.");
+
+            until = Time.time + 25f;
+            while (flow.CurrentPhase != GamePhase.EndingE3 && Time.time < until) yield return null;
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.EndingE3));
+            Assert.That(input.InputMode, Is.EqualTo(GameplayInputMode.LookOnly));
+            Assert.That(ending.PassResetCount, Is.EqualTo(2));
+            Vector3 seated = motor.transform.position;
+            yield return HoldKeys(.2f, Key.W);
+            Assert.That(motor.transform.position, Is.EqualTo(seated), "E3 must keep the observer seated.");
+
+            until = Time.time + 12f;
+            while (!ending.ClockAdvanced && Time.time < until) yield return null;
+            Assert.That(ending.ClockAdvanced, Is.True);
+            Assert.That(Quaternion.Angle(clockHand.localRotation,
+                clockMark * Quaternion.Euler(0, 0, -6)), Is.LessThan(.01f),
+                "E3 must release the actual stuck hand, starting with one real second.");
+            Assert.That(FindInRoomTransform("EndingSecondHand"), Is.Null);
+            until = Time.time + 12f;
+            while (flow.CurrentPhase != GamePhase.Finished && Time.time < until) yield return null;
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Finished));
+            Assert.That(ending.ShotFired, Is.True);
+            Assert.That(loop.LoopEpoch, Is.EqualTo(epoch), "The ending must never run an ordinary death reset.");
+            var saved = new JsonSaveStore().Load();
+            Assert.That(saved.endingCompleted, Is.True);
+            Assert.That(SimpleMainMenu.CanContinueProgress(saved), Is.False);
+        }
+
+        private IEnumerator ClickAttack()
+        {
+            InputSystem.QueueStateEvent(_mouse, new MouseState().WithButton(MouseButton.Left));
+            yield return null;
+            InputSystem.QueueStateEvent(_mouse, new MouseState());
+            yield return null;
         }
 
         private IEnumerator HoldKeys(float seconds, params Key[] keys)
