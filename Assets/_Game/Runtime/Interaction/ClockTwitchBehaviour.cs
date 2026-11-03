@@ -15,6 +15,8 @@ namespace ConGame.Runtime.Interaction
         private ClockTwitchState _state;
         private Quaternion _initialLocalRotation;
         private bool _captured;
+        private bool _twitchDisplaced;
+        private int _endingTicks;
 
         public int ResetOrder => 76;
         public bool IsSilenced => _state.Silenced;
@@ -29,6 +31,8 @@ namespace ConGame.Runtime.Interaction
 
         private void Update()
         {
+            if (_endingTicks > 0) return;
+
             if (clockItem != null && clockItem.CurrentState == ItemPhysicalState.Broken)
             {
                 _state.Silence();
@@ -43,8 +47,20 @@ namespace ConGame.Runtime.Interaction
 
             for (int i = 0; i < ticks; i++)
             {
-                secondHand.localRotation *= Quaternion.Euler(0f, 0f, -twitchDegrees);
+                _twitchDisplaced = !_twitchDisplaced;
             }
+            secondHand.localRotation = _initialLocalRotation * Quaternion.Euler(
+                0f, 0f, _twitchDisplaced ? -twitchDegrees : 0f);
+        }
+
+        // E3 releases the same stuck hand; regular twitch updates must no longer
+        // pull it back to the loop's mark after this first real tick.
+        public void AdvanceForEnding()
+        {
+            if (!_captured) CaptureInitialState();
+            _endingTicks++;
+            if (secondHand != null)
+                secondHand.localRotation = _initialLocalRotation * Quaternion.Euler(0f, 0f, -6f * _endingTicks);
         }
 
         public void CaptureInitialState()
@@ -56,6 +72,8 @@ namespace ConGame.Runtime.Interaction
             }
 
             _captured = true;
+            _twitchDisplaced = false;
+            _endingTicks = 0;
         }
 
         public void Quiesce(in LoopResetContext context)
@@ -70,6 +88,8 @@ namespace ConGame.Runtime.Interaction
             }
 
             _state.Reset();
+            _twitchDisplaced = false;
+            _endingTicks = 0;
             if (secondHand != null)
             {
                 secondHand.localRotation = _initialLocalRotation;

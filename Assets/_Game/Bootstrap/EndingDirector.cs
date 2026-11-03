@@ -10,6 +10,7 @@ using ConGame.Runtime.AI;
 using ConGame.Runtime.Ending;
 using ConGame.Runtime.Flow;
 using ConGame.Runtime.Input;
+using ConGame.Runtime.Interaction;
 using ConGame.Runtime.Loop;
 using ConGame.Runtime.Player;
 using UnityEngine;
@@ -541,24 +542,27 @@ namespace ConGame.Bootstrap
             bool firstTick = !ClockAdvanced;
             ClockAdvanced = true;
             Transform wallClock = FindSceneTransform("WallClock") ?? FindSceneTransform("PRP_WallClock");
-            Transform secondHand = wallClock == null ? null : FindChild(wallClock, "EndingSecondHand");
-            if (wallClock != null && secondHand == null)
+            ClockTwitchBehaviour clock = wallClock == null ? null : wallClock.GetComponent<ClockTwitchBehaviour>();
+            if (clock != null)
             {
-                GameObject hand = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                hand.name = "EndingSecondHand";
-                hand.transform.SetParent(wallClock, false);
-                hand.transform.localPosition = new Vector3(0f, 0.18f, -0.03f);
-                hand.transform.localScale = new Vector3(0.015f, 0.36f, 0.015f);
-                Collider handCollider = hand.GetComponent<Collider>();
-                if (handCollider != null)
-                {
-                    Destroy(handCollider);
-                }
-                secondHand = hand.transform;
+                clock.AdvanceForEnding();
             }
-            if (secondHand != null)
+            else
             {
-                secondHand.localRotation *= Quaternion.Euler(0f, 0f, -6f);
+                // Compatibility for legacy scenes without the clock controller.
+                Transform secondHand = wallClock == null ? null : FindChild(wallClock, "SecondHand");
+                if (wallClock != null && secondHand == null)
+                {
+                    GameObject hand = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    hand.name = "SecondHand";
+                    hand.transform.SetParent(wallClock, false);
+                    hand.transform.localPosition = new Vector3(0f, 0.18f, -0.03f);
+                    hand.transform.localScale = new Vector3(0.015f, 0.36f, 0.015f);
+                    Destroy(hand.GetComponent<Collider>());
+                    secondHand = hand.transform;
+                }
+                if (secondHand != null)
+                    secondHand.localRotation *= Quaternion.Euler(0f, 0f, -6f);
             }
 
             if (firstTick) ClockAdvancedEvent?.Invoke();
