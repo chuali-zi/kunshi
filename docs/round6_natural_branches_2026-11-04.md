@@ -29,3 +29,27 @@ This adds automated route acceptance for D06/D07/D14. Natural-input acceptance o
 ## Verification
 
 Unity `6000.4.6f1`, `DISPLAY=:5`, graphics enabled, one Editor process at a time. Targeted D07: **1/1** (`/workspace/ref/round6_d07_verified.xml` / `.log`). The first combined stance run: **2/3**, exposing the D06 bug (`round6_stance.xml` / `.log`). After the runtime correction, D06, D14 and the short-hide/exit regression: **3/3**, **0 failed, 0 skipped**, zero C# and shader compilation errors (`round6_stance_fix.xml` / `.log`).
+
+Full EditMode: **191/191**, **0 failed, 0 skipped**, zero C# and shader compilation errors. All 191 Round 5 cases remain present. Evidence: `/workspace/ref/round6_full_editmode.xml` / `.log`.
+
+Fresh gameplay capture: `/workspace/ref/round6_progress.png`, **1920×1080**, from the production capture entry point. Visually inspected against the 6-second MV reference: the seated composition, bookcase, right doorway, warm light, wallpaper, green carpet, dark ceiling and film treatment retain the established main shot. Capture log: `/workspace/ref/round6_capture.log`, zero C# and shader compilation errors.
+
+Reproduction commands (full suites have no test filter):
+
+```bash
+DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
+  -batchmode -projectPath /workspace/con_game -runTests -testPlatform EditMode \
+  -testResults /workspace/ref/round6_full_editmode.xml \
+  -logFile /workspace/ref/round6_full_editmode.log
+
+DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
+  -batchmode -projectPath /workspace/con_game -runTests -testPlatform PlayMode \
+  -testResults /workspace/ref/round6_full_playmode.xml \
+  -logFile /workspace/ref/round6_full_playmode.log
+
+DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
+  -batchmode -projectPath /workspace/con_game \
+  -executeMethod ConGame.Editor.MvMainShotBuilder.CaptureGameplay \
+  -mvScreenshot /workspace/ref/round6_progress.png \
+  -logFile /workspace/ref/round6_capture.log
+```
