@@ -5,6 +5,7 @@ using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
 using ConGame.Presentation.Animation;
 using ConGame.Presentation.Camera;
+using ConGame.Runtime.AI;
 using ConGame.Runtime.Ending;
 using ConGame.Runtime.Facts;
 using ConGame.Runtime.Flow;
@@ -290,6 +291,94 @@ namespace ConGame.Tests.PlayMode
             Assert.That(SimpleMainMenu.CanContinueProgress(saved), Is.False);
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardReachesArmedD07ThenResetsTheHeldBatAndAcceptsNextLoopInput()
+        {
+            CaptureSaveFiles();
+            Transform bat = null;
+            Vector3 batStart = default, batReset = default;
+            // Capture before Start/physics; a loose prop can settle or be bumped
+            // on the approach, which is not the authored reset position.
+            yield return LoadFreshRoomCopy(() =>
+            {
+                bat = FindInRoomTransform("PRP_BaseballBat");
+                Assert.That(bat, Is.Not.Null);
+                batStart = bat.position;
+            });
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            FindInRoom<LoopDirector>().LoopResetCompleted += (_, __) => batReset = bat.position;
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .65f));
+            yield return HoldKeys(.5f, Key.E);
+            yield return new WaitForSeconds(.4f);
+            Assert.That(player.HeldEntity, Is.Not.Null);
+            Assert.That(player.HeldEntity.ItemId, Is.EqualTo("baseball_bat"));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+
+            yield return ObserveNaturalShotAndReset("D07");
+            Assert.That(player.HeldEntity, Is.Null);
+            Assert.That(Vector3.Distance(batReset, batStart), Is.LessThan(.01f),
+                "Death must return the held weapon to its authored position.");
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(FindInRoom<PlayerSeatedPosePresenter>().IsAwakeningSeated, Is.False);
+        }
+
+        private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome)
+        {
+            var killer = FindInRoom<KillerDirector>();
+            var flow = FindInRoom<GameFlowController>();
+            var loop = FindInRoom<LoopDirector>();
+            var input = FindInRoom<PlayerInputRouter>();
+            var camera = FindInRoom<Camera>();
+            int epoch = loop.LoopEpoch;
+            int sceneHandle = _room.handle;
+            Vector3 cameraPosition = camera.transform.position;
+            Quaternion cameraRotation = camera.transform.rotation;
+            string committed = null, fired = null;
+            int shots = 0;
+            float impactAt = -1f;
+            killer.ConfirmedPerformanceLaunching += intent => committed = intent.OutcomeId;
+            killer.ShotFired += (outcome, shotEpoch) =>
+            {
+                Assert.That(shotEpoch, Is.EqualTo(epoch));
+                fired = outcome;
+                shots++;
+            };
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase == GamePhase.KillImpact) impactAt = Time.time;
+            };
+
+            float until = Time.time + 45f;
+            bool sawLiveControl = false;
+            while (loop.LoopEpoch == epoch && Time.time < until)
+            {
+                if (flow.CurrentPhase == GamePhase.Breach && killer.IsLiveHuntActive && input.GameplayEnabled)
+                    sawLiveControl = true;
+                yield return null;
+            }
+            Assert.That(sawLiveControl, Is.True, "Entry must release control for the live hunt.");
+            Assert.That(committed, Is.EqualTo(expectedOutcome), "The actual attack must commit the intended branch.");
+            Assert.That(fired, Is.EqualTo(expectedOutcome));
+            Assert.That(shots, Is.EqualTo(1));
+            Assert.That(impactAt, Is.GreaterThanOrEqualTo(0));
+            Assert.That(Time.time - impactAt, Is.GreaterThanOrEqualTo(.75f));
+            Assert.That(loop.LoopEpoch, Is.EqualTo(epoch + 1));
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Awakening));
+            Assert.That(_room.isLoaded && _room.handle == sceneHandle, Is.True);
+            Assert.That(camera.transform.position, Is.EqualTo(cameraPosition));
+            Assert.That(Quaternion.Angle(camera.transform.rotation, cameraRotation), Is.LessThan(.01f));
+            AssertSeatedAtChair(FindInRoom<GameplayFactService>(), FindInRoom<PlayerMotor>(),
+                FindInRoom<PlayerSeatedPosePresenter>(), FindInRoomTransform("FUR_WoodChair"));
+        }
+
         private IEnumerator ClickAttack()
         {
             InputSystem.QueueStateEvent(_mouse, new MouseState().WithButton(MouseButton.Left));
@@ -416,7 +505,7 @@ namespace ConGame.Tests.PlayMode
             Assert.That(characterController.enabled, Is.False);
         }
 
-        private IEnumerator LoadFreshRoomCopy()
+        private IEnumerator LoadFreshRoomCopy(System.Action beforeStart = null)
         {
             Scene loaded = default;
             UnityEngine.Events.UnityAction<Scene, LoadSceneMode> onSceneLoaded = (scene, mode) =>
@@ -424,6 +513,8 @@ namespace ConGame.Tests.PlayMode
                 if (scene.path == RoomScenePath)
                 {
                     loaded = scene;
+                    _room = scene;
+                    beforeStart?.Invoke();
                 }
             };
 
