@@ -32,6 +32,8 @@ Unity `6000.4.6f1`, `DISPLAY=:5`, graphics enabled, one Editor process at a time
 
 Full EditMode: **191/191**, **0 failed, 0 skipped**, zero C# and shader compilation errors. All 191 Round 5 cases remain present. Evidence: `/workspace/ref/round6_full_editmode.xml` / `.log`.
 
+Full PlayMode: **148/148**, **0 failed, 0 skipped**, zero C# and shader compilation errors, about **338 seconds**. All 144 Round 5 cases remain present, including the continuous natural death/reset and saved television ending routes. Four new cases are D07, D06, D14 and short-hide/exit; their full-suite durations were approximately 36.48s, 36.47s, 36.47s and 0.98s. No original test was removed, ignored or weakened. Evidence: `/workspace/ref/round6_full_playmode.xml` / `.log`.
+
 Fresh gameplay capture: `/workspace/ref/round6_progress.png`, **1920×1080**, from the production capture entry point. Visually inspected against the 6-second MV reference: the seated composition, bookcase, right doorway, warm light, wallpaper, green carpet, dark ceiling and film treatment retain the established main shot. Capture log: `/workspace/ref/round6_capture.log`, zero C# and shader compilation errors.
 
 Reproduction commands (full suites have no test filter):
