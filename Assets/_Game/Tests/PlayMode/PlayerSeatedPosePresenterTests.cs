@@ -330,6 +330,27 @@ namespace ConGame.Tests.PlayMode
             Assert.That(FindInRoom<PlayerSeatedPosePresenter>().IsAwakeningSeated, Is.False);
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardCrouchesThenPlaysDeadAndNaturallyFinishesD14()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var facts = FindInRoom<GameplayFactService>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Crouched));
+            yield return HoldKeys(.75f, Key.C);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Prone),
+                "Holding C from a crouch must play dead before entry.");
+            yield return ObserveNaturalShotAndReset("D14");
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
         private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome)
         {
             var killer = FindInRoom<KillerDirector>();
@@ -371,6 +392,7 @@ namespace ConGame.Tests.PlayMode
             Assert.That(impactAt, Is.GreaterThanOrEqualTo(0));
             Assert.That(Time.time - impactAt, Is.GreaterThanOrEqualTo(.75f));
             Assert.That(loop.LoopEpoch, Is.EqualTo(epoch + 1));
+            Assert.That(loop.LastOutcomeId, Is.EqualTo(expectedOutcome));
             Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Awakening));
             Assert.That(_room.isLoaded && _room.handle == sceneHandle, Is.True);
             Assert.That(camera.transform.position, Is.EqualTo(cameraPosition));
