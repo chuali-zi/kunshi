@@ -669,12 +669,8 @@ namespace ConGame.Runtime.Player
                 return;
             }
 
-            InteractableEntity target = scanner == null ? null : scanner.RefreshForVerb(InteractionVerb.Hide);
-            if (target != null && target.TryExecute(this, InteractionVerb.Hide))
-            {
-                return;
-            }
-
+            // Hide is a tap; deciding it on key-down consumes the same input
+            // that must remain available for surrender or playing dead.
             _stanceHold.Begin(Time.unscaledTime, SurrenderGate.HoldSeconds);
         }
 
@@ -1016,6 +1012,12 @@ namespace ConGame.Runtime.Player
 
         private void CycleStanceTap()
         {
+            InteractableEntity target = scanner == null ? null : scanner.RefreshForVerb(InteractionVerb.Hide);
+            if (target != null && target.TryExecute(this, InteractionVerb.Hide))
+            {
+                return;
+            }
+
             FactSnapshot snapshot = facts.CaptureSnapshot();
             switch (snapshot.PlayerPose)
             {

@@ -3,6 +3,7 @@ using System.IO;
 using ConGame.Bootstrap;
 using ConGame.Domain.Facts;
 using ConGame.Domain.Flow;
+using ConGame.Domain.Interaction;
 using ConGame.Presentation.Animation;
 using ConGame.Presentation.Camera;
 using ConGame.Runtime.AI;
@@ -328,6 +329,68 @@ namespace ConGame.Tests.PlayMode
                 "Death must return the held weapon to its authored position.");
             yield return HoldKeys(.25f, Key.S);
             Assert.That(FindInRoom<PlayerSeatedPosePresenter>().IsAwakeningSeated, Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator KeyboardShortStanceReleaseStillHidesAndSecondPressExits()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var facts = FindInRoom<GameplayFactService>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return HoldKeys(.15f, Key.D);
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Hide), Is.Not.Null);
+            Vector3 approach = motor.transform.position;
+            InputSystem.QueueStateEvent(_keyboard, new KeyboardState(Key.C));
+            yield return new WaitForSeconds(.15f);
+            Assert.That(player.IsHiding, Is.False, "A key-down must wait for the tap/hold decision.");
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            InputSystem.QueueStateEvent(_keyboard, new KeyboardState());
+            yield return null;
+            yield return null;
+            Assert.That(player.IsHiding, Is.True, "A short release must still enter the nearby bed hide.");
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.UnderBed));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Hidden));
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(player.IsHiding, Is.False);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            Assert.That(Vector3.Distance(motor.transform.position, approach), Is.LessThan(.03f));
+        }
+
+        [UnityTest]
+        public IEnumerator KeyboardSurrendersToEnteredKillerAndNaturallyFinishesD06()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var killer = FindInRoom<KillerDirector>();
+            var input = FindInRoom<PlayerInputRouter>();
+            var facts = FindInRoom<GameplayFactService>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            // Turn toward the right-hand door through ordinary movement.
+            yield return HoldKeys(.15f, Key.D);
+            float until = Time.time + 35f;
+            while ((!killer.HasEnteredRoom || !input.GameplayEnabled) && Time.time < until)
+                yield return null;
+            Assert.That(killer.HasEnteredRoom && input.GameplayEnabled, Is.True);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Hide),
+                Is.Not.Null, "This regression must retain the nearby competing bed hide action.");
+            yield return HoldKeys(.75f, Key.C);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Kneeling),
+                "Holding C empty-handed toward the entered killer must surrender.");
+            Assert.That(FindInRoom<PlayerInteractor>().HeldEntity, Is.Null);
+            yield return ObserveNaturalShotAndReset("D06");
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
 
         [UnityTest]
