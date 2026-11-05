@@ -414,7 +414,43 @@ namespace ConGame.Tests.PlayMode
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
 
-        private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome)
+        [UnityTest]
+        public IEnumerator IdleSeatedPlayerNaturallyFinishesD02AfterFortyFiveSeconds()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var loop = FindInRoom<LoopDirector>();
+            var flow = FindInRoom<GameFlowController>();
+            var facts = FindInRoom<GameplayFactService>();
+            int warnings = 0;
+            float warningAt = -1f, entryAt = -1f;
+            loop.EntryWarning += () => { warnings++; warningAt = loop.EntryClock.Elapsed; };
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase != GamePhase.Breach) return;
+                entryAt = loop.EntryClock.Elapsed;
+                Assert.That(loop.EntryClock.Deadline, Is.EqualTo(45f));
+                Assert.That(facts.CaptureSnapshot().HasMeaningfulInput, Is.False);
+                Assert.That(facts.CaptureSnapshot().IsAtAwakeningPoint, Is.True);
+                AssertSeatedAtChair(facts, FindInRoom<PlayerMotor>(),
+                    FindInRoom<PlayerSeatedPosePresenter>(), FindInRoomTransform("FUR_WoodChair"));
+            };
+
+            // No synthetic input, timer changes or staged phases: the original
+            // seated opening must itself remain a reachable death/reset route.
+            yield return ObserveNaturalShotAndReset("D02", 60f);
+            Assert.That(warnings, Is.EqualTo(1));
+            Assert.That(warningAt, Is.InRange(44.5f, 44.5f + Time.maximumDeltaTime));
+            Assert.That(entryAt, Is.InRange(45f, 45f + Time.maximumDeltaTime));
+            Assert.That(facts.CaptureSnapshot().HasMeaningfulInput, Is.False);
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
+        private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome, float timeoutSeconds = 45f)
         {
             var killer = FindInRoom<KillerDirector>();
             var flow = FindInRoom<GameFlowController>();
@@ -440,7 +476,7 @@ namespace ConGame.Tests.PlayMode
                 if (phase == GamePhase.KillImpact) impactAt = Time.time;
             };
 
-            float until = Time.time + 45f;
+            float until = Time.time + timeoutSeconds;
             bool sawLiveControl = false;
             while (loop.LoopEpoch == epoch && Time.time < until)
             {
