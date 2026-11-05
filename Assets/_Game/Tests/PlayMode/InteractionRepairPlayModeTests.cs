@@ -419,6 +419,69 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator HideLocationSurvivesZoneCallbacksUntilExitThenOrdinaryZonesResume()
+        {
+            GameObject player = new GameObject("player");
+            GameObject zone = new GameObject("bed-top-zone");
+            GameObject anchor = new GameObject("under-bed-anchor");
+            try
+            {
+                var controller = player.AddComponent<CharacterController>();
+                var body = player.AddComponent<Rigidbody>();
+                body.isKinematic = true;
+                body.useGravity = false;
+                var facts = player.AddComponent<GameplayFactService>();
+                facts.CaptureInitialState();
+                var motor = player.AddComponent<PlayerMotor>();
+                motor.Configure(controller, null, null, facts, null);
+                var interactor = player.AddComponent<PlayerInteractor>();
+                interactor.Configure(null, null, null, motor, facts, null, null);
+                Vector3 start = new Vector3(0, 0, -4);
+                player.transform.position = start;
+                anchor.transform.position = new Vector3(0, 0, 3);
+                zone.transform.position = anchor.transform.position;
+                zone.AddComponent<BoxCollider>().size = new Vector3(3, 3, 4);
+                zone.AddComponent<PlayerZoneTrigger>().Configure(PlayerZone.Bed, facts);
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+
+                interactor.EnterHide(anchor.transform, PlayerZone.UnderBed);
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+                Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.UnderBed),
+                    "Entering a physical bed-top trigger must preserve the chosen hide location.");
+                zone.SetActive(false);
+                yield return new WaitForFixedUpdate();
+                Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.UnderBed),
+                    "Unregistering the last physical zone must not clear an active hide location.");
+                zone.SetActive(true);
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+                Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.UnderBed));
+
+                interactor.ExitHide();
+                Assert.That(player.transform.position, Is.EqualTo(start));
+                Assert.That(interactor.IsHiding, Is.False);
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+                player.transform.position = anchor.transform.position;
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+                Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.Bed));
+                player.transform.position = start;
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+                Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.Open));
+            }
+            finally
+            {
+                Object.Destroy(player);
+                Object.Destroy(zone);
+                Object.Destroy(anchor);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator HideLocksMovementAndExitRestoresPoseZoneAndPosition()
         {
             GameObject player = new GameObject("player");

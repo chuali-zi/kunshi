@@ -6,6 +6,7 @@ using ConGame.Domain.Flow;
 using ConGame.Domain.Interaction;
 using ConGame.Presentation.Animation;
 using ConGame.Presentation.Camera;
+using ConGame.Presentation.Choreography;
 using ConGame.Runtime.AI;
 using ConGame.Runtime.Ending;
 using ConGame.Runtime.Facts;
@@ -448,6 +449,84 @@ namespace ConGame.Tests.PlayMode
             _keyboard = InputSystem.AddDevice<Keyboard>();
             yield return HoldKeys(.25f, Key.S);
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
+        [UnityTest]
+        public IEnumerator KeyboardHidesUnderBedAndNaturallyFinishesPairedD11ThenResets()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var killer = FindInRoom<KillerDirector>();
+            var paired = FindInRoom<PairedPerformancePlayer>();
+            var loop = FindInRoom<LoopDirector>();
+            var flow = FindInRoom<GameFlowController>();
+            var input = FindInRoom<PlayerInputRouter>();
+            var camera = FindInRoom<Camera>();
+            int epoch = loop.LoopEpoch, sceneHandle = _room.handle;
+            Vector3 cameraPosition = camera.transform.position;
+            Quaternion cameraRotation = camera.transform.rotation;
+            int launches = 0;
+            float impactAt = -1f;
+            var beats = new System.Collections.Generic.List<string>();
+            killer.ConfirmedPerformanceLaunching += intent =>
+            {
+                Assert.That(intent.OutcomeId, Is.EqualTo("D11"));
+                Assert.That(paired.IsPlaying && paired.RootsLocked, Is.True);
+                launches++;
+            };
+            paired.Events.SemanticEventEmitted += cue =>
+            {
+                Assert.That(cue.LoopEpoch, Is.EqualTo(epoch));
+                if (cue.EventId == "D11.ApproachBed" || cue.EventId == "D11.GrabAnkle" ||
+                    cue.EventId == "D11.DragOut" || cue.EventId == "D11.Execute") beats.Add(cue.EventId);
+            };
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase == GamePhase.KillImpact) impactAt = Time.time;
+            };
+
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return HoldKeys(.15f, Key.D);
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(player.IsHiding, Is.True);
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.UnderBed));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Hidden));
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.UnderBed),
+                "Overlapping bed-top triggers must not replace the active under-bed hide location.");
+            bool sawLiveControl = false;
+            float until = Time.time + 60f;
+            while (loop.LoopEpoch == epoch && Time.time < until)
+            {
+                if (flow.CurrentPhase == GamePhase.Breach && killer.IsLiveHuntActive && input.GameplayEnabled)
+                    sawLiveControl = true;
+                yield return null;
+            }
+            Assert.That(sawLiveControl, Is.True);
+            Assert.That(launches, Is.EqualTo(1), "The actual killer must reach the hidden player and start D11 once.");
+            CollectionAssert.AreEqual(new[] { "D11.ApproachBed", "D11.GrabAnkle", "D11.DragOut", "D11.Execute" }, beats);
+            Assert.That(impactAt, Is.GreaterThanOrEqualTo(0));
+            Assert.That(Time.time - impactAt, Is.GreaterThanOrEqualTo(.75f));
+            Assert.That(loop.LoopEpoch, Is.EqualTo(epoch + 1));
+            Assert.That(loop.LastOutcomeId, Is.EqualTo("D11"));
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Awakening));
+            Assert.That(_room.isLoaded && _room.handle == sceneHandle, Is.True);
+            Assert.That(camera.transform.position, Is.EqualTo(cameraPosition));
+            Assert.That(Quaternion.Angle(camera.transform.rotation, cameraRotation), Is.LessThan(.01f));
+            Assert.That(paired.IsPlaying || paired.RootsLocked || paired.HasActiveAnimationGraph, Is.False);
+            Assert.That(player.IsHiding, Is.False);
+            AssertSeatedAtChair(facts, motor, FindInRoom<PlayerSeatedPosePresenter>(), FindInRoomTransform("FUR_WoodChair"));
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            Assert.That(motor.transform.position.z,
+                Is.LessThan(FindInRoom<PlayerSeatedPosePresenter>().StandingPosition.z - .1f));
         }
 
         private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome, float timeoutSeconds = 45f)

@@ -15,6 +15,7 @@ namespace ConGame.Runtime.Facts
         [SerializeField] private PlayerZone zone = PlayerZone.Open;
         [SerializeField] private GameplayFactService facts;
         private readonly HashSet<int> _playerColliders = new HashSet<int>();
+        private PlayerInteractor _player;
 
         public void Configure(PlayerZone targetZone, GameplayFactService factService)
         {
@@ -45,12 +46,14 @@ namespace ConGame.Runtime.Facts
 
         private void OnTriggerEnter(Collider other)
         {
-            if (facts == null || other.GetComponentInParent<PlayerMotor>() == null ||
+            PlayerMotor motor = other.GetComponentInParent<PlayerMotor>();
+            if (facts == null || motor == null ||
                 !_playerColliders.Add(other.GetInstanceID()) || _playerColliders.Count != 1)
             {
                 return;
             }
 
+            _player = motor.GetComponent<PlayerInteractor>();
             RegisterActiveZone();
         }
 
@@ -81,7 +84,11 @@ namespace ConGame.Runtime.Facts
 
             zones.Remove(this);
             zones.Add(this);
-            facts.SetPlayerZone(zone);
+            // A hide capability owns the semantic location until ExitHide. The
+            // standing capsule can overlap both the under-bed and bed-top zones.
+            // Still track occupancy so ordinary overlap resolution remains valid.
+            if (_player == null || !_player.IsHiding)
+                facts.SetPlayerZone(zone);
         }
 
         private void UnregisterActiveZone()
@@ -92,6 +99,11 @@ namespace ConGame.Runtime.Facts
             }
 
             zones.Remove(this);
+            if (_player != null && _player.IsHiding)
+            {
+                if (zones.Count == 0) ActiveZones.Remove(facts);
+                return;
+            }
             for (int i = zones.Count - 1; i >= 0; i--)
             {
                 PlayerZoneTrigger active = zones[i];
