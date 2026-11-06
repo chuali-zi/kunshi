@@ -416,6 +416,44 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator KeyboardLeavesChairAndNaturallyFinishesExposedD01WithoutExecutionSnap()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var loop = FindInRoom<LoopDirector>();
+            var paired = FindInRoom<PairedPerformancePlayer>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            var snapshot = facts.CaptureSnapshot();
+            Assert.That(snapshot.HasMeaningfulInput, Is.True);
+            Assert.That(snapshot.IsAtAwakeningPoint, Is.False);
+            Assert.That(snapshot.PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            Assert.That(FindInRoom<PlayerInteractor>().HeldEntity, Is.Null);
+            Assert.That(loop.EntryClock.Deadline, Is.EqualTo(30f));
+            Vector3 exposedPosition = motor.transform.position;
+            FindInRoom<KillerDirector>().ConfirmedPerformanceLaunching += intent =>
+            {
+                Assert.That(intent.OutcomeId, Is.EqualTo("D01"));
+                Assert.That(Vector3.Distance(motor.transform.position, exposedPosition), Is.LessThan(.02f),
+                    "An ordinary live shot must preserve the player's exposed position.");
+                Assert.That(paired.IsPlaying || paired.RootsLocked, Is.False,
+                    "D01 must not attach the player to a paired execution anchor.");
+            };
+
+            yield return ObserveNaturalShotAndReset("D01");
+            Assert.That(facts.CaptureSnapshot().HasMeaningfulInput, Is.False);
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            Assert.That(motor.transform.position.z,
+                Is.LessThan(FindInRoom<PlayerSeatedPosePresenter>().StandingPosition.z - .1f));
+        }
+
+        [UnityTest]
         public IEnumerator IdleSeatedPlayerNaturallyFinishesD02AfterFortyFiveSeconds()
         {
             CaptureSaveFiles();
