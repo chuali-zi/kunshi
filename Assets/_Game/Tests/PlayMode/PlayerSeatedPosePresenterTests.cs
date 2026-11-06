@@ -416,6 +416,33 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator KeyboardWalksBehindSofaAndNaturallyFinishesStandingD03()
+        {
+            yield return WalkBehindSofa();
+            var facts = FindInRoom<GameplayFactService>();
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.SofaRear));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            yield return ObserveNaturalShotAndReset("D03", 60f);
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
+        private IEnumerator WalkBehindSofa()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-.6f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-.6f, 0, 2.25f));
+            yield return WalkTo(motor, new Vector3(-1.4f, 0, 2.25f));
+            yield return new WaitForFixedUpdate();
+        }
+
+        [UnityTest]
         public IEnumerator KeyboardLeavesChairAndNaturallyFinishesExposedD01WithoutExecutionSnap()
         {
             CaptureSaveFiles();
