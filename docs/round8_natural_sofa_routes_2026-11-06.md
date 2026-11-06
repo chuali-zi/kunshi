@@ -29,9 +29,9 @@ Unity `6000.4.6f1`, `DISPLAY=:5`, graphics enabled, one Editor at a time.
 - Corrected D03P, short-hide/exit and all tactical-anchor navigation: **3/3**, zero failed or skipped, `/workspace/ref/round8_sofa_verified.xml` and `.log`.
 - Narrow Editor repair: `/workspace/ref/round8_sofa_hide_repair.log`, successful path/reveal validation.
 - Full EditMode: **191/191**, zero failed or skipped, `/workspace/ref/round8_full_editmode.xml` and `.log`. All 191 Round 7 cases remain present.
-- Full PlayMode: running; final result pending.
+- Full PlayMode: **154/154**, zero failed or skipped, about **568 seconds**, `/workspace/ref/round8_full_playmode.xml` and `.log`. All 151 Round 7 cases remain present; the three additions are D01, D03 and D03P. No original test was removed or weakened.
 
-The successful targeted runs, Editor repair and full EditMode suite have zero C# or shader compilation errors. Other D01–D22 natural-input routes, human discovery acceptance and detailed animation/MV matching remain open.
+The successful targeted runs, Editor repair and both full suites have zero C# or shader compilation errors. Other D01–D22 natural-input routes, human discovery acceptance and detailed animation/MV matching remain open.
 
 Reproduction (the full-suite commands have no test filter):
 
