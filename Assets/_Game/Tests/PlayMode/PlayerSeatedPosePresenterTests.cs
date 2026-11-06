@@ -427,6 +427,34 @@ namespace ConGame.Tests.PlayMode
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardHidesBehindSofaAndNaturallyFinishesCrouchedD03P()
+        {
+            yield return WalkBehindSofa();
+            var facts = FindInRoom<GameplayFactService>();
+            var player = FindInRoom<PlayerInteractor>();
+            var motor = FindInRoom<PlayerMotor>();
+            // Face and approach the backrest after walking around the furniture.
+            yield return HoldKeys(.3f, Key.S);
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Hide),
+                Is.EqualTo(FindInRoomTransform("FUR_Armchair").GetComponent<InteractableEntity>()),
+                $"The normal chest scanner must select the sofa before the stance tap; player at {motor.transform.position}, facing {motor.transform.forward}.");
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(player.IsHiding, Is.True, "Short C must use the real sofa's hide capability.");
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.SofaRear));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Crouched));
+            var hunt = FindInRoom<KillerDirector>().TacticalController;
+            bool searched = false;
+            hunt.ModeChanged += mode => { if (mode == KillerTacticalMode.Searching) searched = true; };
+            // Searching can revisit several authored anchors before discovery;
+            // leave time for the complete impact hold and reset after the shot.
+            yield return ObserveNaturalShotAndReset("D03P", 75f);
+            Assert.That(searched, Is.True, "Concealed players must be found by searching, not ordinary vision.");
+            Assert.That(player.IsHiding, Is.False);
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
         private IEnumerator WalkBehindSofa()
         {
             CaptureSaveFiles();

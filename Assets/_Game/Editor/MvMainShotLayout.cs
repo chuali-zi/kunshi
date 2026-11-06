@@ -12,6 +12,34 @@ namespace ConGame.Editor
 {
     public static partial class MvMainShotBuilder
     {
+        // Keep the crouched player behind the backrest and within reveal range
+        // of reachable ground, including the killer's 0.28m stopping distance.
+        private static readonly Vector3 SofaHidePosition = new Vector3(-1.15f, 0, 2.1f);
+
+        public static void RepairSofaHideAnchor()
+        {
+            var scene = EditorSceneManager.OpenScene(Room);
+            var anchor = Find("TA_SofaCheck");
+            var hide = Find("HideAnchor_SofaRear");
+            if (anchor == null || hide == null) throw new InvalidOperationException("Sofa anchors missing.");
+            foreach (var surface in All<Unity.AI.Navigation.NavMeshSurface>()) surface.AddData();
+            if (!UnityEngine.AI.NavMesh.SamplePosition(anchor.position, out var hit, 1f, UnityEngine.AI.NavMesh.AllAreas))
+                throw new InvalidOperationException("Sofa search point must sample ground navigation.");
+            Vector3 separation = hit.position - SofaHidePosition;
+            separation.y = 0;
+            if (hit.position.y >= .25f || separation.magnitude + .28f > 1.35f)
+                throw new InvalidOperationException("Sofa hide needs stopping-distance clearance inside the 1.35m reveal radius.");
+            var path = new UnityEngine.AI.NavMeshPath();
+            if (!UnityEngine.AI.NavMesh.SamplePosition(Find("TA_Entry").position, out var entry, 1f, UnityEngine.AI.NavMesh.AllAreas) ||
+                !UnityEngine.AI.NavMesh.CalculatePath(entry.position, hit.position,
+                    UnityEngine.AI.NavMesh.AllAreas, path) || path.status != UnityEngine.AI.NavMeshPathStatus.PathComplete)
+                throw new InvalidOperationException("Sofa search point must be reachable from the doorway.");
+            hide.position = SofaHidePosition;
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log($"SOFA_HIDE_REPAIR: ground search point {hit.position}, hide {hide.position}, separation {separation.magnitude:F3}m.");
+        }
+
         [MenuItem("ConGame/Art/Build Reference Main Shot (Round 2)")]
         public static void Build()
         {
@@ -131,6 +159,7 @@ namespace ConGame.Editor
             var chair = Find("FUR_Armchair");
             chair.position = new Vector3(-1.45f,.575f,1.3f);
             chair.rotation = Quaternion.Euler(0,168,0);
+            Find("HideAnchor_SofaRear").position = SofaHidePosition;
             foreach(var r in chair.GetComponentsInChildren<Renderer>(true)) r.enabled=false;
             var previous=chair.Find("MV Wingback");
             if(previous!=null) UnityEngine.Object.DestroyImmediate(previous.gameObject);
