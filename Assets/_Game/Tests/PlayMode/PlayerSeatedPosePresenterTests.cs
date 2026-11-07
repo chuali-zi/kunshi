@@ -622,6 +622,39 @@ namespace ConGame.Tests.PlayMode
                 Is.LessThan(FindInRoom<PlayerSeatedPosePresenter>().StandingPosition.z - .1f));
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardHidesOnBedAndNaturallyFinishesD04ThenResetsBlanket()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var blanket = FindInRoomTransform("PRP_Blanket").GetComponent<InteractableEntity>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(1.05f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(1.05f, 0, .65f));
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Hide),
+                Is.EqualTo(blanket), "Approaching the blanket must offer its on-bed hide rather than the bed-bottom hide.");
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(player.IsHiding, Is.True);
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.Bed));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Hidden));
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.Bed));
+            yield return ObserveNaturalShotAndReset("D04", 75f);
+            Assert.That(player.IsHiding, Is.False);
+            Assert.That(blanket.GetComponent<StatefulWorldItem>().CurrentState, Is.EqualTo(ItemPhysicalState.Placed));
+            Assert.That(blanket.GetComponent<HideCapability>().isActiveAndEnabled, Is.True);
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
         private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome, float timeoutSeconds = 45f)
         {
             var killer = FindInRoom<KillerDirector>();
