@@ -16,6 +16,26 @@ namespace ConGame.Editor
         // of reachable ground, including the killer's 0.28m stopping distance.
         private static readonly Vector3 SofaHidePosition = new Vector3(-1.15f, 0, 2.1f);
 
+        // The bookcase moved to the return wall for the MV layout. Its old
+        // blind zone is inside that wall, beyond the impassable lamp-table gap.
+        private static readonly Vector3 CameraBlindPosition = new Vector3(-2.75f, 1.05f, -.65f);
+
+        public static void RepairCameraBlindZone()
+        {
+            var scene = EditorSceneManager.OpenScene(Room);
+            ConfigureCameraBlindZone();
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log($"CAMERA_BLIND_REPAIR: moved trigger to accessible bookcase side at {CameraBlindPosition}.");
+        }
+
+        static void ConfigureCameraBlindZone()
+        {
+            var zone = Find("Zone_CameraBlind");
+            if (zone == null) throw new InvalidOperationException("Camera-blind zone missing.");
+            zone.position = CameraBlindPosition;
+        }
+
         public static void RepairSofaHideAnchor()
         {
             var scene = EditorSceneManager.OpenScene(Room);
@@ -178,6 +198,7 @@ namespace ConGame.Editor
             // Reuse the delivered bookcase and books, extending its silhouette up the left edge.
             var bookcase=Find("FUR_Bookcase");
             bookcase.position=new Vector3(-2.91f,1.05f,.9f);
+            ConfigureCameraBlindZone();
             foreach(Transform child in bookcase)
                 if(child.name.Contains("Visual")) child.localScale=new Vector3(1.6f,1.25f,1);
             var bookCollider=bookcase.GetComponent<BoxCollider>();

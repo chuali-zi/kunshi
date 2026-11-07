@@ -23,3 +23,24 @@ DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
   -testFilter KeyboardHidesOnBedAndNaturallyFinishesD04ThenResetsBlanket \
   -testResults /workspace/ref/round9_d04.xml -logFile /workspace/ref/round9_d04.log
 ```
+
+## D12 camera blind
+
+`KeyboardWalksToCameraBlindAndNaturallyFinishesD12WithScreenCrack` walks from the production chair along open floor to the bookcase's south side. The CameraBlind zone was moved to an accessible point beside the MV-layout bookcase (`(-2.75, 1.05, -0.65)`); the old wall-side trigger was unreachable past the lamp-table gap. Standing in that zone, natural entry and live hunt commit D12; the real KillImpact must raise viewer screen crack, and the next loop must clear it.
+
+## Verification
+
+Unity `6000.4.6f1`, `DISPLAY=:5`, graphics enabled, one Editor at a time.
+
+- D04: **1/1**, `/workspace/ref/round9_d04.xml` and `.log`.
+- D12 (after camera-blind repair): **1/1**, `/workspace/ref/round9_d12_verified.xml` and `.log`.
+- Full suites were not re-run this round because weekly Codex usage reached the 50% pause gate; Round 8 baseline remains EditMode **191/191**, PlayMode **154/154**.
+
+Reproduce the D12 targeted run:
+
+```bash
+DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
+  -batchmode -projectPath /workspace/con_game -runTests -testPlatform PlayMode \
+  -testFilter KeyboardWalksToCameraBlindAndNaturallyFinishesD12WithScreenCrack \
+  -testResults /workspace/ref/round9_d12_verified.xml -logFile /workspace/ref/round9_d12_verified.log
+```

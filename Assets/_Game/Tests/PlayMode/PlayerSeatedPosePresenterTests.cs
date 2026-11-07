@@ -7,6 +7,7 @@ using ConGame.Domain.Interaction;
 using ConGame.Presentation.Animation;
 using ConGame.Presentation.Camera;
 using ConGame.Presentation.Choreography;
+using ConGame.Presentation.CRT;
 using ConGame.Runtime.AI;
 using ConGame.Runtime.Ending;
 using ConGame.Runtime.Facts;
@@ -651,6 +652,41 @@ namespace ConGame.Tests.PlayMode
             Assert.That(player.IsHiding, Is.False);
             Assert.That(blanket.GetComponent<StatefulWorldItem>().CurrentState, Is.EqualTo(ItemPhysicalState.Placed));
             Assert.That(blanket.GetComponent<HideCapability>().isActiveAndEnabled, Is.True);
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
+        [UnityTest]
+        public IEnumerator KeyboardWalksToCameraBlindAndNaturallyFinishesD12WithScreenCrack()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var signature = FindInRoom<MvSignaturePresenter>();
+            var flow = FindInRoom<GameFlowController>();
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            // Approach the bookcase's south side along the open floor.
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, -.8f));
+            yield return WalkTo(motor, new Vector3(-2.5f, 0, -.8f));
+            yield return new WaitForFixedUpdate();
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.CameraBlind));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+            Assert.That(signature.ScreenCrackAmount, Is.Zero);
+            bool sawCrack = false;
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase != GamePhase.KillImpact) return;
+                sawCrack = signature.ScreenCrackAmount > 0f;
+                Assert.That(sawCrack, Is.True, "The real D12 bullet must fracture the viewer's screen.");
+            };
+
+            yield return ObserveNaturalShotAndReset("D12", 75f);
+            Assert.That(sawCrack, Is.True);
+            Assert.That(signature.ScreenCrackAmount, Is.Zero, "The next loop must clear the viewer's glass.");
             yield return HoldKeys(.25f, Key.S);
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
