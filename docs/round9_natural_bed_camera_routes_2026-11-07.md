@@ -44,3 +44,7 @@ DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
   -testFilter KeyboardWalksToCameraBlindAndNaturallyFinishesD12WithScreenCrack \
   -testResults /workspace/ref/round9_d12_verified.xml -logFile /workspace/ref/round9_d12_verified.log
 ```
+
+## Round 10 follow-up (2026-11-10)
+
+The full Round 10 suites passed: EditMode **191/191**, PlayMode **157/157**, zero failed or skipped and zero C# or shader compilation errors. Both Round 9 natural routes passed in the full PlayMode run. Evidence and reproduction commands: [Round 10 record](round10_natural_door_block_2026-11-10.md).

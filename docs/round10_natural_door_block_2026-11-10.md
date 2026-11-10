@@ -36,8 +36,9 @@ Unity `6000.4.6f1`, `DISPLAY=:5`, graphics enabled, one Editor at a time.
 
 - D09 plus existing door-breach regression: **2/2**, zero failed or skipped, zero C# or shader compilation errors. D09 took about **40 seconds**. Evidence: `/workspace/ref/round10_d09_verified.xml` and `.log`.
 - Full EditMode: **191/191**, zero failed or skipped, zero C# or shader compilation errors. Evidence: `/workspace/ref/round10_full_editmode.xml` and `.log`. All Round 8 cases remain present.
-- Initial full PlayMode: **156/157**, zero skipped, zero C# or shader compilation errors. D09 and both Round 9 routes passed. One existing seated-start test expected the un-settled root at y = 0 instead of the active controller at its 0.08m skin offset. Evidence: `/workspace/ref/round10_full_playmode.xml` and `.log`. The final full run is pending.
+- Initial full PlayMode: **156/157**, zero skipped, zero C# or shader compilation errors. D09 and both Round 9 routes passed. One existing seated-start test expected the un-settled root at y = 0 instead of the active controller at its 0.08m skin offset. Evidence: `/workspace/ref/round10_full_playmode.xml` and `.log`.
 
+- Final full PlayMode: **157/157**, zero failed or skipped, zero C# or shader compilation errors, about **683 seconds**. All **154/154** Round 8 cases remain present; the additions are Round 9 D04/D12 and Round 10 D09. Evidence: `/workspace/ref/round10_full_playmode_verified.xml` and `.log`.
 - Seated-start grounding and independent camera/mesh-sole regression: **2/2**, zero failed or skipped, zero C# or shader compilation errors. Evidence: `/workspace/ref/round10_grounding_verified.xml` and `.log`.
 
 Reproduce the targeted route:
@@ -60,8 +61,8 @@ DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
 
 DISPLAY=:5 ~/Unity/Hub/Editor/6000.4.6f1/Editor/Unity \
   -batchmode -projectPath /workspace/con_game -runTests -testPlatform PlayMode \
-  -testResults /workspace/ref/round10_full_playmode.xml \
-  -logFile /workspace/ref/round10_full_playmode.log
+  -testResults /workspace/ref/round10_full_playmode_verified.xml \
+  -logFile /workspace/ref/round10_full_playmode_verified.log
 ```
 
 D08, D13, D16 and a complete natural-input D21 route remain open, alongside human discovery acceptance and detailed paired-animation/MV matching. This increment does not establish acceptance of those routes or final furniture-placement visuals.
