@@ -71,6 +71,12 @@ public PlayerInputRouter Input => input;
         private void Awake()
         {
             characterController ??= GetComponent<CharacterController>();
+            if (characterController != null)
+            {
+                // Carrying halves the speed. Keep those small per-frame steps
+                // at uncapped frame rates instead of discarding their movement.
+                characterController.minMoveDistance = 0f;
+            }
         }
 
         private void Update()

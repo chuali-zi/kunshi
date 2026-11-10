@@ -691,6 +691,77 @@ namespace ConGame.Tests.PlayMode
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardCarriesChairToBlockDoorAndNaturallyFinishesD09ThenRestoresRoom()
+        {
+            CaptureSaveFiles();
+            Transform chair = null;
+            Vector3 chairStart = default, chairReset = default;
+            Quaternion chairRotation = default, chairResetRotation = default;
+            yield return LoadFreshRoomCopy(() =>
+            {
+                chair = FindInRoomTransform("FUR_WoodChair");
+                chairStart = chair.position;
+                chairRotation = chair.rotation;
+            });
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var breach = FindInRoom<RoomDoorBreachController>();
+            var socket = FindInRoomTransform("PRP_RoomDoor_Interact").GetComponent<PlacementSocket>();
+            float baseDuration = breach.CurrentDuration;
+            FindInRoom<LoopDirector>().LoopResetCompleted += (_, __) =>
+            {
+                chairReset = chair.position;
+                chairResetRotation = chair.rotation;
+            };
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-.35f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-.35f, 0, 1.55f));
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Carry),
+                Is.EqualTo(chair.GetComponent<InteractableEntity>()));
+            yield return HoldKeys(.5f, Key.E);
+            yield return new WaitForSeconds(.4f);
+            Assert.That(player.HeldEntity, Is.EqualTo(chair.GetComponent<InteractableEntity>()));
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Carrying));
+
+            yield return WalkTo(motor, new Vector3(-.35f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(2.4f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(2.4f, 0, 1.15f));
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Place),
+                Is.EqualTo(socket.GetComponent<InteractableEntity>()));
+            yield return HoldKeys(.1f, Key.E);
+            yield return new WaitForSeconds(.4f);
+            Assert.That(player.HeldEntity, Is.Null);
+            Assert.That(socket.Occupant, Is.EqualTo(chair.GetComponent<InteractableEntity>()));
+            Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.Furniture));
+            Assert.That(facts.DoorBlockBreachExtraSeconds, Is.EqualTo(3f));
+            yield return WalkTo(motor, new Vector3(2.4f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            bool sawExtendedBreach = false;
+            breach.KickWindupStarted += _ =>
+            {
+                Assert.That(breach.CurrentDuration, Is.EqualTo(baseDuration + 3f).Within(.01f));
+                sawExtendedBreach = true;
+            };
+
+            yield return ObserveNaturalShotAndReset("D09", 60f);
+            Assert.That(sawExtendedBreach, Is.True);
+            Assert.That(socket.Occupant, Is.Null);
+            Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.None));
+            Assert.That(facts.DoorBlockBreachExtraSeconds, Is.Zero);
+            Assert.That(Vector3.Distance(chairReset, chairStart), Is.LessThan(.01f));
+            Assert.That(Quaternion.Angle(chairResetRotation, chairRotation), Is.LessThan(.01f));
+            Assert.That(breach.CurrentDuration, Is.EqualTo(baseDuration));
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
         private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome, float timeoutSeconds = 45f)
         {
             var killer = FindInRoom<KillerDirector>();

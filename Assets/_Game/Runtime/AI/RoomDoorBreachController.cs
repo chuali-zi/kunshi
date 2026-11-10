@@ -61,6 +61,13 @@ namespace ConGame.Runtime.AI
         public event Action<int> KickWindupStarted;
         public event Action<int> KickContact;
 
+        private void Awake()
+        {
+            // Scene deserialization does not call Configure. Reset must restore
+            // the authored duration rather than the field initializer's default.
+            _baseDuration = Mathf.Max(0.01f, duration);
+        }
+
         public void Configure(Transform doorTransform, float breachDuration, float doorOpenAngle)
         {
             door = doorTransform;
