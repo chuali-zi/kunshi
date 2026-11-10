@@ -895,17 +895,20 @@ namespace ConGame.Tests.PlayMode
             InputSystem.QueueStateEvent(_keyboard, new KeyboardState());
             InputSystem.Update();
             yield return null;
+            yield return new WaitForSeconds(0.3f);
 
             Assert.That(facts.CaptureSnapshot().HasMeaningfulInput, Is.True,
                 "The first E press should reach the normal gameplay input route.");
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.Not.EqualTo(PlayerPose.Sitting));
             Assert.That(presenter.IsAwakeningSeated, Is.False);
             Assert.That(motor.transform.position.x, Is.EqualTo(presenter.StandingPosition.x).Within(0.01f));
-            Assert.That(motor.transform.position.y, Is.EqualTo(presenter.StandingPosition.y).Within(0.02f));
+            Assert.That(motor.transform.position.y,
+                Is.EqualTo(presenter.StandingPosition.y + characterController.skinWidth).Within(0.02f),
+                "The active controller settles one skin width above its floor anchor.");
             Assert.That(motor.transform.position.z, Is.EqualTo(presenter.StandingPosition.z).Within(0.01f));
             Assert.That(characterController.enabled, Is.True);
-
-            yield return new WaitForSeconds(0.3f);
+            Assert.That(characterController.isGrounded, Is.True);
+            AssertSolesOnFloor(motor);
 
             flow = FindInRoom<GameFlowController>();
             if (flow.CurrentPhase == GamePhase.FreeRoam)
