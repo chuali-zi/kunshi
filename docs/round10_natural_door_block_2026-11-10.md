@@ -29,7 +29,8 @@ After movement was corrected, the full D09 shot/reset route reached its final du
 Unity `6000.4.6f1`, `DISPLAY=:5`, graphics enabled, one Editor at a time.
 
 - D09 plus existing door-breach regression: **2/2**, zero failed or skipped, zero C# or shader compilation errors. D09 took about **40 seconds**. Evidence: `/workspace/ref/round10_d09_verified.xml` and `.log`.
-- Full-suite results will be recorded after the verified route increment. Previous full baseline: EditMode **191/191**, PlayMode **154/154**; Round 9 added two targeted-passing routes.
+- Full EditMode: **191/191**, zero failed or skipped, zero C# or shader compilation errors. Evidence: `/workspace/ref/round10_full_editmode.xml` and `.log`. All Round 8 cases remain present.
+- Full PlayMode is pending. Previous full baseline: **154/154**; Round 9 added two targeted-passing routes and Round 10 adds D09.
 
 Reproduce the targeted route:
 
