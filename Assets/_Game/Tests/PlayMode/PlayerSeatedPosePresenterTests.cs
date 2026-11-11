@@ -762,6 +762,93 @@ namespace ConGame.Tests.PlayMode
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardAmbushesFromDoorBlindAndNaturallyFinishesPairedD08ThenResets()
+        {
+            CaptureSaveFiles();
+            Transform bat = null;
+            Vector3 batStart = default, batReset = default;
+            yield return LoadFreshRoomCopy(() =>
+            {
+                bat = FindInRoomTransform("PRP_BaseballBat");
+                batStart = bat.position;
+            });
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var killer = FindInRoom<KillerDirector>();
+            var paired = FindInRoom<PairedPerformancePlayer>();
+            var flow = FindInRoom<GameFlowController>();
+            var loop = FindInRoom<LoopDirector>();
+            var input = FindInRoom<PlayerInputRouter>();
+            var camera = FindInRoom<Camera>();
+            int epoch = loop.LoopEpoch, sceneHandle = _room.handle, launches = 0;
+            Vector3 cameraPosition = camera.transform.position;
+            Quaternion cameraRotation = camera.transform.rotation;
+            float impactAt = -1f;
+            var beats = new System.Collections.Generic.List<string>();
+            killer.ConfirmedPerformanceLaunching += intent =>
+            {
+                Assert.That(intent.OutcomeId, Is.EqualTo("D08"));
+                Assert.That(paired.IsPlaying && paired.RootsLocked, Is.True);
+                launches++;
+            };
+            paired.Events.SemanticEventEmitted += cue =>
+            {
+                Assert.That(cue.LoopEpoch, Is.EqualTo(epoch));
+                if (cue.EventId.StartsWith("D08.")) beats.Add(cue.EventId);
+            };
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase == GamePhase.KillImpact) impactAt = Time.time;
+            };
+            loop.LoopResetCompleted += (_, __) => batReset = bat.position;
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            _mouse = InputSystem.AddDevice<Mouse>();
+
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .65f));
+            yield return HoldKeys(.5f, Key.E);
+            yield return new WaitForSeconds(.4f);
+            Assert.That(player.HeldEntity, Is.EqualTo(bat.GetComponent<InteractableEntity>()));
+            yield return WalkTo(motor, new Vector3(-2.3f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(2.5f, 0, .1f));
+            yield return WalkTo(motor, new Vector3(2.5f, 0, 1.5f));
+            yield return new WaitForFixedUpdate();
+            Assert.That(facts.CaptureSnapshot().PlayerZone, Is.EqualTo(PlayerZone.DoorBlind));
+            float until = Time.time + 45f;
+            while (!(killer.IsLiveHuntActive && input.GameplayEnabled) && Time.time < until)
+                yield return null;
+            Assert.That(killer.IsLiveHuntActive && input.GameplayEnabled, Is.True);
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Breach));
+            yield return ClickAttack();
+            Assert.That(launches, Is.EqualTo(1), "A real swing from DoorBlind must launch paired D08.");
+            Assert.That(player.HeldEntity, Is.Null, "The grapple must drop the bat.");
+
+            // Deliberately fail the real QTE by giving it no E presses.
+            until = Time.time + 15f;
+            while (loop.LoopEpoch == epoch && Time.time < until) yield return null;
+            CollectionAssert.IsSubsetOf(new[] { "D08.Strike", "D08.Pair.Begin", "D08.GrappleFailed",
+                "D08.Pair.End", "D08.PointBlankShot" }, beats);
+            Assert.That(beats, Does.Not.Contain("D08.LootWindow.Open"));
+            Assert.That(impactAt, Is.GreaterThanOrEqualTo(0));
+            Assert.That(Time.time - impactAt, Is.GreaterThanOrEqualTo(.75f));
+            Assert.That(loop.LoopEpoch, Is.EqualTo(epoch + 1));
+            Assert.That(loop.LastOutcomeId, Is.EqualTo("D08"));
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Awakening));
+            Assert.That(_room.isLoaded && _room.handle == sceneHandle, Is.True);
+            Assert.That(camera.transform.position, Is.EqualTo(cameraPosition));
+            Assert.That(Quaternion.Angle(camera.transform.rotation, cameraRotation), Is.LessThan(.01f));
+            Assert.That(paired.IsPlaying || paired.RootsLocked || paired.HasActiveAnimationGraph, Is.False);
+            Assert.That(Vector3.Distance(batReset, batStart), Is.LessThan(.01f));
+            AssertSeatedAtChair(facts, motor, FindInRoom<PlayerSeatedPosePresenter>(), FindInRoomTransform("FUR_WoodChair"));
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
         private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome, float timeoutSeconds = 45f)
         {
             var killer = FindInRoom<KillerDirector>();

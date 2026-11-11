@@ -483,7 +483,16 @@ namespace ConGame.Presentation.Choreography
             IsPlaying = true;
             _rootsLocked = true;
             playerMotor.SetInputLocked(true);
-            _progress?.OnPerformanceStarted(_activeOutcomeId, _loopEpoch, PerformanceHeldItemPolicy.Preserve);
+            // Door ambush and blanket contact both release the carried item before
+            // the paired animation takes over; under-bed contact has no such drop.
+            PerformanceHeldItemPolicy itemPolicy = _activeOutcomeId == "D08" || _activeOutcomeId == "D21"
+                ? PerformanceHeldItemPolicy.DropAtStart
+                : PerformanceHeldItemPolicy.Preserve;
+            if (itemPolicy == PerformanceHeldItemPolicy.DropAtStart)
+            {
+                playerInteractor?.ForceDropHeld();
+            }
+            _progress?.OnPerformanceStarted(_activeOutcomeId, _loopEpoch, itemPolicy);
             if (generation != _generation)
             {
                 verdict = new PairedPerformanceLaunchVerdict(false, false, "Launch was superseded.", default);
