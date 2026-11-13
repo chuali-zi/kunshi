@@ -1,5 +1,9 @@
 using System;
 using System.Linq;
+using ConGame.Domain.Facts;
+using ConGame.Runtime.Events;
+using ConGame.Runtime.Facts;
+using ConGame.Runtime.Interaction;
 using ConGame.Runtime.Lighting;
 using ConGame.Presentation.Lighting;
 using UnityEditor;
@@ -19,6 +23,32 @@ namespace ConGame.Editor
         // The bookcase moved to the return wall for the MV layout. Its old
         // blind zone is inside that wall, beyond the impassable lamp-table gap.
         private static readonly Vector3 CameraBlindPosition = new Vector3(-2.75f, 1.05f, -.65f);
+
+        public static void RepairRugTrap()
+        {
+            var scene = EditorSceneManager.OpenScene(Room);
+            ConfigureRugTrap();
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log("RUG_TRAP_REPAIR: physical killer contact and player-confirmed pull wired to the production rug.");
+        }
+
+        static void ConfigureRugTrap()
+        {
+            var rug = Find("PRP_Rug");
+            if (rug == null) throw new InvalidOperationException("Production rug missing.");
+            var collider = rug.GetComponent<BoxCollider>();
+            if (collider == null) throw new InvalidOperationException("Rug contact footprint missing.");
+            collider.isTrigger = true;
+            var trap = rug.GetComponent<TripTrapController>() ?? rug.gameObject.AddComponent<TripTrapController>();
+            trap.Configure(All<GameplayFactService>().Single(), All<GameplayEventHub>().Single(), TrapState.RugArmed, true);
+            var body = rug.GetComponent<Rigidbody>();
+            body.isKinematic = true;
+            body.useGravity = false;
+            rug.GetComponent<UseCapability>().Configure(trap);
+            var legacy = rug.GetComponent<GameplayAffordanceHandler>();
+            if (legacy != null) UnityEngine.Object.DestroyImmediate(legacy);
+        }
 
         public static void RepairCameraBlindZone()
         {
@@ -144,6 +174,7 @@ namespace ConGame.Editor
             ConfigurePostProcessRenderer();
             ConfigureMainGrade();
             AddOutlet(details,cream,ink);
+            ConfigureRugTrap();
             // Carpet covers the trap rug too, so the floor reads as one green field.
             var rug = Find("PRP_Rug");
             if (rug != null) foreach(var r in rug.GetComponentsInChildren<Renderer>(true))
