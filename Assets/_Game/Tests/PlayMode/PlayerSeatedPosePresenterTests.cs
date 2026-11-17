@@ -849,6 +849,101 @@ namespace ConGame.Tests.PlayMode
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }
 
+        [UnityTest]
+        public IEnumerator KeyboardArmsRugWaitsForKillerContactAndPullsNaturalD16ThenResets()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var player = FindInRoom<PlayerInteractor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var killer = FindInRoom<KillerDirector>();
+            var loop = FindInRoom<LoopDirector>();
+            var flow = FindInRoom<GameFlowController>();
+            var camera = FindInRoom<Camera>();
+            var rug = FindInRoomTransform("PRP_Rug").GetComponent<InteractableEntity>();
+            var trap = rug.GetComponent<TripTrapController>();
+            var performance = FindInRoom<ConGame.Presentation.M1.M1GreyboxPerformancePlayer>();
+            Assert.That(trap, Is.Not.Null, "The production rug must use physical contact, not a fact-only affordance.");
+            int epoch = loop.LoopEpoch, sceneHandle = _room.handle, pulls = 0;
+            Vector3 cameraPosition = camera.transform.position;
+            Quaternion cameraRotation = camera.transform.rotation;
+            float impactAt = -1f;
+            FindInRoom<ConGame.Runtime.Events.GameplayEventHub>().KillerStimulusEmitted += stimulus =>
+            {
+                if (stimulus.Type == KillerStimulusType.TrapPull) pulls++;
+            };
+            flow.PhaseChanged += (_, phase, __) =>
+            {
+                if (phase == GamePhase.KillImpact) impactAt = Time.time;
+            };
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+            yield return WalkTo(motor, new Vector3(0, 0, .1f));
+            // Give the turn toward the floor rug enough actual movement time;
+            // a very short reversal still faces the neighbouring bed.
+            yield return WalkTo(motor, new Vector3(0, 0, -.4f));
+            yield return WalkTo(motor, new Vector3(0, 0, .4f));
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Use), Is.EqualTo(rug),
+                $"Rug approach at {motor.transform.position}, facing {motor.transform.forward}.");
+            Assert.That(trap.OccupantPresent, Is.False);
+            yield return HoldKeys(.1f, Key.E);
+            Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.RugArmed));
+            Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
+            Assert.That(trap.CanPull(new InteractionContext(player, rug)), Is.False);
+            Assert.That(pulls, Is.Zero, "Arming an empty rug must not produce a pull stimulus.");
+
+            // Hide from the open east side so exiting restores a reachable
+            // pull position, without a race around the rotated backrest.
+            yield return WalkTo(motor, new Vector3(-.5f, 0, .4f));
+            yield return WalkTo(motor, new Vector3(-.5f, 0, 1.5f));
+            yield return new WaitForFixedUpdate();
+            yield return HoldKeys(.15f, Key.A);
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Hide),
+                Is.EqualTo(FindInRoomTransform("FUR_Armchair").GetComponent<InteractableEntity>()));
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(player.IsHiding, Is.True);
+            float until = Time.time + 75f;
+            while (!trap.OccupantPresent && loop.LoopEpoch == epoch && Time.time < until) yield return null;
+            Assert.That(trap.OccupantPresent, Is.True,
+                $"Natural search must cross the rug; killer at {killer.transform.position}, mode {killer.TacticalController.Mode}.");
+            Assert.That(killer.IsLiveHuntActive, Is.True);
+            yield return HoldKeys(.1f, Key.C);
+            Assert.That(player.IsHiding, Is.False);
+            yield return HoldKeys(.15f, Key.S);
+            Assert.That(trap.CanPull(new InteractionContext(player, rug)), Is.True,
+                $"Rug corner: player {motor.transform.position}, facing {motor.transform.forward}, contact {trap.OccupantPresent}, phase {flow.CurrentPhase}.");
+            Assert.That(motor.GetComponent<InteractionScanner>().RefreshForVerb(InteractionVerb.Use), Is.EqualTo(rug));
+            yield return HoldKeys(.1f, Key.E);
+            Assert.That(pulls, Is.EqualTo(1));
+            Assert.That(facts.CaptureSnapshot().TrapPulled, Is.True);
+            Assert.That(killer.SelectedOutcomeId, Is.EqualTo("D16"));
+            Assert.That(performance.ActiveOutcomeId, Is.EqualTo("D16"));
+            Assert.That(performance.HasActiveAnimationGraph, Is.True);
+            Assert.That(FindInRoom<PairedPerformancePlayer>().IsPlaying, Is.False,
+                "The rug causes a stumble, not D21's paired fall and loot route.");
+
+            until = Time.time + 15f;
+            while (loop.LoopEpoch == epoch && Time.time < until) yield return null;
+            Assert.That(impactAt, Is.GreaterThanOrEqualTo(0));
+            Assert.That(Time.time - impactAt, Is.GreaterThanOrEqualTo(.75f));
+            Assert.That(loop.LoopEpoch, Is.EqualTo(epoch + 1));
+            Assert.That(loop.LastOutcomeId, Is.EqualTo("D16"));
+            Assert.That(flow.CurrentPhase, Is.EqualTo(GamePhase.Awakening));
+            Assert.That(_room.isLoaded && _room.handle == sceneHandle, Is.True);
+            Assert.That(camera.transform.position, Is.EqualTo(cameraPosition));
+            Assert.That(Quaternion.Angle(camera.transform.rotation, cameraRotation), Is.LessThan(.01f));
+            Assert.That(facts.CaptureSnapshot().Trap, Is.EqualTo(TrapState.None));
+            Assert.That(facts.CaptureSnapshot().TrapPulled, Is.False);
+            Assert.That(trap.OccupantPresent, Is.False);
+            Assert.That(performance.HasActiveAnimationGraph || performance.IsPlaying, Is.False);
+            Assert.That(player.IsHiding, Is.False);
+            AssertSeatedAtChair(facts, motor, FindInRoom<PlayerSeatedPosePresenter>(), FindInRoomTransform("FUR_WoodChair"));
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
         private IEnumerator ObserveNaturalShotAndReset(string expectedOutcome, float timeoutSeconds = 45f)
         {
             var killer = FindInRoom<KillerDirector>();
