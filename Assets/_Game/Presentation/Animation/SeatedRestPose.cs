@@ -102,22 +102,57 @@ namespace ConGame.Presentation.Animation
         {
             Transform root = animator.transform;
             bool supporting = hand == AvatarIKGoal.LeftHand;
+            // Lead with the free hand so the rising knee passes behind its fingertips.
+            float lift = Mathf.SmoothStep(0f, 1f, supporting
+                ? Mathf.InverseLerp(.06f, .44f, rise) : Mathf.InverseLerp(.01f, .31f, rise));
+
+            // The left palm rests on the crown of the knee. The right elbow hangs
+            // outside the suit, with the fingers slanting back across the thigh.
+            Vector3 seated = supporting ? new Vector3(0f, .178f, -.010f) : new Vector3(.040f, .170f, -.040f);
+            Vector3 lifted = supporting ? new Vector3(-.07f, .220f, .125f) : new Vector3(.10f, .385f, .135f);
             Vector3 wrist = animator.GetBoneTransform(knee).position
-                - root.forward * (supporting ? .015f : .045f) + root.up * .155f;
-            // The left palm bears weight as the right arm floats forward for balance.
-            // Release each wrist into the incoming clip before the body reaches full height.
-            float lift = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.06f, .44f, rise));
-            wrist += lift * (supporting
-                ? root.forward * .14f - root.right * .07f + root.up * .065f
-                : root.forward * .18f + root.right * .10f + root.up * .23f);
+                + root.rotation * Vector3.Lerp(seated, lifted, lift);
+
             if (rise > 0f)
                 weight = Mathf.SmoothStep(1f, 0f, supporting
                     ? Mathf.InverseLerp(.32f, .70f, rise) : Mathf.InverseLerp(.51f, .95f, rise));
             animator.SetIKPositionWeight(hand, weight);
             animator.SetIKPosition(hand, wrist);
+
+            float yaw = supporting ? 0f : -32f * (1f - lift);
+            float pitch = supporting ? Mathf.Lerp(22f, 18f, lift) : Mathf.Lerp(39f, -10f, lift);
             animator.SetIKRotationWeight(hand, weight);
-            float wristPitch = supporting ? 18f : Mathf.Lerp(12f, -10f, lift);
-            animator.SetIKRotation(hand, Quaternion.AngleAxis(wristPitch, root.right) * animator.GetIKRotation(hand));
+            animator.SetIKRotation(hand, Quaternion.AngleAxis(yaw, root.up) * Quaternion.AngleAxis(pitch, root.right)
+                * animator.GetIKRotation(hand));
+
+            if (!supporting)
+            {
+                Vector3 shoulder = animator.GetBoneTransform(HumanBodyBones.RightUpperArm).position;
+                animator.SetIKHintPosition(AvatarIKHint.RightElbow,
+                    shoulder + root.rotation * new Vector3(.15f, -.24f, -.12f));
+                animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, .65f * weight * (1f - lift));
+            }
+
+            // The suit weights the row of fingers to the index chain. Ease the
+            // bend at both knuckles, then return it to the incoming gesture.
+            float opening = 30f * weight * (1f - lift);
+            if (opening <= 0f) return;
+            HumanBodyBones middle = supporting ? HumanBodyBones.LeftIndexIntermediate : HumanBodyBones.RightIndexIntermediate;
+            RelaxKnuckle(animator, middle, supporting ? HumanBodyBones.LeftIndexDistal : HumanBodyBones.RightIndexDistal, opening);
+            RelaxKnuckle(animator, supporting ? HumanBodyBones.LeftIndexProximal : HumanBodyBones.RightIndexProximal, middle, opening);
+        }
+
+        private static void RelaxKnuckle(Animator animator, HumanBodyBones bone, HumanBodyBones child, float degrees)
+        {
+            Transform joint = animator.GetBoneTransform(bone);
+            Transform tip = animator.GetBoneTransform(child);
+            if (joint == null || tip == null) return;
+            Transform parent = joint.parent;
+            Vector3 finger = parent.InverseTransformDirection(tip.position - joint.position);
+            Vector3 palm = parent.InverseTransformDirection(joint.position - parent.position);
+            Quaternion straighten = Quaternion.FromToRotation(finger, palm);
+            animator.SetBoneLocalRotation(bone, Quaternion.RotateTowards(Quaternion.identity, straighten, degrees)
+                * joint.localRotation);
         }
     }
 }
