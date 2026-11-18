@@ -24,6 +24,7 @@ namespace ConGame.Presentation.M1
             Array.Empty<PerformanceBranchDefinition>();
         [SerializeField] private AnimationClip playerAnimation;
         [SerializeField] private AnimationClip killerAnimation;
+        [SerializeField] private AnimationClip playerImpactAnimation;
 
         public M1GreyboxDeathStyle Style => style;
         public string OutcomeId => outcomeId ?? string.Empty;
@@ -33,6 +34,7 @@ namespace ConGame.Presentation.M1
             resultBranches ?? Array.Empty<PerformanceBranchDefinition>();
         public AnimationClip PlayerAnimation => playerAnimation;
         public AnimationClip KillerAnimation => killerAnimation;
+        public AnimationClip PlayerImpactAnimation => playerImpactAnimation;
         public float SequenceDuration => Mathf.Max(0.25f, sequenceDuration);
 
         public float TotalQteDuration
@@ -75,10 +77,12 @@ namespace ConGame.Presentation.M1
             resultBranches = CopyBranches(branches);
         }
 
-        public void ConfigureAnimations(AnimationClip playerClip, AnimationClip killerClip)
+        public void ConfigureAnimations(AnimationClip playerClip, AnimationClip killerClip,
+            AnimationClip impactClip = null)
         {
             playerAnimation = playerClip;
             killerAnimation = killerClip;
+            playerImpactAnimation = impactClip;
         }
 
         public bool TryResolveBranch(

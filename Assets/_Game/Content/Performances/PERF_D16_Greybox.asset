@@ -20,3 +20,4 @@ MonoBehaviour:
   resultBranches: []
   playerAnimation: {fileID: -7163681636452116516, guid: e23f8a5c14df404ba59d4de1b254dc83, type: 3}
   killerAnimation: {fileID: -7163681636452116516, guid: 1065ac46fab14c36aac55e0ece3515cd, type: 3}
+  playerImpactAnimation: {fileID: 7400000, guid: b7130871f1abf6c138c2ed99bf78b121, type: 2}

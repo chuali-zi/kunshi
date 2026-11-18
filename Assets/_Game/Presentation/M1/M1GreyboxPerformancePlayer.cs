@@ -34,6 +34,8 @@ namespace ConGame.Presentation.M1
         private int _loopEpoch;
         private int _generation;
         private PlayableGraph _animationGraph;
+        private AnimationMixerPlayable _impactMixer;
+        private AnimationClipPlayable _impactClip;
 
         public int ResetOrder => 25;
         public bool IsPlaying { get; private set; }
@@ -268,7 +270,8 @@ namespace ConGame.Presentation.M1
                 yield return null;
             }
 
-            Quaternion impactRotation = playerStartRotation * Quaternion.Euler(profile.ImpactEuler);
+            Quaternion impactRotation = _impactMixer.IsValid()
+                ? playerStartRotation : playerStartRotation * Quaternion.Euler(profile.ImpactEuler);
             float impactDuration = Mathf.Max(0.15f, duration - approachDuration - holdDuration);
             elapsed = 0f;
             while (elapsed < impactDuration && generation == _generation)
@@ -288,6 +291,13 @@ namespace ConGame.Presentation.M1
                     if (sightline.sqrMagnitude > .001f)
                         killer.rotation = Quaternion.Slerp(killerStartRotation, Quaternion.LookRotation(sightline),
                             Mathf.SmoothStep(0f, 1f, progress));
+                }
+                if (_impactMixer.IsValid())
+                {
+                    _impactClip.SetTime(progress * _impactClip.GetAnimationClip().length);
+                    float weight = Mathf.SmoothStep(0f, 1f, elapsed / .12f);
+                    _impactMixer.SetInputWeight(0, 1f - weight);
+                    _impactMixer.SetInputWeight(1, weight);
                 }
                 player.rotation =
                     Quaternion.Slerp(playerStartRotation, impactRotation, Mathf.SmoothStep(0f, 1f, progress));
@@ -543,7 +553,8 @@ namespace ConGame.Presentation.M1
                 ? performance.PlayerAnimation.length / (performance.SequenceDuration * .58f) : 1d;
             double stumbleRate = rugPull && killerAnimation != null
                 ? killerAnimation.length / (performance.SequenceDuration * .84f - stepDelay) : 1d;
-            CreateAnimationOutput(playerAnimator, performance.PlayerAnimation, "Player", reachRate);
+            CreateAnimationOutput(playerAnimator, performance.PlayerAnimation, "Player", reachRate,
+                impact: performance.PlayerImpactAnimation);
             CreateAnimationOutput(killerAnimator, killerAnimation, "Killer", stumbleRate, stepDelay);
             if (rugPull)
             {
@@ -556,7 +567,8 @@ namespace ConGame.Presentation.M1
             AnimationClip clip,
             string outputName,
             double speed = 1d,
-            double delaySeconds = 0d)
+            double delaySeconds = 0d,
+            AnimationClip impact = null)
         {
             if (target == null || clip == null)
             {
@@ -571,7 +583,19 @@ namespace ConGame.Presentation.M1
             if (delaySeconds > 0d) playable.SetTime(-delaySeconds * speed);
             playable.SetDuration(clip.length);
             AnimationPlayableOutput output = AnimationPlayableOutput.Create(_animationGraph, outputName, target);
-            output.SetSourcePlayable(playable);
+            if (impact == null)
+            {
+                output.SetSourcePlayable(playable);
+                return;
+            }
+
+            // The reach retains its foot IK. The landing already includes floor contact.
+            _impactClip = AnimationClipPlayable.Create(_animationGraph, impact);
+            _impactClip.SetSpeed(0d);
+            _impactMixer = AnimationMixerPlayable.Create(_animationGraph, 2);
+            _impactMixer.ConnectInput(0, playable, 0, 1f);
+            _impactMixer.ConnectInput(1, _impactClip, 0, 0f);
+            output.SetSourcePlayable(_impactMixer);
         }
 
         private void StopAnimations()

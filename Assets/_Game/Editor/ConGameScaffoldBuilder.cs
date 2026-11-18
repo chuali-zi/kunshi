@@ -196,7 +196,9 @@ namespace ConGame.Editor
                 asset.Configure(seed.Id, style, duration, policy, windows, branches);
                 ResolvePerformanceAnimations(seed.Id, out AnimationClip playerAnimation,
                     out AnimationClip killerAnimation);
-                asset.ConfigureAnimations(playerAnimation, killerAnimation);
+                AnimationClip landing = seed.Id == "D16"
+                    ? AssetDatabase.LoadAssetAtPath<AnimationClip>($"{AnimationRoot}/AN_Player_RugLanding.anim") : null;
+                asset.ConfigureAnimations(playerAnimation, killerAnimation, landing);
                 EditorUtility.SetDirty(asset);
                 result.Add(seed.Id, asset);
             }
