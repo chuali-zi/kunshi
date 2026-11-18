@@ -18,7 +18,17 @@ namespace ConGame.Presentation.Animation
                 weight = animator.GetNextAnimatorStateInfo(layer).fullPathHash == state.fullPathHash ? t : 1f - t;
             }
 
-            animator.bodyPosition -= Vector3.up * (KneelingDrop * weight);
+            Vector3 drop = Vector3.down * (KneelingDrop * weight);
+            // Keep one palm beside the temple and offer the other towards the killer.
+            // Get the authored goals before lowering the body so both travel with the knees.
+            Vector3 nearHand = animator.GetIKPosition(AvatarIKGoal.RightHand) + drop;
+            Vector3 farHand = animator.GetIKPosition(AvatarIKGoal.LeftHand) + drop;
+            animator.bodyPosition += drop;
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, weight);
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, nearHand - animator.transform.forward * .20f
+                + Vector3.up * .06f);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, farHand + animator.transform.forward * .11f);
         }
     }
 }
