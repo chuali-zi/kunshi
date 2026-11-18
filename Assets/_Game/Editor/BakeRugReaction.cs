@@ -63,6 +63,25 @@ namespace ConGame.Editor
             { "RightFootT.z", -.19f },
         };
 
+        // The near arm clears the folding shin, bends under the descending shoulder,
+        // then slides out beside the hip. Times are fractions of the landing clip.
+        private static readonly Dictionary<string, AnimationCurve> CatchingArm = new()
+        {
+            { "Left Arm Down-Up", CatchCurve(-.89f, 0f, .44f) },
+            { "Left Arm Front-Back", CatchCurve(.23f, .45f, .45f) },
+            { "Left Arm Twist In-Out", CatchCurve(.17f, -.61f, -.81f) },
+            { "Left Forearm Stretch", CatchCurve(.72f, .41f, .54f) },
+            { "Left Forearm Twist In-Out", CatchCurve(.39f, -1f, -1f) },
+            { "Left Hand Down-Up", CatchCurve(.27f, -.03f, .01f) },
+            { "Left Hand In-Out", CatchCurve(0f, .16f, 0f) },
+        };
+
+        private static AnimationCurve CatchCurve(float reach, float contact, float settle)
+        {
+            return new AnimationCurve(new Keyframe(.52f, reach), new Keyframe(.70f, contact),
+                new Keyframe(.85f, settle));
+        }
+
         [MenuItem("ConGame/Characters/Bake D16 player landing")]
         public static void Bake()
         {
@@ -127,6 +146,8 @@ namespace ConGame.Editor
                     previous = rotation;
                     for (int j = 0; j < 3; j++) Key(curves, "RootT." + "xyz"[j], time, body[j]);
                     for (int j = 0; j < 4; j++) Key(curves, "RootQ." + "xyzw"[j], time, rotation[j]);
+                    float catchWeight = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.28f, .52f, impact))
+                        * (1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.85f, .98f, impact)));
                     foreach (var entry in sourceCurves)
                     {
                         float value = entry.Value.Evaluate((float)hit.GetTime());
@@ -139,6 +160,8 @@ namespace ConGame.Editor
                                 weight = release;
                             value = Mathf.Lerp(value, resting, weight);
                         }
+                        if (CatchingArm.TryGetValue(entry.Key, out var catchCurve))
+                            value = Mathf.Lerp(value, catchCurve.Evaluate(impact), catchWeight);
                         Key(curves, entry.Key, time, value);
                     }
                 }
