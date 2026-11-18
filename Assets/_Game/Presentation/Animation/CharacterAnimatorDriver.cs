@@ -264,12 +264,14 @@ else if (agent != null && agent.enabled)
                     animator.CrossFade("SitChair", 0.08f, 0, 0f);
                 }
             }
-            else if ((IsCurrentOrNextState("SitChair") || IsCurrentOrNextState("WakeUp")) &&
-                     !IsTransitioningToState("Idle"))
+            else if (destination.IsName("SitChair") || destination.IsName("WakeUp"))
             {
                 animator.ResetTrigger(WakeUpHash);
-                // Match the visual rise off the chair in seconds, independent of clip length.
-                animator.CrossFadeInFixedTime("Idle", PlayerSeatedPosePresenter.StandBlendSeconds, 0, 0f);
+                // Enter Walk on its right support so the left shoe can swing through as the rise ends.
+                bool walking = playerMotor != null && playerMotor.Input != null &&
+                               playerMotor.Input.Move.sqrMagnitude > .01f && HasState("Walk");
+                animator.CrossFadeInFixedTime(walking ? "Walk" : "Idle",
+                    PlayerSeatedPosePresenter.StandBlendSeconds, 0, walking ? .54f : 0f);
             }
         }
 
@@ -281,11 +283,6 @@ else if (agent != null && agent.enabled)
                 return true;
             }
 
-            return animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).IsName(stateName);
-        }
-
-        private bool IsTransitioningToState(string stateName)
-        {
             return animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).IsName(stateName);
         }
 

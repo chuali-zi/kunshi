@@ -17,7 +17,7 @@ namespace ConGame.Presentation.Animation
     {
         // Calibrated to the imported chair pose's shoe soles, not its ankle joints.
         private const float SeatedVisualDrop = 0.205f;
-        internal const float StandBlendSeconds = 0.25f;
+        internal const float StandBlendSeconds = 0.46f;
 
         [SerializeField] private LoopDirector loop;
         [SerializeField] private PlayerInputRouter input;
@@ -38,9 +38,7 @@ namespace ConGame.Presentation.Animation
         private bool _isBlendingVisual;
         private float _visualBlendElapsed;
         private Vector3 _visualBlendStart;
-        private Vector3 _visualBlendTarget;
         private Quaternion _visualBlendStartRotation;
-        private Quaternion _visualBlendTargetRotation;
 
         public Vector3 StandingPosition => _standingPosition;
         public bool IsAwakeningSeated => _isAwakeningSeated;
@@ -106,9 +104,11 @@ namespace ConGame.Presentation.Animation
                 _visualBlendElapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(_visualBlendElapsed / StandBlendSeconds);
                 t = t * t * (3f - 2f * t);
-                animator.transform.localPosition = Vector3.Lerp(_visualBlendStart, _visualBlendTarget, t);
-                animator.transform.localRotation = Quaternion.Slerp(
-                    _visualBlendStartRotation, _visualBlendTargetRotation, t);
+                // Keep the start on the chair even if the first input turns the motor.
+                Transform parent = animator.transform.parent;
+                animator.transform.SetPositionAndRotation(
+                    Vector3.Lerp(_visualBlendStart, parent.TransformPoint(_initialVisualLocalPosition), t),
+                    Quaternion.Slerp(_visualBlendStartRotation, parent.rotation * _initialVisualLocalRotation, t));
                 if (t >= 1f)
                 {
                     _isBlendingVisual = false;
@@ -256,10 +256,8 @@ namespace ConGame.Presentation.Animation
                 return;
             }
 
-            _visualBlendStart = animator.transform.localPosition;
-            _visualBlendTarget = target;
-            _visualBlendStartRotation = animator.transform.localRotation;
-            _visualBlendTargetRotation = _initialVisualLocalRotation;
+            _visualBlendStart = animator.transform.position;
+            _visualBlendStartRotation = animator.transform.rotation;
             _visualBlendElapsed = 0f;
             _isBlendingVisual = true;
         }
