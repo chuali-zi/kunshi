@@ -22,14 +22,17 @@ namespace ConGame.Presentation.Animation
         {
             if (!animator.isHuman) return;
             float weight = 1f;
-            float load = 0f;
+            float rise = 0f;
             if (animator.IsInTransition(layer))
             {
                 float t = Mathf.Clamp01(animator.GetAnimatorTransitionInfo(layer).normalizedTime);
                 var next = animator.GetNextAnimatorStateInfo(layer);
                 weight = next.fullPathHash == state.fullPathHash ? t : 1f - t;
                 if (hasPlants && animator.transform.parent != null && (next.IsName("Idle") || next.IsName("Walk")))
-                    load = Rise(animator, t, next.IsName("Walk"));
+                {
+                    rise = t;
+                    Rise(animator, t, next.IsName("Walk"));
+                }
             }
             else
             {
@@ -39,8 +42,8 @@ namespace ConGame.Presentation.Animation
                 hasPlants = true;
             }
 
-            RestHand(animator, AvatarIKGoal.LeftHand, HumanBodyBones.LeftLowerLeg, -.035f, weight, load);
-            RestHand(animator, AvatarIKGoal.RightHand, HumanBodyBones.RightLowerLeg, .015f, weight, load);
+            RestHand(animator, AvatarIKGoal.LeftHand, HumanBodyBones.LeftLowerLeg, weight, rise);
+            RestHand(animator, AvatarIKGoal.RightHand, HumanBodyBones.RightLowerLeg, weight, rise);
 
             Transform root = animator.transform;
             Vector3 eyes = animator.GetBoneTransform(HumanBodyBones.Head).position;
@@ -48,7 +51,7 @@ namespace ConGame.Presentation.Animation
             animator.SetLookAtWeight(weight, .16f, .67f, 0f, .45f);
         }
 
-        private float Rise(Animator animator, float t, bool walking)
+        private void Rise(Animator animator, float t, bool walking)
         {
             // Fold over the knees to leave the seat. Uncurl as the trailing shoe comes through.
             Transform root = animator.transform;
@@ -79,7 +82,6 @@ namespace ConGame.Presentation.Animation
                 : stance - motor.right * .15f;
             Step(animator, AvatarIKGoal.LeftFoot, leftPlant, leftLanding,
                 Mathf.InverseLerp(.50f, walking ? .80f : .94f, t), Mathf.InverseLerp(.85f, 1f, t));
-            return load;
         }
 
         private void Step(Animator animator, AvatarIKGoal foot, Vector3 start, Vector3 end,
@@ -96,17 +98,26 @@ namespace ConGame.Presentation.Animation
         }
 
         private static void RestHand(Animator animator, AvatarIKGoal hand, HumanBodyBones knee,
-            float inset, float weight, float load)
+            float weight, float rise)
         {
             Transform root = animator.transform;
-            Vector3 wrist = animator.GetBoneTransform(knee).position - root.forward * inset + root.up * .20f;
-            // Slide off the front and the outside of the knee as the body passes over it.
-            float side = hand == AvatarIKGoal.LeftHand ? -1f : 1f;
-            wrist += (root.forward * .18f + root.right * (.075f * side) + Vector3.up * .045f) * load;
-            if (hand == AvatarIKGoal.RightHand)
-                wrist += (root.right * .04f - root.forward * .07f + root.up * .065f) * load;
-            animator.SetIKPositionWeight(hand, Mathf.Max(weight, load));
+            bool supporting = hand == AvatarIKGoal.LeftHand;
+            Vector3 wrist = animator.GetBoneTransform(knee).position
+                - root.forward * (supporting ? .015f : .045f) + root.up * .155f;
+            // The left palm bears weight as the right arm floats forward for balance.
+            // Release each wrist into the incoming clip before the body reaches full height.
+            float lift = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.06f, .44f, rise));
+            wrist += lift * (supporting
+                ? root.forward * .14f - root.right * .07f + root.up * .065f
+                : root.forward * .18f + root.right * .10f + root.up * .23f);
+            if (rise > 0f)
+                weight = Mathf.SmoothStep(1f, 0f, supporting
+                    ? Mathf.InverseLerp(.32f, .70f, rise) : Mathf.InverseLerp(.51f, .95f, rise));
+            animator.SetIKPositionWeight(hand, weight);
             animator.SetIKPosition(hand, wrist);
+            animator.SetIKRotationWeight(hand, weight);
+            float wristPitch = supporting ? 18f : Mathf.Lerp(12f, -10f, lift);
+            animator.SetIKRotation(hand, Quaternion.AngleAxis(wristPitch, root.right) * animator.GetIKRotation(hand));
         }
     }
 }
