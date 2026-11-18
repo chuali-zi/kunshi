@@ -240,7 +240,16 @@ else if (agent != null && agent.enabled)
                 : animator.GetCurrentAnimatorStateInfo(0);
             bool hidingAtSofa = snapshot.PlayerZone == PlayerZone.SofaRear && snapshot.PlayerPose == PlayerPose.Crouched
                 && playerInteractor != null && playerInteractor.IsHiding;
-            if (hidingAtSofa && (destination.IsName("Idle") || destination.IsName("Walk")) && HasState("SofaHide"))
+            bool inLocomotion = destination.IsName("Idle") || destination.IsName("Walk");
+            if (snapshot.PlayerPose == PlayerPose.Kneeling && inLocomotion && HasState("Surrender"))
+            {
+                animator.CrossFadeInFixedTime("Surrender", .36f, 0, 0f);
+            }
+            else if (snapshot.PlayerPose != PlayerPose.Kneeling && destination.IsName("Surrender"))
+            {
+                animator.CrossFadeInFixedTime("Idle", .20f, 0, 0f);
+            }
+            else if (hidingAtSofa && inLocomotion && HasState("SofaHide"))
             {
                 animator.CrossFadeInFixedTime("SofaHide", .20f, 0, 0f);
             }

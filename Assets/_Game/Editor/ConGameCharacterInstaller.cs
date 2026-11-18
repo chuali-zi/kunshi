@@ -87,6 +87,15 @@ namespace ConGame.Editor
             AssetDatabase.SaveAssets();
         }
 
+        [MenuItem("ConGame/Characters/Install Surrender Pose")]
+        public static void InstallSurrenderPose()
+        {
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>($"{CtrlDir}/AC_Player.controller");
+            EnsureSurrenderState(controller);
+            EditorUtility.SetDirty(controller);
+            AssetDatabase.SaveAssets();
+        }
+
         [MenuItem("ConGame/Characters/Install Locomotion Contacts")]
         public static void InstallLocomotionContacts()
         {
@@ -251,6 +260,7 @@ namespace ConGame.Editor
             {
                 EnsurePlayerSitChairState(controller);
                 EnsureSofaHideState(controller);
+                EnsureSurrenderState(controller);
             }
 
             AnimatorStateTransition toWalk = idle.AddTransition(walk);
@@ -292,6 +302,16 @@ namespace ConGame.Editor
             state.motion = LoadClip("POSE_Player_CrouchHide");
             if (!state.behaviours.OfType<SofaHidePose>().Any())
                 state.AddStateMachineBehaviour<SofaHidePose>();
+        }
+
+        private static void EnsureSurrenderState(AnimatorController controller)
+        {
+            var machine = controller.layers[0].stateMachine;
+            var state = machine.states.Select(child => child.state).FirstOrDefault(s => s.name == "Surrender")
+                ?? machine.AddState("Surrender", new Vector3(240, 440, 0));
+            state.motion = LoadClip("POSE_Player_KneelHandsUp");
+            if (!state.behaviours.OfType<SurrenderPose>().Any())
+                state.AddStateMachineBehaviour<SurrenderPose>();
         }
 
         private static bool EnsurePlayerSitChairState(AnimatorController controller)
