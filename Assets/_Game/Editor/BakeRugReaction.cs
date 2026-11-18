@@ -82,6 +82,13 @@ namespace ConGame.Editor
                 new Keyframe(.85f, settle));
         }
 
+        // Let the pelvis lead the turn as the supporting shoe slips, then give the
+        // authored shoulder and hand catch full control by the time the palm lands.
+        private static readonly AnimationCurve HipLead = new(
+            new Keyframe(.25f, 0f), new Keyframe(.435f, .46f),
+            new Keyframe(.55f, .18f, -1.8f, -1.8f),
+            new Keyframe(.64f, .10f, -.8f, -.8f), new Keyframe(.71f, 0f));
+
         [MenuItem("ConGame/Characters/Bake D16 player landing")]
         public static void Bake()
         {
@@ -120,6 +127,8 @@ namespace ConGame.Editor
                 // Supine, with the long axis of the body across the runner.
                 var restingRotation = Quaternion.LookRotation(new Vector3(-0.259f, 0.958f, 0.125f),
                     new Vector3(-0.699f, -0.097f, -0.708f));
+                Quaternion rollStart = Quaternion.identity;
+                const int buckleFrame = 5;
                 for (int i = 0; i <= Frames; i++)
                 {
                     float time = i / (float)Rate;
@@ -140,7 +149,20 @@ namespace ConGame.Editor
                     float release = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.63f, 1f, impact));
                     // Carry the hip toward the front edge so the far leg clears the wingback.
                     body += new Vector3(.09f, 0f, .26f) * (land / bodyScale);
+                    // Once the knees buckle, carry the pelvis onto its side in one arc.
+                    // The source fall pitches forward again halfway through this turn.
+                    if (i == buckleFrame) rollStart = rotation;
                     rotation = Quaternion.Slerp(rotation, restingRotation, land);
+                    float lead = HipLead.Evaluate(impact);
+                    if (lead > 0f)
+                    {
+                        float roll = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(
+                            buckleFrame / (float)Frames, .87f, impact));
+                        Quaternion leadingHip = Quaternion.Slerp(rollStart, restingRotation, roll);
+                        rotation = Quaternion.Slerp(rotation, leadingHip, lead);
+                    }
+                    float heelSlide = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.30f, .78f, impact));
+                    float nearLegWeight = Mathf.Lerp(land, heelSlide, lead);
                     if (Quaternion.Dot(rotation, previous) < 0f)
                         rotation = new Quaternion(-rotation.x, -rotation.y, -rotation.z, -rotation.w);
                     previous = rotation;
@@ -153,7 +175,9 @@ namespace ConGame.Editor
                         float value = entry.Value.Evaluate((float)hit.GetTime());
                         if (RestingChannels.TryGetValue(entry.Key, out float resting))
                         {
-                            float weight = land;
+                            // Slide the near heel out while the far knee still folds under the hip.
+                            float weight = entry.Key.StartsWith("LeftFootT.") || entry.Key.StartsWith("Left Upper Leg")
+                                || entry.Key == "Left Lower Leg Stretch" ? nearLegWeight : land;
                             if (entry.Key.Contains("Chest") || entry.Key.Contains("Shoulder"))
                                 weight = shoulder;
                             if (entry.Key.Contains("Forearm") || entry.Key.StartsWith("Neck") || entry.Key.StartsWith("Head"))
@@ -186,10 +210,12 @@ namespace ConGame.Editor
                 // Fit the authored vertical curve to the output played on the actual suit.
                 var baked = AnimationClipPlayable.Create(graph, result);
                 output.SetSourcePlayable(baked);
-                var vertical = curves["RootT.y"];
-                for (int i = 0; i <= Frames; i++)
+                // A heel or seam can be the lowest point between two 30 Hz pose keys.
+                const int contactSubsteps = 4;
+                var vertical = new AnimationCurve();
+                for (int i = 0; i <= Frames * contactSubsteps; i++)
                 {
-                    float time = i / (float)Rate;
+                    float time = i / (float)(Rate * contactSubsteps);
                     baked.SetTime(time);
                     graph.Evaluate(0);
                     skin.BakeMesh(mesh, true);
@@ -197,11 +223,10 @@ namespace ConGame.Editor
                     float lowest = float.PositiveInfinity;
                     foreach (Vector3 vertex in vertices)
                         lowest = Mathf.Min(lowest, skin.transform.TransformPoint(vertex).y);
-                    var key = vertical[i];
-                    key.value += (.008f - lowest) / bodyScale;
-                    vertical.MoveKey(i, key);
+                    float authoredHeight = curves["RootT.y"].Evaluate(time);
+                    vertical.AddKey(time, authoredHeight + (.008f - lowest) / bodyScale);
                 }
-                for (int i = 0; i <= Frames; i++) vertical.SmoothTangents(i, 0f);
+                for (int i = 0; i <= Frames * contactSubsteps; i++) vertical.SmoothTangents(i, 0f);
                 AnimationUtility.SetEditorCurve(result, EditorCurveBinding.FloatCurve("", typeof(Animator), "RootT.y"), vertical);
                 var old = AssetDatabase.LoadAssetAtPath<AnimationClip>(Path);
                 if (old == null)
