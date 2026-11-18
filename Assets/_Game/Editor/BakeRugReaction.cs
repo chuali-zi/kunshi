@@ -45,8 +45,11 @@ namespace ConGame.Editor
             { "Left Arm Front-Back", .43f },
             { "Left Arm Twist In-Out", -.63f },
             { "Left Forearm Stretch", .96f },
-            { "Left Forearm Twist In-Out", -.47f },
-            { "Left Hand Down-Up", .02f },
+            { "Left Forearm Twist In-Out", -.31f },
+            { "Left Hand Down-Up", -.235f },
+            { "LeftHand.Thumb.1 Stretched", -.7f },
+            { "LeftHand.Thumb.Spread", -.45f },
+            { "LeftHand.Index.1 Stretched", .53f },
             { "Right Shoulder Down-Up", -.3f },
             { "Right Arm Down-Up", -1.06f },
             { "Right Arm Front-Back", .25f },
@@ -71,9 +74,19 @@ namespace ConGame.Editor
             { "Left Arm Front-Back", CatchCurve(.23f, .45f, .45f) },
             { "Left Arm Twist In-Out", CatchCurve(.17f, -.61f, -.81f) },
             { "Left Forearm Stretch", CatchCurve(.72f, .41f, .54f) },
-            { "Left Forearm Twist In-Out", CatchCurve(.39f, -1f, -1f) },
-            { "Left Hand Down-Up", CatchCurve(.27f, -.03f, .01f) },
+            { "Left Forearm Twist In-Out", CatchCurve(.39f, -.15f, -.20f) },
+            // Flex the wrist as the fingertips slide off the bound edge onto the carpet.
+            { "Left Hand Down-Up", new AnimationCurve(new Keyframe(.52f, .27f),
+                new Keyframe(.70f, -.11f, -2f, -2f), new Keyframe(.76f, -.23f, -1f, -1f),
+                new Keyframe(.85f, -.27f)) },
             { "Left Hand In-Out", CatchCurve(0f, .16f, 0f) },
+            // Open the thumb as the wrist turns palm-down. The suit's four fingers
+            // move together on the index chain and uncurl as they take weight.
+            { "LeftHand.Thumb.1 Stretched", CatchCurve(-1.4f, -.6f, -.3f) },
+            { "LeftHand.Thumb.Spread", CatchCurve(-.7f, -.45f, -.45f) },
+            { "LeftHand.Index.1 Stretched", CatchCurve(.32f, .48f, .60f) },
+            { "LeftHand.Index.2 Stretched", CatchCurve(.48f, .92f, .92f) },
+            { "LeftHand.Index.3 Stretched", CatchCurve(.38f, .9f, .9f) },
         };
 
         private static AnimationCurve CatchCurve(float reach, float contact, float settle)
