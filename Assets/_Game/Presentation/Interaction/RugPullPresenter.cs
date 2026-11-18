@@ -75,8 +75,8 @@ namespace ConGame.Presentation.Interaction
         {
             if (!pulling) return;
             float age = Time.time - pullTime;
-            float close = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.32f, .48f, age));
-            float release = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.70f, 1.02f, age));
+            float close = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.49f, .60f, age));
+            float release = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.76f, 1.08f, age));
             Vector3 fingers = cloth.transform.InverseTransformPoint(hand.position - Vector3.up * .075f);
             Vector3 tug = fingers - grip;
             tug.x = Mathf.Clamp(tug.x, -.24f, .24f);

@@ -537,13 +537,14 @@ namespace ConGame.Presentation.M1
             _animationGraph = PlayableGraph.Create($"M1 Performance {_activeOutcomeId}");
             _animationGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
             bool rugPull = _activeOutcomeId == "D16";
-            // The deepest reach lands just ahead of the stumble's open stride.
+            // Let the wrist get down to the runner before the killer takes the catching step.
+            double stepDelay = rugPull ? performance.SequenceDuration * .18f : 0d;
             double reachRate = rugPull && performance.PlayerAnimation != null
-                ? performance.PlayerAnimation.length / (performance.SequenceDuration * .48f) : 1d;
+                ? performance.PlayerAnimation.length / (performance.SequenceDuration * .58f) : 1d;
             double stumbleRate = rugPull && killerAnimation != null
-                ? killerAnimation.length / (performance.SequenceDuration * .84f) : 1d;
+                ? killerAnimation.length / (performance.SequenceDuration * .84f - stepDelay) : 1d;
             CreateAnimationOutput(playerAnimator, performance.PlayerAnimation, "Player", reachRate);
-            CreateAnimationOutput(killerAnimator, killerAnimation, "Killer", stumbleRate);
+            CreateAnimationOutput(killerAnimator, killerAnimation, "Killer", stumbleRate, stepDelay);
             if (rugPull)
             {
                 _animationGraph.Play();
@@ -554,7 +555,8 @@ namespace ConGame.Presentation.M1
             Animator target,
             AnimationClip clip,
             string outputName,
-            double speed = 1d)
+            double speed = 1d,
+            double delaySeconds = 0d)
         {
             if (target == null || clip == null)
             {
@@ -565,6 +567,8 @@ namespace ConGame.Presentation.M1
             playable.SetApplyFootIK(true);
             playable.SetApplyPlayableIK(true);
             playable.SetSpeed(speed);
+            // A non-looping clip holds its opening pose during this lead-in.
+            if (delaySeconds > 0d) playable.SetTime(-delaySeconds * speed);
             playable.SetDuration(clip.length);
             AnimationPlayableOutput output = AnimationPlayableOutput.Create(_animationGraph, outputName, target);
             output.SetSourcePlayable(playable);
