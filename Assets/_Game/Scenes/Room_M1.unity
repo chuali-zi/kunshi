@@ -15689,7 +15689,7 @@ PrefabInstance:
     - target: {fileID: 1159159032072491857, guid: 9a7a8164c0aebc04cb695a10dda073bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 5b566c40e8423d35ea370347c8753d57, type: 2}
+      objectReference: {fileID: 2100000, guid: 5a567d8d54203a4499a76f2a57b35674, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15698,6 +15698,11 @@ PrefabInstance:
 --- !u!4 &931589338 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9a7a8164c0aebc04cb695a10dda073bb, type: 3}
+  m_PrefabInstance: {fileID: 931589337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &931589339 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -4589743630447312056, guid: 9a7a8164c0aebc04cb695a10dda073bb, type: 3}
   m_PrefabInstance: {fileID: 931589337}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &942785538
@@ -16991,6 +16996,7 @@ GameObject:
   - component: {fileID: 1070551490}
   - component: {fileID: 1070551499}
   - component: {fileID: 1070551498}
+  - component: {fileID: 1070551500}
   m_Layer: 0
   m_Name: PRP_Rug
   m_TagString: Untagged
@@ -17189,6 +17195,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1070551500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070551488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf44cb548153e331da6b8b499193b29e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.Interaction.RugPullPresenter
+  cloth: {fileID: 931589339}
+  events: {fileID: 294111221}
+  player: {fileID: 2143678672}
 --- !u!1 &1088368873
 GameObject:
   m_ObjectHideFlags: 0

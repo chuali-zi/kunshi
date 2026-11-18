@@ -6,6 +6,7 @@ using ConGame.Runtime.Facts;
 using ConGame.Runtime.Interaction;
 using ConGame.Runtime.Lighting;
 using ConGame.Presentation.Lighting;
+using ConGame.Presentation.Interaction;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -71,6 +72,11 @@ namespace ConGame.Editor
             body.isKinematic = true;
             body.useGravity = false;
             rug.GetComponent<UseCapability>().Configure(trap);
+            var cloth = rug.GetComponentsInChildren<MeshFilter>(true).Single(m => m.name == "Rug_Body");
+            var presenter = rug.GetComponent<RugPullPresenter>() ?? rug.gameObject.AddComponent<RugPullPresenter>();
+            presenter.Configure(cloth, All<GameplayEventHub>().Single(), Find("CH_Player_Model").GetComponent<Animator>());
+            cloth.GetComponent<Renderer>().sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(
+                "Assets/_Game/Art/Materials/MAT_Floor_DarkGreen_Rug.mat");
             var legacy = rug.GetComponent<GameplayAffordanceHandler>();
             if (legacy != null) UnityEngine.Object.DestroyImmediate(legacy);
         }
@@ -201,10 +207,6 @@ namespace ConGame.Editor
             ConfigureMainGrade();
             AddOutlet(details,cream,ink);
             ConfigureRugTrap();
-            // Carpet covers the trap rug too, so the floor reads as one green field.
-            var rug = Find("PRP_Rug");
-            if (rug != null) foreach(var r in rug.GetComponentsInChildren<Renderer>(true))
-                r.sharedMaterials=r.sharedMaterials.Select(_=>carpet).ToArray();
             ConGameArtInstaller.RebuildNavMesh();
             ValidateTacticalNavigation();
             EditorSceneManager.MarkSceneDirty(scene);
