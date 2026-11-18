@@ -763,6 +763,53 @@ namespace ConGame.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator KeyboardTipsBookcaseAndNaturallyFinishesD13ThenRestoresRoom()
+        {
+            CaptureSaveFiles();
+            yield return LoadFreshRoomCopy();
+            yield return null;
+            yield return null;
+            var motor = FindInRoom<PlayerMotor>();
+            var facts = FindInRoom<GameplayFactService>();
+            var bookcase = FindInRoomTransform("FUR_Bookcase");
+            var tip = bookcase.GetComponent<TipBookcaseUseHandler>();
+            var breach = FindInRoom<RoomDoorBreachController>();
+            Vector3 bookcaseStart = bookcase.position;
+            Quaternion bookcaseRotation = bookcase.rotation;
+            float baseDuration = breach.CurrentDuration;
+            _keyboard = InputSystem.AddDevice<Keyboard>();
+
+            yield return WalkTo(motor, new Vector3(0, 0, -.6f));
+            yield return WalkTo(motor, new Vector3(-2.25f, 0, -.6f));
+            yield return WalkTo(motor, new Vector3(-2.32f, 0, 1.15f));
+            yield return HoldKeys(.15f, Key.A);
+            Assert.That(motor.GetComponent<InteractionScanner>().Refresh(),
+                Is.EqualTo(bookcase.GetComponent<InteractableEntity>()));
+            yield return HoldKeys(1.6f, Key.E);
+            Assert.That(tip.IsTipped, Is.False, "Releasing before two seconds must cancel the push.");
+            Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.None));
+            yield return HoldKeys(2.1f, Key.E);
+            yield return new WaitForSeconds(.4f);
+            Assert.That(tip.IsTipped, Is.True);
+            Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.Bookcase));
+            Assert.That(facts.DoorBlockBreachExtraSeconds, Is.Zero);
+            Assert.That(Quaternion.Angle(bookcase.rotation, bookcaseRotation), Is.GreaterThan(75f));
+
+            yield return WalkTo(motor, new Vector3(-2.25f, 0, -.6f));
+            yield return WalkTo(motor, new Vector3(0, 0, -.6f));
+            breach.KickWindupStarted += _ =>
+                Assert.That(breach.CurrentDuration, Is.EqualTo(baseDuration).Within(.01f),
+                    "D13 must not add the ordinary furniture breach delay.");
+            yield return ObserveNaturalShotAndReset("D13", 45f);
+            Assert.That(tip.IsTipped, Is.False);
+            Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.None));
+            Assert.That(bookcase.position, Is.EqualTo(bookcaseStart));
+            Assert.That(Quaternion.Angle(bookcase.rotation, bookcaseRotation), Is.LessThan(.01f));
+            yield return HoldKeys(.25f, Key.S);
+            Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
+        }
+
+        [UnityTest]
         public IEnumerator KeyboardAmbushesFromDoorBlindAndNaturallyFinishesPairedD08ThenResets()
         {
             CaptureSaveFiles();
