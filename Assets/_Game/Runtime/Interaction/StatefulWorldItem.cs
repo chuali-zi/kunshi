@@ -17,6 +17,10 @@ namespace ConGame.Runtime.Interaction
         [SerializeField] private ItemPhysicalState initialState = ItemPhysicalState.Placed;
         [SerializeField] private ImpactKind flyingImpactKind = ImpactKind.Projectile;
 
+        [Tooltip("Right wrist position and orientation in item space when held.")]
+        [SerializeField] private Vector3 gripPosition;
+        [SerializeField] private Vector3 gripEulerAngles;
+
         private readonly List<CollisionPair> _ignoredPlayerCollisions = new List<CollisionPair>();
         private Transform _initialParent;
         private Vector3 _initialLocalPosition;
@@ -56,6 +60,12 @@ namespace ConGame.Runtime.Interaction
             _captured = false;
         }
 
+        public void ConfigureHandGrip(Vector3 position, Vector3 eulerAngles)
+        {
+            gripPosition = position;
+            gripEulerAngles = eulerAngles;
+        }
+
         private void Awake()
         {
             EnsureComponents();
@@ -87,8 +97,9 @@ namespace ConGame.Runtime.Interaction
             }
 
             transform.SetParent(socket, false);
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.identity;
+            Quaternion rotation = Quaternion.Inverse(Quaternion.Euler(gripEulerAngles));
+            Vector3 offset = rotation * Vector3.Scale(transform.localScale, -gripPosition);
+            transform.SetLocalPositionAndRotation(offset, rotation);
             SetState(ItemPhysicalState.Held);
             return true;
         }

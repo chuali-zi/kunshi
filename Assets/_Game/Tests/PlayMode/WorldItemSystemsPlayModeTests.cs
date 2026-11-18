@@ -49,8 +49,6 @@ namespace ConGame.Tests.PlayMode
                 yield return new WaitForFixedUpdate();
                 Assert.That(Physics.GetIgnoreCollision(itemCollider, playerCollider), Is.False);
 
-                // A loop can also end with the chair still in the player's hand.
-                Assert.That(stateful.BeginHeld(socket.transform, new Collider[] { playerCollider }), Is.True);
                 LoopResetContext context = new LoopResetContext(1, 2);
                 stateful.Quiesce(context);
                 stateful.Restore(context);
@@ -59,6 +57,22 @@ namespace ConGame.Tests.PlayMode
                 Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation.Interpolate));
                 Assert.That(item.transform.parent, Is.EqualTo(root.transform));
                 Assert.That(item.transform.localPosition, Is.EqualTo(new Vector3(1f, 2f, 3f)));
+
+                // On a subsequent loop the item can reset directly from a grip away from its pivot.
+                Vector3 grip = new Vector3(.24f, -.05f, .12f);
+                Vector3 wristAngles = new Vector3(-84f, 0f, 90f);
+                stateful.ConfigureHandGrip(grip, wristAngles);
+                Assert.That(stateful.BeginHeld(socket.transform, new Collider[] { playerCollider }), Is.True);
+                Assert.That(Vector3.Distance(item.transform.TransformPoint(grip), socket.transform.position),
+                    Is.LessThan(.001f));
+                Assert.That(Quaternion.Angle(item.transform.rotation * Quaternion.Euler(wristAngles),
+                    socket.transform.rotation), Is.LessThan(.01f));
+                context = new LoopResetContext(2, 3);
+                stateful.Quiesce(context);
+                stateful.Restore(context);
+                stateful.Resume(context);
+                Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation.Interpolate));
+                Assert.That(item.transform.parent, Is.EqualTo(root.transform));
             }
             finally
             {

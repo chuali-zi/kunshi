@@ -11,6 +11,7 @@ namespace ConGame.Presentation.Animation
         private CharacterController motor;
         private float gripWeight;
         private float lookYaw;
+        private bool chairGrip;
 
         private void Awake()
         {
@@ -43,11 +44,26 @@ namespace ConGame.Presentation.Animation
                 animator.SetLookAtWeight(1f, .30f, .72f, 0f, .5f);
             }
 
-            bool hasBat = player.HeldEntity != null && player.HeldEntity.ItemId == "baseball_bat";
-            gripWeight = Mathf.MoveTowards(gripWeight, hasBat ? 1f : 0f, Time.deltaTime * 6f);
+            string itemId = player.HeldEntity != null ? player.HeldEntity.ItemId : null;
+            bool holdingChair = itemId == "wood_chair";
+            bool hasGrip = holdingChair || itemId == "baseball_bat";
+            if (hasGrip) chairGrip = holdingChair;
+            gripWeight = Mathf.MoveTowards(gripWeight, hasGrip ? 1f : 0f, Time.deltaTime * 6f);
             if (gripWeight <= 0f) return;
 
             Vector3 hips = animator.GetBoneTransform(HumanBodyBones.Hips).position;
+            if (chairGrip)
+            {
+                // Cup the two seat rails in front of the hips, leaving the legs free to walk.
+                Vector3 centre = hips + transform.forward * .34f + transform.up * .035f;
+                Vector3 halfWidth = transform.right * .245f;
+                SetHand(AvatarIKGoal.RightHand, centre + halfWidth,
+                    Quaternion.LookRotation(transform.forward, transform.right));
+                SetHand(AvatarIKGoal.LeftHand, centre - halfWidth,
+                    Quaternion.LookRotation(transform.forward, -transform.right));
+                return;
+            }
+
             Vector3 grip = hips + transform.forward * .32f + transform.up * .23f + transform.right * .055f;
             Vector3 barrel = (transform.up + transform.right * .42f + transform.forward * .52f).normalized;
             // The bat pivot is in its handle and its local Y runs along the barrel.

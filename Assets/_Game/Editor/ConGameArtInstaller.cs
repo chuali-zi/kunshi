@@ -138,6 +138,9 @@ namespace ConGame.Editor
             // 木椅:北墙正中(苏醒/结局椅)
             GameObject woodChair = Find("FUR_WoodChair").gameObject;
             NormalizeScale(woodChair);
+            // Carry across the body so the slatted back clears the player's face.
+            woodChair.GetComponent<StatefulWorldItem>().ConfigureHandGrip(
+                new Vector3(.12f, -.045f, .245f), new Vector3(-84.5f, 0f, 90f));
             MoveRot("FUR_WoodChair", new Vector3(0f, 0.475f, 2.35f), 180f);
             GameObject intactChair = AddChildVisual("FUR_WoodChair", "Environment/FUR_WoodChair",
                                                     new Vector3(0f, 0f, 2.35f), 180f, visuals);

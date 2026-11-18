@@ -7847,6 +7847,8 @@ MonoBehaviour:
   body: {fileID: 270226044}
   initialState: 0
   flyingImpactKind: 1
+  gripPosition: {x: 0.12, y: -0.045, z: 0.245}
+  gripEulerAngles: {x: -84.5, y: 0, z: 90}
 --- !u!54 &270226044
 Rigidbody:
   m_ObjectHideFlags: 0
