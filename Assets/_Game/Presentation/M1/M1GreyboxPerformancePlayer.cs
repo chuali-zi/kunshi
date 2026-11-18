@@ -125,7 +125,7 @@ namespace ConGame.Presentation.M1
                 return true;
             }
 
-            StartAnimations(performance, false);
+            StartAnimations(performance);
             _routine = StartCoroutine(RunPerformance(performance, generation));
             return true;
         }
@@ -208,7 +208,10 @@ namespace ConGame.Presentation.M1
             OutcomeBeatProfile profile = GetOutcomeProfile(_activeOutcomeId);
             float approachDuration = duration * profile.ApproachFraction;
             float holdDuration = duration * profile.HoldFraction;
-            Vector3 target = player.position + player.right * profile.LateralOffset +
+            // A rug pull catches a walking foot. Play the step at that contact
+            // before turning back toward the player, without a paired approach.
+            bool rugPull = _activeOutcomeId == "D16";
+            Vector3 target = rugPull ? killerStart : player.position + player.right * profile.LateralOffset +
                              player.forward * profile.ForwardOffset;
             float elapsed = 0f;
 
@@ -228,7 +231,7 @@ namespace ConGame.Presentation.M1
 
                 Vector3 lookDirection = player.position - killer.position;
                 lookDirection.y = 0f;
-                if (lookDirection.sqrMagnitude > 0.001f)
+                if (!rugPull && lookDirection.sqrMagnitude > 0.001f)
                 {
                     Quaternion look = Quaternion.LookRotation(lookDirection.normalized, Vector3.up);
                     killer.rotation = Quaternion.Slerp(killerStartRotation, look, eased);
@@ -244,7 +247,7 @@ namespace ConGame.Presentation.M1
 
             // Paired clips start only after both roots share their authored anchor.
             killer.position = target;
-            if (_animationGraph.IsValid())
+            if (!rugPull && _animationGraph.IsValid())
             {
                 _animationGraph.Play();
             }
@@ -279,6 +282,13 @@ namespace ConGame.Presentation.M1
                 }
 
                 float progress = Mathf.Clamp01(elapsed / impactDuration);
+                if (rugPull)
+                {
+                    Vector3 sightline = Vector3.ProjectOnPlane(player.position - killer.position, Vector3.up);
+                    if (sightline.sqrMagnitude > .001f)
+                        killer.rotation = Quaternion.Slerp(killerStartRotation, Quaternion.LookRotation(sightline),
+                            Mathf.SmoothStep(0f, 1f, progress));
+                }
                 player.rotation =
                     Quaternion.Slerp(playerStartRotation, impactRotation, Mathf.SmoothStep(0f, 1f, progress));
                 yield return null;
@@ -421,7 +431,7 @@ namespace ConGame.Presentation.M1
                 case "D13": return new OutcomeBeatProfile(0.70f, 1.58f, 0.36f, 0.19f, 62f, -18f, 48f, 5f, 0.032f);
                 case "D14": return new OutcomeBeatProfile(-0.66f, 0.96f, 0.57f, 0.09f, 86f, 14f, -30f, 8f, 0.024f);
                 case "D15": return new OutcomeBeatProfile(0.12f, 1.38f, 0.47f, 0.13f, 34f, -34f, 72f, 7f, 0.027f);
-                case "D16": return new OutcomeBeatProfile(0.96f, 1.84f, 0.53f, 0.10f, 6f, 38f, 84f, 9f, 0.015f);
+                case "D16": return new OutcomeBeatProfile(0f, 0f, 0.53f, 0.10f, 6f, 38f, 84f, 0f, 0f);
                 case "D17": return new OutcomeBeatProfile(-1.02f, 1.12f, 0.41f, 0.17f, 70f, -6f, -44f, 13f, 0.038f);
                 case "D18": return new OutcomeBeatProfile(0.30f, 0.82f, 0.63f, 0.03f, 80f, 26f, 28f, 6f, 0.011f);
                 case "D19": return new OutcomeBeatProfile(-0.44f, 1.66f, 0.34f, 0.24f, 24f, -40f, -68f, 4f, 0.029f);
@@ -508,7 +518,7 @@ namespace ConGame.Presentation.M1
             _progress?.OnPerformanceCancelled(cancelledOutcomeId, cancelledEpoch);
         }
 
-        private void StartAnimations(M1GreyboxPlayableAsset performance, bool playImmediately)
+        private void StartAnimations(M1GreyboxPlayableAsset performance)
         {
             StopAnimations();
             Animator playerAnimator = playerMotor == null ? null : playerMotor.GetComponentInChildren<Animator>(true);
@@ -526,9 +536,15 @@ namespace ConGame.Presentation.M1
 
             _animationGraph = PlayableGraph.Create($"M1 Performance {_activeOutcomeId}");
             _animationGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
-            CreateAnimationOutput(playerAnimator, performance.PlayerAnimation, "Player");
-            CreateAnimationOutput(killerAnimator, killerAnimation, "Killer");
-            if (playImmediately)
+            bool rugPull = _activeOutcomeId == "D16";
+            // The deepest reach lands just ahead of the stumble's open stride.
+            double reachRate = rugPull && performance.PlayerAnimation != null
+                ? performance.PlayerAnimation.length / (performance.SequenceDuration * .48f) : 1d;
+            double stumbleRate = rugPull && killerAnimation != null
+                ? killerAnimation.length / (performance.SequenceDuration * .84f) : 1d;
+            CreateAnimationOutput(playerAnimator, performance.PlayerAnimation, "Player", reachRate);
+            CreateAnimationOutput(killerAnimator, killerAnimation, "Killer", stumbleRate);
+            if (rugPull)
             {
                 _animationGraph.Play();
             }

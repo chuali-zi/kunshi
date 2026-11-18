@@ -254,6 +254,7 @@ namespace ConGame.Editor
                     killerAnimation = LoadPerformanceClip("PAIR_D11_KillerSide");
                     break;
                 case "D16":
+                    playerAnimation = LoadPerformanceClip("AN_Player_Pickup");
                     killerAnimation = LoadPerformanceClip("AN_Killer_Stumble");
                     break;
                 case "D17":
