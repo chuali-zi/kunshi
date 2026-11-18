@@ -1,0 +1,53 @@
+ConGame current Unity screenshot export — 2026-11-18
+Source gameplay/scene HEAD: 5a5111dd73bd139507506b7c3097ab8c80ffd43e
+Output directory: /workspace/screenshots/2026-11-18/
+Unity 6000.4.6f1; DISPLAY=:5; -batchmode with graphics enabled; no -nographics.
+All PNGs freshly rendered today; no copied, renamed, composited, or reused older images.
+All cameras: production Main Camera (Camera.main), fixed at (0, 1.55, -5.2).
+All scenes: Assets/_Game/Scenes/Room_M1.unity; D16 test loads that saved production scene additively in its test harness.
+All renders: existing MvMainShotBuilder.RenderMainCamera, 1920x1080 URP StandardRequest (two submissions) with grading/vignette/grain.
+D16 test-harness renders appear brighter than the directly opened production panorama; lighting was not adjusted for capture.
+Times below are Unity runtime Time.timeSinceLevelLoad / Time.time (not MV reference time).
+
+room_panorama_awakening.png
+  Pixel size: 1920 x 1080; byte size: 3607017
+  Capture method: executeMethod ConGame.Editor.MvMainShotBuilder.CaptureGameplay; production Room_M1 opened directly, Play Mode.
+  Scene/camera: Room_M1 / Main Camera (same production camera as above).
+  Runtime state: 3.000 s, frame 3572; seated awakening, no input.
+  What it shows: Room-wide current gameplay view; no live trap beat.
+  SHA256: 5421e3ae184827849a5521bec0fc01fac4882766706d8f533753c324ce864a48
+
+d16_rug_in_room.png
+  Pixel size: 1920 x 1080; byte size: 3630843
+  Capture method: Play Mode -runTests; existing natural-keyboard D16 test plus temporary editor-only observer.
+  Scene/camera: Room_M1 / Main Camera (same production camera as above).
+  Runtime state: 1.801 s, frame 7325; FreeRoam; RugArmed=True, TrapPulled=False, killer contact=False.
+  What it shows: Current production rug armed by E; player approaching/standing over it; preparatory live gameplay, no pull yet.
+  SHA256: 528add72398d81aa6bfed3237a71c8af80007b22eaebfabe04157f4bcf3d8082
+
+d16_killer_rug_contact.png
+  Pixel size: 1920 x 1080; byte size: 3642979
+  Capture method: Play Mode -runTests; existing natural-keyboard D16 test plus temporary editor-only observer.
+  Scene/camera: Room_M1 / Main Camera (same production camera as above).
+  Runtime state: 40.900 s, frame 66521; Breach/live hunt; RugArmed=True, TrapPulled=False, killer contact=True.
+  What it shows: Live trap beat: navigating killer actually contacts rug while player is behind the armchair.
+  SHA256: e0fba633fc35458e01a92639237a27c84d5852fd74400757b1866659af8bcaf7
+
+d16_trap_action.png
+  Pixel size: 1920 x 1080; byte size: 3610839
+  Capture method: Play Mode -runTests; existing natural-keyboard D16 test plus temporary editor-only observer.
+  Scene/camera: Room_M1 / Main Camera (same production camera as above).
+  Runtime state: 41.947 s, frame 67484; Counterplay; RugArmed=True, TrapPulled=True; D16 performance active with animation graph; 0.550 s after first observed D16 activation; killer contact=False at capture.
+  What it shows: Live D16 performance after explicit E pull; early approach toward player. This frame does not establish a visibly readable stumble or rug deformation.
+  SHA256: 5fb82d13dd13da2107de7d3e2781320c003d4fd6e9e2fcc8ce8f7279fc830fb3
+
+Verification:
+  Both Unity processes finished with exit code 0; zero C# or shader compile errors in their logs.
+  Natural D16 test: 1/1 passed, 0 failed, 0 skipped; includes real input, natural entry/contact/pull, D16 performance, death/reset and next-loop movement.
+  Test: ConGame.Tests.PlayMode.PlayerSeatedPosePresenterTests.KeyboardArmsRugWaitsForKillerContactAndPullsNaturalD16ThenResets
+  Evidence: room_panorama_awakening.log, d16_natural_capture.log, d16_natural_capture.xml (local only).
+  Four PNGs decoded, checked for nontrivial content and visually inspected.
+  Temporary observer only read runtime state and called the existing renderer; it did not inject facts, force branches, move actors, change camera/lighting or save scenes.
+  Observer source archived locally as D16ScreenshotObserver.cs.txt, then removed from Assets; no helper or gameplay changes committed.
+  InitTestScene leftovers left untouched. No D13, D21 or MV feature development performed.
+  Open visual limitation: low-contrast green rug blends into green floor; no clearly visible rug pull/deformation or distinct stumble claimed by these stills.
