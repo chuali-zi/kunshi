@@ -245,7 +245,8 @@ else if (agent != null && agent.enabled)
                      !IsTransitioningToState("Idle"))
             {
                 animator.ResetTrigger(WakeUpHash);
-                animator.CrossFade("Idle", 0.08f, 0, 0f);
+                // Match the visual rise off the chair in seconds, independent of clip length.
+                animator.CrossFadeInFixedTime("Idle", PlayerSeatedPosePresenter.StandBlendSeconds, 0, 0f);
             }
         }
 

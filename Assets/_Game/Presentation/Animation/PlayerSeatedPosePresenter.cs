@@ -17,7 +17,7 @@ namespace ConGame.Presentation.Animation
     {
         // Calibrated to the imported chair pose's shoe soles, not its ankle joints.
         private const float SeatedVisualDrop = 0.205f;
-        private const float StandBlendSeconds = 0.25f;
+        internal const float StandBlendSeconds = 0.25f;
 
         [SerializeField] private LoopDirector loop;
         [SerializeField] private PlayerInputRouter input;

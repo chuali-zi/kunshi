@@ -246,6 +246,20 @@ namespace ConGame.Editor
                 changed = true;
             }
 
+            var layers = controller.layers;
+            if (!layers[0].iKPass)
+            {
+                layers[0].iKPass = true;
+                controller.layers = layers;
+                changed = true;
+            }
+
+            if (!sitChair.behaviours.OfType<SeatedRestPose>().Any())
+            {
+                sitChair.AddStateMachineBehaviour<SeatedRestPose>();
+                changed = true;
+            }
+
             AnimationClip clip = LoadClip("POSE_Player_SitChair");
             if (sitChair.motion != clip)
             {
