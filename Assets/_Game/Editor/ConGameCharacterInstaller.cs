@@ -78,6 +78,21 @@ namespace ConGame.Editor
             }
         }
 
+        [MenuItem("ConGame/Characters/Install Locomotion Contacts")]
+        public static void InstallLocomotionContacts()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            EnsureLocomotionPose(FindInScene("CH_Player_Model").gameObject);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene, ScenePath);
+        }
+
+        private static void EnsureLocomotionPose(GameObject model)
+        {
+            if (!model.TryGetComponent<PlayerLocomotionPose>(out _))
+                model.AddComponent<PlayerLocomotionPose>();
+        }
+
         // ---- 1) 导入设置:全部 Humanoid,循环动画勾 Loop Time ----
 
         static void ConfigureModelImports()
@@ -399,6 +414,7 @@ namespace ConGame.Editor
             }
             else
             {
+                EnsureLocomotionPose(instance);
                 Transform handSocket = FindRecursive(root.transform, "HandSocket_R");
                 if (handSocket == null)
                 {

@@ -26420,7 +26420,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 190a5d814aba03740a7e223c0c48f7fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2143678675}
   m_SourcePrefab: {fileID: 100100000, guid: 190a5d814aba03740a7e223c0c48f7fb, type: 3}
 --- !u!95 &2143678672 stripped
 Animator:
@@ -26432,6 +26435,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 190a5d814aba03740a7e223c0c48f7fb, type: 3}
   m_PrefabInstance: {fileID: 2143678671}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2143678674 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 190a5d814aba03740a7e223c0c48f7fb, type: 3}
+  m_PrefabInstance: {fileID: 2143678671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2143678675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143678674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3fa7eb8e25dde276ab2e582110149cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.Animation.PlayerLocomotionPose
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
