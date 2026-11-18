@@ -78,6 +78,15 @@ namespace ConGame.Editor
             }
         }
 
+        [MenuItem("ConGame/Characters/Install Sofa Hide Pose")]
+        public static void InstallSofaHidePose()
+        {
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>($"{CtrlDir}/AC_Player.controller");
+            EnsureSofaHideState(controller);
+            EditorUtility.SetDirty(controller);
+            AssetDatabase.SaveAssets();
+        }
+
         [MenuItem("ConGame/Characters/Install Locomotion Contacts")]
         public static void InstallLocomotionContacts()
         {
@@ -238,7 +247,11 @@ namespace ConGame.Editor
             walk.iKOnFeet = true;
             sm.defaultState = idle;
 
-            if (!killer) EnsurePlayerSitChairState(controller);
+            if (!killer)
+            {
+                EnsurePlayerSitChairState(controller);
+                EnsureSofaHideState(controller);
+            }
 
             AnimatorStateTransition toWalk = idle.AddTransition(walk);
             toWalk.AddCondition(AnimatorConditionMode.Greater, 0.15f, "Speed");
@@ -269,6 +282,16 @@ namespace ConGame.Editor
             EditorUtility.SetDirty(controller);
             Debug.Log($"INSTALL controller {name} ok");
             return controller;
+        }
+
+        private static void EnsureSofaHideState(AnimatorController controller)
+        {
+            var machine = controller.layers[0].stateMachine;
+            var state = machine.states.Select(child => child.state).FirstOrDefault(s => s.name == "SofaHide")
+                ?? machine.AddState("SofaHide", new Vector3(240, 340, 0));
+            state.motion = LoadClip("POSE_Player_CrouchHide");
+            if (!state.behaviours.OfType<SofaHidePose>().Any())
+                state.AddStateMachineBehaviour<SofaHidePose>();
         }
 
         private static bool EnsurePlayerSitChairState(AnimatorController controller)

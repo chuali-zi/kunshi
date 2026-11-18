@@ -47,6 +47,7 @@ namespace ConGame.Presentation.Animation
 [SerializeField] private GameplayFactService facts;
 
         private PlayerMotor playerMotor;
+        private PlayerInteractor playerInteractor;
 
         private bool _wasSwinging;
         private bool _receivedPhaseChange;
@@ -155,9 +156,10 @@ else if (agent != null && agent.enabled)
 
             if (role == DriverRole.Player && facts != null)
             {
-                ApplyPlayerPose(facts.CaptureSnapshot().PlayerPose);
+                var snapshot = facts.CaptureSnapshot();
+                ApplyPlayerPose(snapshot);
 
-                bool swinging = facts.CaptureSnapshot().IsSwinging;
+                bool swinging = snapshot.IsSwinging;
                 if (swinging && !_wasSwinging)
                 {
                     animator.SetTrigger(SwingHash);
@@ -219,7 +221,7 @@ else if (agent != null && agent.enabled)
             }
         }
 
-        private void ApplyPlayerPose(PlayerPose pose)
+        private void ApplyPlayerPose(FactSnapshot snapshot)
         {
             // Counterplay and death own their poses, including a seated no-input
             // death. A lingering Sitting fact must not override HitFall each frame.
@@ -234,7 +236,19 @@ else if (agent != null && agent.enabled)
                 return;
             }
 
-            if (pose == PlayerPose.Sitting)
+            var destination = animator.IsInTransition(0) ? animator.GetNextAnimatorStateInfo(0)
+                : animator.GetCurrentAnimatorStateInfo(0);
+            bool hidingAtSofa = snapshot.PlayerZone == PlayerZone.SofaRear && snapshot.PlayerPose == PlayerPose.Crouched
+                && playerInteractor != null && playerInteractor.IsHiding;
+            if (hidingAtSofa && (destination.IsName("Idle") || destination.IsName("Walk")) && HasState("SofaHide"))
+            {
+                animator.CrossFadeInFixedTime("SofaHide", .20f, 0, 0f);
+            }
+            else if (!hidingAtSofa && destination.IsName("SofaHide"))
+            {
+                animator.CrossFadeInFixedTime("Idle", .18f, 0, 0f);
+            }
+            else if (snapshot.PlayerPose == PlayerPose.Sitting)
             {
                 if (!IsCurrentOrNextState("SitChair") && !IsCurrentOrNextState("WakeUp"))
                 {
@@ -345,6 +359,7 @@ else if (agent != null && agent.enabled)
             }
 
             playerMotor ??= GetComponentInParent<PlayerMotor>();
+            playerInteractor = GetComponentInParent<PlayerInteractor>();
         }
 
         private void OnPlayerClimbStarted(float duration)

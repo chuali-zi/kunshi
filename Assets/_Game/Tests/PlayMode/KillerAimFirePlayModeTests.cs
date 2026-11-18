@@ -166,7 +166,11 @@ namespace ConGame.Tests.PlayMode
                     "Sitting facts should present the authored chair pose.");
 
                 facts.SetPlayerPose(ConGame.Domain.Facts.PlayerPose.Standing);
-                yield return new WaitForSeconds(0.15f);
+                yield return new WaitForSeconds(0.10f);
+                Assert.That(animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).IsName("Idle"),
+                    Is.True, "Standing should start blending out of the chair pose.");
+                // The production rise takes 0.25 seconds from the standing input.
+                yield return new WaitForSeconds(0.20f);
                 Assert.That(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"), Is.True,
                     "A standing pose should exit the chair pose.");
             }
@@ -300,6 +304,8 @@ namespace ConGame.Tests.PlayMode
             var controller = new UnityEditor.Animations.AnimatorController();
             controller.name = "AC_PlayerSeatedPoseTest";
             controller.AddLayer("Base");
+            controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
+            controller.AddParameter("WakeUp", AnimatorControllerParameterType.Trigger);
             UnityEditor.Animations.AnimatorStateMachine sm = controller.layers[0].stateMachine;
             UnityEditor.Animations.AnimatorState idle = sm.AddState("Idle");
             sm.AddState("SitChair");
