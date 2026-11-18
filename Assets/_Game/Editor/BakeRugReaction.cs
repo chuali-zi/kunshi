@@ -18,18 +18,20 @@ namespace ConGame.Editor
         // lower leg along the runner and keep the other knee folded.
         private static readonly Dictionary<string, float> RestingChannels = new()
         {
-            { "Spine Front-Back", .98f },
+            { "Spine Front-Back", .88f },
             { "Spine Left-Right", -.98f },
-            { "Spine Twist Left-Right", -.87f },
-            { "Chest Front-Back", -.98f },
+            { "Spine Twist Left-Right", -.6f },
+            { "Chest Front-Back", -.53f },
             { "Chest Left-Right", -.98f },
-            { "Chest Twist Left-Right", .42f },
-            { "UpperChest Front-Back", -.98f },
-            { "UpperChest Twist Left-Right", .98f },
-            { "Neck Nod Down-Up", .98f },
-            { "Head Nod Down-Up", .98f },
-            { "Head Tilt Left-Right", -.31f },
-            { "Head Turn Left-Right", .98f },
+            { "Chest Twist Left-Right", .15f },
+            { "UpperChest Front-Back", -.01f },
+            { "UpperChest Left-Right", -.29f },
+            { "UpperChest Twist Left-Right", .14f },
+            { "Neck Nod Down-Up", .28f },
+            { "Neck Turn Left-Right", .2f },
+            { "Head Nod Down-Up", -.93f },
+            { "Head Tilt Left-Right", .98f },
+            { "Head Turn Left-Right", .9f },
             { "Left Upper Leg Front-Back", .98f },
             { "Left Upper Leg In-Out", -.98f },
             { "Left Upper Leg Twist In-Out", .98f },
@@ -37,23 +39,28 @@ namespace ConGame.Editor
             { "Right Upper Leg Front-Back", .98f },
             { "Right Upper Leg Twist In-Out", -.21f },
             { "Right Lower Leg Stretch", .27f },
-            { "Left Shoulder Down-Up", -.67f },
-            { "Left Shoulder Front-Back", .39f },
-            { "Left Arm Down-Up", .04f },
-            { "Left Arm Front-Back", .39f },
-            { "Left Arm Twist In-Out", -.51f },
-            { "Left Forearm Stretch", .60f },
-            { "Left Forearm Twist In-Out", -.82f },
-            { "Right Shoulder Down-Up", -.01f },
-            { "Right Arm Front-Back", -.82f },
+            { "Left Shoulder Down-Up", -.71f },
+            { "Left Shoulder Front-Back", .3f },
+            { "Left Arm Down-Up", .22f },
+            { "Left Arm Front-Back", .43f },
+            { "Left Arm Twist In-Out", -.63f },
+            { "Left Forearm Stretch", .96f },
+            { "Left Forearm Twist In-Out", -.47f },
+            { "Left Hand Down-Up", .02f },
+            { "Right Shoulder Down-Up", -.3f },
+            { "Right Arm Down-Up", -1.06f },
+            { "Right Arm Front-Back", .25f },
             { "Right Arm Twist In-Out", -.87f },
-            { "Right Forearm Stretch", .21f },
+            { "Right Forearm Stretch", -.01f },
             { "Right Forearm Twist In-Out", -1.35f },
             { "Right Hand Down-Up", -.15f },
-            // The imported humanoid clip also drives the folded leg through its foot goal.
-            { "RightFootT.x", 0.321f },
-            { "RightFootT.y", -0.352f },
-            { "RightFootT.z", -0.087f },
+            // Keep the heels at the runner as the upper body rolls across the hips.
+            { "LeftFootT.x", .11f },
+            { "LeftFootT.y", -.75f },
+            { "LeftFootT.z", -.19f },
+            { "RightFootT.x", .24f },
+            { "RightFootT.y", -.38f },
+            { "RightFootT.z", -.19f },
         };
 
         [MenuItem("ConGame/Characters/Bake D16 player landing")]
@@ -92,8 +99,8 @@ namespace ConGame.Editor
                 using var handler = new HumanPoseHandler(animator.avatar, actor.transform);
                 Quaternion previous = Quaternion.identity;
                 // Supine, with the long axis of the body across the runner.
-                var restingRotation = Quaternion.LookRotation(new Vector3(.058f, .973f, .224f),
-                    new Vector3(-.669f, .204f, -.715f));
+                var restingRotation = Quaternion.LookRotation(new Vector3(-0.259f, 0.958f, 0.125f),
+                    new Vector3(-0.699f, -0.097f, -0.708f));
                 for (int i = 0; i <= Frames; i++)
                 {
                     float time = i / (float)Rate;
@@ -108,6 +115,9 @@ namespace ConGame.Editor
                     body = rollDirection * body;
                     Quaternion rotation = rollDirection * pose.bodyRotation;
                     float land = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.42f, .90f, impact));
+                    // The hips take the impact first. Let the upper back and collar roll onto
+                    // the runner before the head and forearms finish dropping.
+                    float shoulder = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.54f, .96f, impact));
                     float release = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.63f, 1f, impact));
                     // Carry the hip toward the front edge so the far leg clears the wingback.
                     body += new Vector3(.09f, 0f, .26f) * (land / bodyScale);
@@ -122,8 +132,12 @@ namespace ConGame.Editor
                         float value = entry.Value.Evaluate((float)hit.GetTime());
                         if (RestingChannels.TryGetValue(entry.Key, out float resting))
                         {
-                            bool followThrough = entry.Key.Contains("Forearm") || entry.Key.StartsWith("Head");
-                            value = Mathf.Lerp(value, resting, followThrough ? release : land);
+                            float weight = land;
+                            if (entry.Key.Contains("Chest") || entry.Key.Contains("Shoulder"))
+                                weight = shoulder;
+                            if (entry.Key.Contains("Forearm") || entry.Key.StartsWith("Neck") || entry.Key.StartsWith("Head"))
+                                weight = release;
+                            value = Mathf.Lerp(value, resting, weight);
                         }
                         Key(curves, entry.Key, time, value);
                     }
