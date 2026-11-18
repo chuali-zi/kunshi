@@ -87,6 +87,26 @@ namespace ConGame.Editor
             EditorSceneManager.SaveScene(scene, ScenePath);
         }
 
+        [MenuItem("ConGame/Characters/Install Killer Floor Contact")]
+        public static void InstallKillerFloorContact()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            EnsureKillerFloorContact(FindInScene("CH_Killer_Model").gameObject);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene, ScenePath);
+            AssetDatabase.SaveAssets();
+        }
+
+        private static void EnsureKillerFloorContact(GameObject model)
+        {
+            if (!model.TryGetComponent<KillerFloorContact>(out _)) model.AddComponent<KillerFloorContact>();
+            var controller = (AnimatorController)model.GetComponent<Animator>().runtimeAnimatorController;
+            var layers = controller.layers;
+            layers[0].iKPass = true;
+            controller.layers = layers;
+            EditorUtility.SetDirty(controller);
+        }
+
         private static void EnsureLocomotionPose(GameObject model)
         {
             if (!model.TryGetComponent<PlayerLocomotionPose>(out _))
@@ -144,9 +164,12 @@ namespace ConGame.Editor
                     clip.loopTime = baseName.StartsWith("POSE_", StringComparison.Ordinal) ||
                                     Array.IndexOf(LoopClips, baseName) >= 0;
                     clip.lockRootRotation = true;
-                    clip.lockRootHeightY = true;
+                    bool grounded = baseName == "AN_Killer_Walk" ||
+                                    baseName == "AN_Player_Pickup" || baseName == "AN_Killer_Stumble";
+                    clip.lockRootHeightY = !grounded;
+                    clip.heightFromFeet = grounded;
                     clip.keepOriginalOrientation = true;
-                    clip.keepOriginalPositionY = true;
+                    clip.keepOriginalPositionY = !grounded;
                     clip.keepOriginalPositionXZ = true;
                 }
 
@@ -401,6 +424,7 @@ namespace ConGame.Editor
                              root.GetComponent<NavMeshAgent>(), flow, facts);
             if (role == CharacterAnimatorDriver.DriverRole.Killer)
             {
+                EnsureKillerFloorContact(instance);
                 InstallKillerEquipment(instance.transform);
                 KillerHitReceiver hitReceiver = root.GetComponent<KillerHitReceiver>() ??
                                                  root.AddComponent<KillerHitReceiver>();

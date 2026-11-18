@@ -15581,7 +15581,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -3938903898477504799, guid: ceeb2986b78d1f944a7d8cebc345cd41, type: 3}
       insertIndex: -1
       addedObject: {fileID: 316983627}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ceeb2986b78d1f944a7d8cebc345cd41, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 912708578}
   m_SourcePrefab: {fileID: 100100000, guid: ceeb2986b78d1f944a7d8cebc345cd41, type: 3}
 --- !u!4 &912708573 stripped
 Transform:
@@ -15603,6 +15606,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -3938903898477504799, guid: ceeb2986b78d1f944a7d8cebc345cd41, type: 3}
   m_PrefabInstance: {fileID: 912708572}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &912708577 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ceeb2986b78d1f944a7d8cebc345cd41, type: 3}
+  m_PrefabInstance: {fileID: 912708572}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &912708578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912708577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b92514fef5d12198a28e98a1d20a66d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ConGame.Presentation::ConGame.Presentation.Animation.KillerFloorContact
 --- !u!1 &930165916
 GameObject:
   m_ObjectHideFlags: 0
