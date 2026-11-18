@@ -25,6 +25,7 @@ namespace ConGame.Runtime.Interaction
         private bool _initialActive;
         private bool _initialIsKinematic;
         private bool _initialUseGravity;
+        private RigidbodyInterpolation? _interpolationBeforeGrip;
         private CollisionDetectionMode _initialCollisionDetectionMode;
         private Collider[] _colliders;
         private bool[] _initialColliderEnabled;
@@ -79,6 +80,10 @@ namespace ConGame.Runtime.Interaction
                 StopBodyMotion();
                 body.isKinematic = true;
                 body.useGravity = false;
+                // The animated socket now owns the pose each render frame.
+                // Interpolating the previous physics poses leaves the item behind the wrist.
+                _interpolationBeforeGrip ??= body.interpolation;
+                body.interpolation = RigidbodyInterpolation.None;
             }
 
             transform.SetParent(socket, false);
@@ -551,6 +556,11 @@ namespace ConGame.Runtime.Interaction
 
         private void SetState(ItemPhysicalState state)
         {
+            if (state != ItemPhysicalState.Held && _interpolationBeforeGrip.HasValue)
+            {
+                if (body != null) body.interpolation = _interpolationBeforeGrip.Value;
+                _interpolationBeforeGrip = null;
+            }
             if (CurrentState == state)
             {
                 return;

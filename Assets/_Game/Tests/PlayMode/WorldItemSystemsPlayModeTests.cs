@@ -27,6 +27,7 @@ namespace ConGame.Tests.PlayMode
                 BoxCollider playerCollider = player.AddComponent<BoxCollider>();
                 BoxCollider itemCollider = item.AddComponent<BoxCollider>();
                 Rigidbody body = item.AddComponent<Rigidbody>();
+                body.interpolation = RigidbodyInterpolation.Interpolate;
                 InteractableEntity entity = item.AddComponent<InteractableEntity>();
                 entity.Configure(null, "test_item");
                 StatefulWorldItem stateful = item.AddComponent<StatefulWorldItem>();
@@ -37,20 +38,25 @@ namespace ConGame.Tests.PlayMode
 
                 Assert.That(stateful.BeginHeld(socket.transform, new Collider[] { playerCollider }), Is.True);
                 Assert.That(stateful.CurrentState, Is.EqualTo(ItemPhysicalState.Held));
+                Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation.None));
                 Assert.That(Physics.GetIgnoreCollision(itemCollider, playerCollider), Is.True);
 
                 stateful.Release(Vector3.forward * 8f, Vector3.zero);
                 Assert.That(stateful.CurrentState, Is.EqualTo(ItemPhysicalState.Flying));
+                Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation.Interpolate));
                 Assert.That(Physics.GetIgnoreCollision(itemCollider, playerCollider), Is.True);
 
                 yield return new WaitForFixedUpdate();
                 Assert.That(Physics.GetIgnoreCollision(itemCollider, playerCollider), Is.False);
 
+                // A loop can also end with the chair still in the player's hand.
+                Assert.That(stateful.BeginHeld(socket.transform, new Collider[] { playerCollider }), Is.True);
                 LoopResetContext context = new LoopResetContext(1, 2);
                 stateful.Quiesce(context);
                 stateful.Restore(context);
                 stateful.Resume(context);
                 Assert.That(stateful.CurrentState, Is.EqualTo(ItemPhysicalState.Placed));
+                Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation.Interpolate));
                 Assert.That(item.transform.parent, Is.EqualTo(root.transform));
                 Assert.That(item.transform.localPosition, Is.EqualTo(new Vector3(1f, 2f, 3f)));
             }
