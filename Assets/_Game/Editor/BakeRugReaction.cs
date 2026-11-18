@@ -89,6 +89,12 @@ namespace ConGame.Editor
             new Keyframe(.55f, .18f, -1.8f, -1.8f),
             new Keyframe(.64f, .10f, -.8f, -.8f), new Keyframe(.71f, 0f));
 
+        // Lower the far heel as the player lands, easing off as the shoulder takes weight.
+        // Values are metres below the source ankle path at normalized clip times.
+        private static readonly AnimationCurve FarHeelDrop = new(
+            new Keyframe(.44f, 0f), new Keyframe(.64f, .043f, .20f, .20f),
+            new Keyframe(.74f, .066f), new Keyframe(1f, .008f));
+
         [MenuItem("ConGame/Characters/Bake D16 player landing")]
         public static void Bake()
         {
@@ -170,6 +176,11 @@ namespace ConGame.Editor
                     for (int j = 0; j < 4; j++) Key(curves, "RootQ." + "xyzw"[j], time, rotation[j]);
                     float catchWeight = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.28f, .52f, impact))
                         * (1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.85f, .98f, impact)));
+                    // The far boot folds back beneath the bent knee while the near heel
+                    // slides forward. Foot goals are stored in the rotating body's space.
+                    float tuck = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.44f, .68f, impact));
+                    Vector3 farFootOffset = Quaternion.Inverse(rotation)
+                        * new Vector3(-.15f * tuck, -FarHeelDrop.Evaluate(impact), 0f) / bodyScale;
                     foreach (var entry in sourceCurves)
                     {
                         float value = entry.Value.Evaluate((float)hit.GetTime());
@@ -184,6 +195,8 @@ namespace ConGame.Editor
                                 weight = release;
                             value = Mathf.Lerp(value, resting, weight);
                         }
+                        if (entry.Key.StartsWith("RightFootT."))
+                            value += farFootOffset[entry.Key[^1] - 'x'];
                         if (CatchingArm.TryGetValue(entry.Key, out var catchCurve))
                             value = Mathf.Lerp(value, catchCurve.Evaluate(impact), catchWeight);
                         Key(curves, entry.Key, time, value);
