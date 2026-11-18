@@ -47,6 +47,7 @@ namespace ConGame.Runtime.AI
         private Quaternion _initialRotation;
         private bool _initialActive;
         private bool _huntActive;
+        private bool _holdDoorwayPosition;
         private int _loopEpoch;
         private string _outcomeId = "D01";
         private float _detectionProgress;
@@ -121,8 +122,9 @@ namespace ConGame.Runtime.AI
             aimFirePresentationSettings = settings.Validated();
         }
 
-        public void BeginHunt(int loopEpoch, string outcomeId)
+        public void BeginHunt(int loopEpoch, string outcomeId, bool holdDoorwayPosition = false)
         {
+            _holdDoorwayPosition = holdDoorwayPosition;
             _loopEpoch = loopEpoch;
             _outcomeId = string.IsNullOrWhiteSpace(outcomeId) ? "D01" : outcomeId;
             _huntActive = true;
@@ -173,6 +175,7 @@ namespace ConGame.Runtime.AI
 
         public void StopHunt()
         {
+            _holdDoorwayPosition = false;
             CancelAimIfNeeded();
             _aimFirePresentation.Reset();
             _huntActive = false;
@@ -754,6 +757,13 @@ namespace ConGame.Runtime.AI
 
         private void SetAnchorDestination(Transform preferred, Vector3 fallbackReference)
         {
+            if (_holdDoorwayPosition)
+            {
+                _hasDestination = false;
+                StopNavigation(true);
+                return;
+            }
+
             if (!TryGetAnchorDestination(preferred, out Vector3 destination))
             {
                 preferred = FindClosestAnchor(fallbackReference);
@@ -812,6 +822,12 @@ namespace ConGame.Runtime.AI
 
         private bool MoveToDestination(float speed)
         {
+            if (_holdDoorwayPosition)
+            {
+                StopNavigation(true);
+                return true;
+            }
+
             if (!_hasDestination)
             {
                 return true;
@@ -843,6 +859,14 @@ namespace ConGame.Runtime.AI
 
         private void EnableNavigation()
         {
+            // A bookcase leaves only the gun gap. Keep real perception and aim,
+            // but never warp onto an interior NavMesh or pursue through the door.
+            if (_holdDoorwayPosition)
+            {
+                StopNavigation(true);
+                return;
+            }
+
             if (agent == null)
             {
                 return;

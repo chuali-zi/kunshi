@@ -33,6 +33,8 @@ namespace ConGame.Runtime.AI
         private float duration = DefaultDuration;
         [SerializeField]
         private float openAngle = DefaultOpenAngle;
+        [SerializeField, Range(1f, 89f)]
+        private float bookcaseGapAngle = 30f;
         [SerializeField]
         private BreachKickTimingSettings kickTiming = BreachKickTimingSettings.Default;
 
@@ -45,6 +47,7 @@ namespace ConGame.Runtime.AI
         private float _contactElapsed = -1f;
         private int _loopEpoch;
         private bool _captured;
+        private bool _bookcaseBlocked;
 
         public int ResetOrder => 20;
 
@@ -55,6 +58,7 @@ namespace ConGame.Runtime.AI
         public float Progress => duration <= 0f ? 1f : Mathf.Clamp01(_elapsed / duration);
 
         public float CurrentDuration => duration;
+        public float CurrentOpenAngle => _bookcaseBlocked ? bookcaseGapAngle : openAngle;
 
         public bool HasContactOccurred => _contactElapsed >= 0f;
 
@@ -87,11 +91,12 @@ namespace ConGame.Runtime.AI
             Begin(loopEpoch, completed, _baseDuration);
         }
 
-        public void Begin(int loopEpoch, Action completed, float durationOverride)
+        public void Begin(int loopEpoch, Action completed, float durationOverride, bool bookcaseBlocked = false)
         {
             EnsureInitialStateCaptured();
             Cancel();
 
+            _bookcaseBlocked = bookcaseBlocked;
             duration = Mathf.Max(0.01f, durationOverride);
             _loopEpoch = loopEpoch;
             _completed = completed;
@@ -190,6 +195,7 @@ namespace ConGame.Runtime.AI
             _elapsed = 0f;
             _contactElapsed = -1f;
             duration = _baseDuration;
+            _bookcaseBlocked = false;
             SetPhase(RoomDoorBreachPhase.Idle);
         }
 
@@ -247,7 +253,7 @@ namespace ConGame.Runtime.AI
             {
                 float openingDuration = Mathf.Max(MinOpeningSeconds, duration - _contactElapsed);
                 float openingProgress = Mathf.Clamp01((_elapsed - _contactElapsed) / openingDuration);
-                yaw = Mathf.SmoothStep(0f, openAngle, openingProgress);
+                yaw = Mathf.SmoothStep(0f, CurrentOpenAngle, openingProgress);
             }
 
             door.localPosition = _initialLocalPosition;
@@ -280,7 +286,7 @@ namespace ConGame.Runtime.AI
             if (door != null && _captured)
             {
                 door.localPosition = _initialLocalPosition;
-                door.localRotation = _initialLocalRotation * Quaternion.Euler(0f, openAngle, 0f);
+                door.localRotation = _initialLocalRotation * Quaternion.Euler(0f, CurrentOpenAngle, 0f);
                 door.localScale = _initialLocalScale;
             }
 

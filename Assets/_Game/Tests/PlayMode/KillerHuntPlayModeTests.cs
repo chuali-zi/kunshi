@@ -15,6 +15,43 @@ namespace ConGame.Tests.PlayMode
     public sealed class KillerHuntPlayModeTests
     {
         [UnityTest]
+        public IEnumerator DoorGapHoldsOutsideUntilClearSightAndRangePermitARealShot()
+        {
+            var fixture = new Fixture();
+            try
+            {
+                fixture.Player.transform.position = Vector3.forward * 6f;
+                fixture.Hunt.BeginHunt(31, "D13", true);
+                yield return new WaitForSeconds(1.5f);
+                Assert.That(fixture.CommitCount, Is.Zero, "The gap does not bypass shooting range.");
+                Assert.That(fixture.Killer.transform.position, Is.EqualTo(Vector3.zero));
+                fixture.CreateOccluder();
+                fixture.Player.transform.position = Vector3.forward * 3f;
+                Physics.SyncTransforms();
+                yield return new WaitForSeconds(1.5f);
+                Assert.That(fixture.CommitCount, Is.Zero, "The gap does not bypass physical occlusion.");
+                Assert.That(fixture.Killer.transform.position, Is.EqualTo(Vector3.zero));
+                fixture.RemoveOccluder();
+                // A stationary search may face away when the obstacle clears;
+                // allow a complete authored scan plus detection and aim.
+                float until = Time.time + 8f;
+                while (fixture.CommitCount == 0 && Time.time < until) yield return null;
+                Assert.That(fixture.CommitCount, Is.EqualTo(1),
+                    $"Clear sight must eventually commit from the gap; mode={fixture.Hunt.Mode}.");
+                Assert.That(fixture.ShotCount, Is.Zero, "A real phase confirmation is still required.");
+                Assert.That(fixture.Hunt.ConfirmAttackCommit(31), Is.True);
+                yield return new WaitForSeconds(.35f);
+                Assert.That(fixture.ShotCount, Is.EqualTo(1));
+                Assert.That(fixture.ResolveCount, Is.EqualTo(1));
+                Assert.That(fixture.Killer.transform.position, Is.EqualTo(Vector3.zero));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator OcclusionCancelsAimAndPreventsShotCommit()
         {
             Fixture fixture = new Fixture();
@@ -328,6 +365,12 @@ namespace ConGame.Tests.PlayMode
                 _occluder.transform.SetParent(Root.transform);
                 _occluder.transform.position = new Vector3(0f, 1.1f, 1.5f);
                 _occluder.transform.localScale = new Vector3(2f, 2.4f, 0.2f);
+                Physics.SyncTransforms();
+            }
+
+            public void RemoveOccluder()
+            {
+                if (_occluder != null) _occluder.SetActive(false);
                 Physics.SyncTransforms();
             }
 

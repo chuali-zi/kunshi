@@ -702,7 +702,7 @@ MonoBehaviour:
   facts: {fileID: 294111205}
   events: {fileID: 294111221}
   fallenLocalEuler: {x: 0, y: 0, z: 85}
-  doorway: {fileID: 0}
+  doorway: {fileID: 1999451663}
   tipWorldDirection: {x: 1, y: 0, z: 0}
 --- !u!114 &50553344
 MonoBehaviour:
@@ -7211,6 +7211,7 @@ Transform:
   - {fileID: 1065438139}
   - {fileID: 1065934205}
   - {fileID: 1506989841}
+  - {fileID: 1495542576}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &220253654
@@ -8479,6 +8480,7 @@ MonoBehaviour:
   door: {fileID: 1999451663}
   duration: 0.9
   openAngle: 105
+  bookcaseGapAngle: 30
   kickTiming:
     WindupSeconds: 0.28
     ContactFallbackSeconds: 0.4
@@ -15785,6 +15787,7 @@ MonoBehaviour:
   performanceLauncherBehaviour: {fileID: 0}
   tacticalController: {fileID: 942785549}
   entryInsideTarget: {fileID: 1065934205}
+  entryDoorGapTarget: {fileID: 1495542576}
   entryWalkSpeed: 1.05
   entryStopDistance: 0.04
 --- !u!114 &942785542
@@ -20975,6 +20978,37 @@ MonoBehaviour:
   item: {fileID: 1489597775}
   intactVisual: {fileID: 97679149}
   brokenVisual: {fileID: 649086459}
+--- !u!1 &1495542575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1495542576}
+  m_Layer: 0
+  m_Name: KillerEntryDoorGap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1495542576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495542575}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.1799998, y: 0, z: 1.6499999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 217486012}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1495657994
 GameObject:
   m_ObjectHideFlags: 0

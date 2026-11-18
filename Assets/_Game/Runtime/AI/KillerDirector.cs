@@ -44,6 +44,7 @@ namespace ConGame.Runtime.AI
 
         [Header("Doorway Entry")]
         [SerializeField] private Transform entryInsideTarget;
+        [SerializeField] private Transform entryDoorGapTarget;
         [SerializeField, Min(0.1f)] private float entryWalkSpeed = 1.05f;
         [SerializeField, Min(0.01f)] private float entryStopDistance = 0.04f;
         private Action<string> _killCallback;
@@ -120,6 +121,14 @@ public void ConfigureEntry(Transform insideTarget, float walkSpeed)
             entryInsideTarget = insideTarget;
             entryWalkSpeed = Mathf.Max(0.1f, walkSpeed);
         }
+
+        public void ConfigureDoorGapEntry(Transform gapTarget)
+        {
+            entryDoorGapTarget = gapTarget;
+        }
+
+        private bool IsBookcaseBlockingEntry => !_endingMode && facts != null &&
+            facts.CaptureSnapshot().DoorBlock == DoorBlockState.Bookcase;
 
         public void ConfigureHunt(KillerTacticalController controller)
         {
@@ -783,7 +792,9 @@ private void UpdateDoorwayEntry()
                 return;
             }
 
-            Vector3 target = entryInsideTarget.position;
+            Transform entryTarget = IsBookcaseBlockingEntry && entryDoorGapTarget != null
+                ? entryDoorGapTarget : entryInsideTarget;
+            Vector3 target = entryTarget.position;
             Vector3 offset = target - transform.position;
             offset.y = 0f;
             float distance = offset.magnitude;
@@ -854,7 +865,7 @@ private void UpdateDoorwayEntry()
 
             CounterplaySelected?.Invoke(SelectedOutcomeId);
             SetState(KillerState.Perceiving);
-            tacticalController.BeginHunt(_loopEpoch, SelectedOutcomeId);
+            tacticalController.BeginHunt(_loopEpoch, SelectedOutcomeId, IsBookcaseBlockingEntry);
             GetComponent<KillerLampBrightener>()?.TryBrightenForRecoverableDark();
         }
 

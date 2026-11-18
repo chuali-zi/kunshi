@@ -356,7 +356,9 @@ public void MarkD21Seen()
                 {
                     float baseDuration = config == null ? 0.9f : config.BreachDuration;
                     float extra = facts == null ? 0f : facts.DoorBlockBreachExtraSeconds;
-                    breach.Begin(_loopEpoch, OnBreachCompleted, baseDuration + extra);
+                    bool bookcaseBlocked = facts != null &&
+                        facts.CaptureSnapshot().DoorBlock == DoorBlockState.Bookcase;
+                    breach.Begin(_loopEpoch, OnBreachCompleted, baseDuration + extra, bookcaseBlocked);
                 }
             }
             else if (current == GamePhase.Counterplay)

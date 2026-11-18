@@ -798,13 +798,33 @@ namespace ConGame.Tests.PlayMode
             yield return WalkTo(motor, new Vector3(-2.25f, 0, -.6f));
             yield return WalkTo(motor, new Vector3(0, 0, -.6f));
             breach.KickWindupStarted += _ =>
+            {
                 Assert.That(breach.CurrentDuration, Is.EqualTo(baseDuration).Within(.01f),
                     "D13 must not add the ordinary furniture breach delay.");
+                Assert.That(breach.CurrentOpenAngle, Is.InRange(1f, 45f),
+                    "A bookcase must leave a gun gap rather than the ordinary fully open door.");
+            };
+            var killer = FindInRoom<KillerDirector>();
+            var hinge = FindInRoomTransform("DoorHinge");
+            var gap = FindInRoomTransform("KillerEntryDoorGap");
+            Assert.That(gap, Is.Not.Null);
+            killer.ShotFired += (_, __) =>
+            {
+                Assert.That(killer.transform.position.x, Is.GreaterThanOrEqualTo(hinge.position.x),
+                    "D13 must shoot from outside the room rather than pursuing the player inside.");
+                Vector3 offset = killer.transform.position - gap.position;
+                offset.y = 0;
+                Assert.That(offset.magnitude, Is.LessThan(.05f));
+                Assert.That(Quaternion.Angle(hinge.localRotation, Quaternion.identity),
+                    Is.EqualTo(breach.CurrentOpenAngle).Within(.1f));
+            };
             yield return ObserveNaturalShotAndReset("D13", 45f);
             Assert.That(tip.IsTipped, Is.False);
             Assert.That(facts.CaptureSnapshot().DoorBlock, Is.EqualTo(DoorBlockState.None));
             Assert.That(bookcase.position, Is.EqualTo(bookcaseStart));
             Assert.That(Quaternion.Angle(bookcase.rotation, bookcaseRotation), Is.LessThan(.01f));
+            Assert.That(breach.CurrentOpenAngle, Is.GreaterThan(45f));
+            Assert.That(Quaternion.Angle(hinge.localRotation, Quaternion.identity), Is.LessThan(.01f));
             yield return HoldKeys(.25f, Key.S);
             Assert.That(facts.CaptureSnapshot().PlayerPose, Is.EqualTo(PlayerPose.Standing));
         }

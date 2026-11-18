@@ -10,6 +10,32 @@ namespace ConGame.Tests.PlayMode
     public sealed class RoomDoorBreachPlayModeTests
     {
         [UnityTest]
+        public IEnumerator BookcaseGapDoesNotLeakIntoNextOrdinaryBreach()
+        {
+            var root = new GameObject("Gap breach test");
+            try
+            {
+                var hinge = new GameObject("Door hinge").transform;
+                hinge.SetParent(root.transform);
+                var breach = root.AddComponent<RoomDoorBreachController>();
+                breach.Configure(hinge, .5f, 95f);
+                breach.Begin(3, null, .5f, true);
+                breach.Advance(1f);
+                Assert.That(Quaternion.Angle(hinge.localRotation, Quaternion.identity),
+                    Is.EqualTo(30f).Within(.01f));
+                breach.Begin(3, null);
+                breach.Advance(1f);
+                Assert.That(Quaternion.Angle(hinge.localRotation, Quaternion.identity),
+                    Is.EqualTo(95f).Within(.01f));
+            }
+            finally
+            {
+                Object.Destroy(root);
+            }
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator BreachCompletesOnceAndLoopResetRestoresDoor()
         {
             GameObject root = new GameObject("Breach Test");

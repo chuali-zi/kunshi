@@ -24,6 +24,31 @@ namespace ConGame.Editor
         // blind zone is inside that wall, beyond the impassable lamp-table gap.
         private static readonly Vector3 CameraBlindPosition = new Vector3(-2.75f, 1.05f, -.65f);
 
+        public static void RepairBookcaseDoorGap()
+        {
+            var scene = EditorSceneManager.OpenScene(Room);
+            ConfigureBookcaseDoorGap();
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log("BOOKCASE_DOOR_GAP_REPAIR: doorway reference and exterior D13 aim point wired.");
+        }
+
+        static void ConfigureBookcaseDoorGap()
+        {
+            var hinge = Find("DoorHinge");
+            var bookcase = Find("FUR_Bookcase");
+            var killer = All<ConGame.Runtime.AI.KillerDirector>().Single();
+            var gap = Find("KillerEntryDoorGap");
+            if (gap == null) gap = Child(Find("KillerEntryInside").parent, "KillerEntryDoorGap");
+            // The body stays outside the right wall; the gun aims past the
+            // free edge of the partially open leaf, with physical sight checks.
+            gap.position = new Vector3(hinge.position.x + .08f, 0f, hinge.position.z - .7f);
+            killer.ConfigureDoorGapEntry(gap);
+            bookcase.GetComponent<TipBookcaseUseHandler>().Configure(
+                All<GameplayFactService>().Single(), All<GameplayEventHub>().Single(),
+                new Vector3(0, 0, 85), hinge, Vector3.right);
+        }
+
         public static void RepairRugTrap()
         {
             var scene = EditorSceneManager.OpenScene(Room);
@@ -169,6 +194,7 @@ namespace ConGame.Editor
             // CharacterController settles one skin width above the floor; keep the visible soles below that root.
             Find("CH_Player_Model").localPosition=Vector3.down*player.GetComponent<CharacterController>().skinWidth;
             ConfigureDoor(details,wallpaper,cream);
+            ConfigureBookcaseDoorGap();
             ConfigureMainCamera(details);
             ConfigureLighting();
             ConfigurePostProcessRenderer();
